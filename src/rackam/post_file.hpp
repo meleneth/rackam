@@ -2,7 +2,7 @@
 #define POSTFILE_HPP
 
 #include<string>
-#include<SDL_types.h>
+#include"SDL_types.h"
 using std::string;
 
 #include"newsgroup.hpp"

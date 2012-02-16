@@ -1,6 +1,13 @@
 #ifndef RACKAM_HPP
 #define RACKAM_HPP
 
+#include<string>
+
+#include"web_server.hpp"
+#include"SDL_types.h"
+
+using std::string;
+
 class Rackam {
   public:
     Rackam();

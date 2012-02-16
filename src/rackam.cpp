@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 
   console = new Console();
   rackam = new Rackam();
+  rackam->start_web_server("../htdocs", 4242);
 
   return 0;
 }

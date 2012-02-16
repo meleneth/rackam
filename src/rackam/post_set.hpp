@@ -1,7 +1,7 @@
 #ifndef POSTSET_HPP
 #define POSTSET_HPP
 
-#include<SDL_types.h>
+#include"SDL_types.h"
 
 class PostSet {
   public:
