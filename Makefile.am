@@ -2,7 +2,14 @@ bin_PROGRAMS = bin/rackam bin/rackamt
 
 ACLOCAL_AMFLAGS = -I m4
 
-AM_CXXFLAGS = -I src/rackam
+AM_CXXFLAGS = -I src/rackam -I/usr/include/lua5.1
+bin_rackam_LDADD  = -llua5.1
+bin_rackamt_LDADD = -llua5.1
+
+CLEANFILES = src/rackam/blackbeard.cxx
+
+src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i src/rackam/newsgroup.hpp
+	swig -c++ -lua -o src/rackam/blackbeard_wrap.cxx src/rackam/blackbeard.i
 
 bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/console.cpp \
@@ -21,7 +28,8 @@ bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/web_request.cpp \
   src/rackam/web_request.hpp \
   src/rackam/web_server.cpp \
-  src/rackam/web_server.hpp
+  src/rackam/web_server.hpp \
+	src/rackam/blackbeard_wrap.cxx
 
 
 bin_rackamt_SOURCES = src/rackamt.cpp \
@@ -41,5 +49,7 @@ bin_rackamt_SOURCES = src/rackamt.cpp \
   src/rackam/web_request.cpp \
   src/rackam/web_request.hpp \
   src/rackam/web_server.cpp \
-  src/rackam/web_server.hpp
+  src/rackam/web_server.hpp \
+	src/rackam/blackbeard_wrap.cxx
+
 

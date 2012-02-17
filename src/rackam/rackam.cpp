@@ -1,7 +1,17 @@
 #include "rackam.hpp"
+#include "console.hpp"
+
+extern "C" {
+  int luaopen_Blackbeard(lua_State* L);
+};
 
 Rackam::Rackam()
 {
+  lua_state = lua_open();
+  luaopen_base(lua_state);
+  luaopen_Blackbeard(lua_state);
+
+  console->log("Lua initialized.");
 }
 
 Rackam::~Rackam()
