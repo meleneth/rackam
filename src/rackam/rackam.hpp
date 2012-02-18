@@ -3,7 +3,6 @@
 
 #include<string>
 
-#include"SDL_types.h"
 /* Include the Lua API header files. */
 #include <lua.hpp>
 #include <lauxlib.h>
@@ -18,7 +17,7 @@ class Rackam {
     Rackam();
     ~Rackam();
 
-    void start_web_server(string base_path, Uint32 port_no);
+    void start_web_server(string base_path, int port_no);
 
     WebServer *webserver;
     lua_State *lua_state;

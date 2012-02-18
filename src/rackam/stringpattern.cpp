@@ -3,9 +3,9 @@
 
 #include <stdlib.h>
 
-StringPattern::StringPattern(Uint32 max_part_no)
+StringPattern::StringPattern(unsigned int max_part_no)
 {
-    for(Uint32 i=0; i<max_part_no+2; i++){
+    for(unsigned int i=0; i<max_part_no+2; i++){
         part_order.push_back(31337);
         results.push_back("");
     }
@@ -22,7 +22,7 @@ void StringPattern::add_breaker(string target)
     breakers.push_back(target);
 }
 
-void StringPattern::add_breaker(Uint32 target)
+void StringPattern::add_breaker(unsigned int target)
 {
     part_order[target] = breakers.size();
 }
@@ -31,11 +31,11 @@ int StringPattern::match(string target)
 {
     list<string>::iterator s;
 
-    for(Uint32 i=0; i<max_part_no; i++){
+    for(unsigned int i=0; i<max_part_no; i++){
         results[i] = "";
     }
 
-    Uint32 count = 0;
+    unsigned int count = 0;
     s = breakers.begin();
     while(s != breakers.end()){
         size_t index = target.find(*s);
@@ -53,14 +53,14 @@ int StringPattern::match(string target)
     return 1;
 }
 
-string StringPattern::get_piece(Uint32 index)
+string StringPattern::get_piece(unsigned int index)
 {
     if(part_order[index] == 31337)
         return "";
     return results[part_order[index]];
 }
 
-Uint32 StringPattern::get_piecen(Uint32 index)
+int StringPattern::get_piecen(unsigned int index)
 {
     string res = get_piece(index);
     return res.compare("") == 0 ? 0 : atoi(res.c_str());

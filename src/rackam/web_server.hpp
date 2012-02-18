@@ -4,18 +4,16 @@
 #include<string>
 using std::string;
 
-#include"SDL_types.h"
-
 class WebServer {
   public:
-    WebServer(string web_root, Uint32 port_no);
+    WebServer(string web_root, int port_no);
     ~WebServer();
 
     void listen();
     void tick();
 
     string web_root;
-    Uint32 port_no;
+    int port_no;
 };
 
 #endif

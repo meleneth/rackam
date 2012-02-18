@@ -4,8 +4,6 @@
 #include<list>
 #include<iostream> // Evil
 
-#include"SDL_types.h"
-
 #include<sstream>
 
 #define MAKE_STRING( msg )  ( ((std::ostringstream&)(std::ostringstream() << msg)).str() )
@@ -25,7 +23,6 @@ class Console {
         Console(); // Constructor
         ~Console(); // Destructor
 
-        void render(Uint32 top, Uint32 bottom);
         void log(std::string line);
         void fatal(std::string line);
         void box_log(std::string line);
@@ -34,10 +31,10 @@ class Console {
 
         list<std::string> loglines;
         string input;
-        Uint32 print_logs;
-        Uint32 print_on_delete;
-        Uint32 keep_logs;
-        Uint32 save_to_file;
+        bool print_logs;
+        bool print_on_delete;
+        bool keep_logs;
+        bool save_to_file;
         ofstream out;
 
     private:
