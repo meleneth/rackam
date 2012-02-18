@@ -6,7 +6,7 @@ AM_CXXFLAGS = -I src/rackam -I/usr/include/lua5.1
 bin_rackam_LDADD  = -llua5.1
 bin_rackamt_LDADD = -llua5.1
 
-CLEANFILES = src/rackam/blackbeard.cxx
+CLEANFILES = src/rackam/blackbeard_wrap.cxx
 
 src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i src/rackam/newsgroup.hpp
 	swig -c++ -lua -o src/rackam/blackbeard_wrap.cxx src/rackam/blackbeard.i

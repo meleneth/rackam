@@ -1,0 +1,2 @@
+print("Lua says 'hi'")
+

@@ -6,7 +6,6 @@
 #include<list>
 #include<vector>
 
-using std::list;
 using std::vector;
 using std::string;
 
@@ -24,7 +23,7 @@ class StringPattern {
         string get_piece(Uint32 index);
         Uint32 get_piecen(Uint32 index);
 
-        list<string> breakers;
+        std::list<string> breakers;
         vector<Uint32> part_order;
         Uint32 max_part_no;
 
