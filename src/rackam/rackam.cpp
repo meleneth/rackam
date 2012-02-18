@@ -9,6 +9,9 @@ Rackam::Rackam()
 {
   lua_state = lua_open();
   luaopen_base(lua_state);
+  luaopen_table(lua_state);
+  luaopen_string(lua_state);
+  luaopen_math(lua_state);
   luaopen_Blackbeard(lua_state);
 
   console->log("Lua initialized.");
