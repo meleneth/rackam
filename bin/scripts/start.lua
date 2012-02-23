@@ -22,3 +22,11 @@ function newsgroup_as_json(newsgroup)
 end
 
 print(newsgroup_as_json(n))
+
+print("starting tests")
+r = Blackbeard.WebRequest("get /jack.css")
+assert(r.path == "/", "Path is '/'")
+assert(r.filename == "jack.css", "Path is jack.css")
+
+print("Finished tests OK")
+
