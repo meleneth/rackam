@@ -27,8 +27,12 @@ bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/stringpattern.hpp \
   src/rackam/web_request.cpp \
   src/rackam/web_request.hpp \
+  src/rackam/strutil.cpp \
+  src/rackam/strutil.hpp \
   src/rackam/web_server.cpp \
   src/rackam/web_server.hpp \
+  src/rackam/tcpconnection.cpp \
+  src/rackam/tcpconnection.hpp \
 	src/rackam/blackbeard_wrap.cxx
 
 
@@ -50,6 +54,10 @@ bin_rackamt_SOURCES = src/rackamt.cpp \
   src/rackam/web_request.hpp \
   src/rackam/web_server.cpp \
   src/rackam/web_server.hpp \
+  src/rackam/strutil.cpp \
+  src/rackam/strutil.hpp \
+  src/rackam/tcpconnection.cpp \
+  src/rackam/tcpconnection.hpp \
 	src/rackam/blackbeard_wrap.cxx
 
 
