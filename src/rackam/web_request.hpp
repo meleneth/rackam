@@ -39,8 +39,13 @@ class WebRequest {
         unsigned int http_major_version;
         unsigned int has_cgi_params;
 
+
         vector<string> param_names;
         vector<string> param_values;
+
+        string response_text;
+        string response_headers;
+        int sent_bytes;
 
     private:
     protected:

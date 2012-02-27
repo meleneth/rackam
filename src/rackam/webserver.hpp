@@ -1,10 +1,11 @@
-#ifndef WEBSERVER_HPP
-#define WEBSERVER_HPP
+#ifndef ___webserver_inc
+#define ___webserver_inc 1
 
+#include "SDL_types.h"
 #include <string>
 #include <list>
 #include "tcplistener.hpp"
-#include "web_request.hpp"
+#include "webrequest.hpp"
 #include "webdatafetcher.hpp"
 
 using std::string;
@@ -33,5 +34,7 @@ class WebServer {
     private:
     protected:
 };
+
+extern WebServer *webserver;
 
 #endif

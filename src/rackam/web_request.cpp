@@ -14,6 +14,7 @@ WebRequest::WebRequest(TCPConnection *tcp)
     defaults();
     parse_uri(request_string);
     content_type = "text/html";
+    sent_bytes = 0;
 }
 
 WebRequest::WebRequest(string uri)
@@ -23,6 +24,7 @@ WebRequest::WebRequest(string uri)
     defaults();
     parse_uri(uri);
     content_type = "text/html";
+    sent_bytes = 0;
 }
 
 WebRequest::~WebRequest()
