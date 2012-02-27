@@ -32,6 +32,8 @@ bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/tcplistener.hpp \
   src/rackam/webdatafetcher.cpp \
   src/rackam/webdatafetcher.hpp \
+  src/rackam/web_response.cpp \
+  src/rackam/web_response.hpp \
   src/rackam/web_request.cpp \
   src/rackam/web_request.hpp \
   src/rackam/web_server.cpp \

@@ -5,6 +5,7 @@
 #include "post_set.hpp"
 #include "post_file.hpp"
 #include "web_request.hpp"
+#include "web_response.hpp"
 #include "stringpattern.hpp"
 #include "rackam.hpp"
 
@@ -24,6 +25,7 @@ using std::string;
 %include "post_file.hpp"
 %include "web_request.hpp"
 %include "stringpattern.hpp"
+%include "web_response.hpp"
 
 
 %{ 
@@ -41,6 +43,14 @@ string newsgroup_as_json(Newsgroup *newsgroup)
   lua_pop(rackam->lua_state, 1);
 
   return result;
+}
+
+void handle_web_request(WebRequest *request, WebResponse *response)
+{
+  lua_getfield(rackam->lua_state, LUA_GLOBALSINDEX, "handle_web_request");
+  SWIG_Lua_NewPointerObj(rackam->lua_state, request, SWIGTYPE_p_WebRequest, 0);
+  SWIG_Lua_NewPointerObj(rackam->lua_state, response, SWIGTYPE_p_WebResponse, 0);
+  lua_call(rackam->lua_state, 1, 0);
 }
 
 %}
