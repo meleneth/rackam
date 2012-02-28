@@ -1,6 +1,10 @@
 #include "web_server.hpp"
 #include "web_request.hpp"
+#include "web_response.hpp"
 #include "console.hpp"
+
+#include<sstream>
+using std::stringstream;
 
 WebServer::WebServer(string web_root, int port_no)
 {
@@ -13,13 +17,17 @@ WebServer::~WebServer()
     delete listener;
 }
 
+extern void handle_web_request(WebRequest *request, WebResponse *response);
+
 void WebServer::handle_request(WebRequest *request)
 {
+  WebResponse response;
 
-   string filename = web_root + request->path + request->filename;
-//   console->log("Sending file: " + filename);
+  console->log(request->get_uri());
+  handle_web_request(request, &response);
+  response.prepare_full_response();
 
-//   handlers.push_back(new WebFileFetcher(request, filename));
+  request->client->send_data((char *) response.full_response.c_str(), response.full_response.length());
 }
 
 void WebServer::tick(void)
@@ -28,7 +36,9 @@ void WebServer::tick(void)
 
     for(i = connections.begin(); i != connections.end(); ++i) {
         if((*i)->has_data_waiting()){
-            handle_request(new WebRequest(*i));
+            WebRequest *r = new WebRequest(*i);
+            handle_request(r);
+            delete r;
             list <TCPConnection *>::iterator p = i;
             --i;
             connections.erase(p);

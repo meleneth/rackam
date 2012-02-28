@@ -104,13 +104,13 @@ void TCPConnection::sendall(string cmd)
     }
 }
 
-void TCPConnection::send_data(char *buf, unsigned int size)
+void TCPConnection::send_data(char *buf, size_t size)
 {
     if(!connected)
         return;
-    int total = 0;        // how many bytes we've sent
-    int bytesleft = size; // how many we have left to send
-    int num_bytes = bytesleft;
+    size_t total = 0;        // how many bytes we've sent
+    size_t bytesleft = size; // how many we have left to send
+    size_t num_bytes = bytesleft;
     int n;
 
     while(total < num_bytes) {

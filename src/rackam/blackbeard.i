@@ -50,7 +50,7 @@ void handle_web_request(WebRequest *request, WebResponse *response)
   lua_getfield(rackam->lua_state, LUA_GLOBALSINDEX, "handle_web_request");
   SWIG_Lua_NewPointerObj(rackam->lua_state, request, SWIGTYPE_p_WebRequest, 0);
   SWIG_Lua_NewPointerObj(rackam->lua_state, response, SWIGTYPE_p_WebResponse, 0);
-  lua_call(rackam->lua_state, 1, 0);
+  lua_call(rackam->lua_state, 2, 0);
 }
 
 %}

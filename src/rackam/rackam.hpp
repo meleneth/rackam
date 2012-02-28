@@ -18,9 +18,11 @@ class Rackam {
     ~Rackam();
 
     void start_web_server(string base_path, int port_no);
+    void main_loop();
 
     WebServer *webserver;
     lua_State *lua_state;
+    bool still_running;
 };
 
 extern Rackam *rackam;

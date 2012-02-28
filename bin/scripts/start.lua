@@ -10,6 +10,10 @@ function newsgroup_as_json(newsgroup)
   return JSON:encode_pretty(output)
 end
 
+function handle_web_request(webrequest, webresponse)
+  webresponse.body = "<html><head></head><body>Lua says hello</body></html>"
+end
+
 n = Blackbeard.Newsgroup()
 
 n.name = "alt.binaries.divx"

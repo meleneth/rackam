@@ -33,6 +33,7 @@ TCPListener::TCPListener(int port_num)
         perror("listen");
         exit(1);
     }
+    console->log("Started listener");
 }
 
 TCPListener::~TCPListener()
