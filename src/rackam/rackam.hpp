@@ -2,6 +2,7 @@
 #define RACKAM_HPP
 
 #include<string>
+#include<vector>
 
 /* Include the Lua API header files. */
 #include <lua.hpp>
@@ -10,8 +11,6 @@
 
 #include"web_server.hpp"
 
-using std::string;
-
 class Rackam {
   public:
     Rackam();
@@ -19,10 +18,12 @@ class Rackam {
 
     void start_web_server(string base_path, int port_no);
     void main_loop();
+    Newsgroup *newsgroup_for_name(string name);
 
     WebServer *webserver;
     lua_State *lua_state;
     bool still_running;
+    std::vector<Newsgroup *> newsgroups;
 };
 
 extern Rackam *rackam;

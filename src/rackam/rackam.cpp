@@ -77,3 +77,18 @@ void Rackam::main_loop()
     webserver->tick();
   }
 }
+
+Newsgroup *Rackam::newsgroup_for_name(string name)
+{
+  std::vector<Newsgroup*>::iterator i;
+  for(i = newsgroups.begin(); i != newsgroups.end(); ++i) {
+    if((*i)->name == name) {
+      return *i;
+    }
+  }
+
+  Newsgroup *new_group = new Newsgroup();
+  new_group->name = name;
+  newsgroups.push_back(new_group);
+  return new_group;
+}

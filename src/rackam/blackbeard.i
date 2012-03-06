@@ -20,6 +20,8 @@ using std::string;
 %include <std_vector.i>
 /*%template(StringIntMap) std::map<string, int>; */
 
+%template(VoidNewsgroupMap) std::map<void *, Newsgroup *>;
+
 %include "newsgroup.hpp"
 %include "post_set.hpp"
 %include "post_file.hpp"

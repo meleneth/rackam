@@ -6,6 +6,7 @@ using std::string;
 
 #include"newsgroup.hpp"
 
+class Newsgroup;
 class PostFile {
   public:
     PostFile();
