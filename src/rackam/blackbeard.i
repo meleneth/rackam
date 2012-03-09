@@ -20,7 +20,6 @@ using std::string;
 %include <std_vector.i>
 /*%template(StringIntMap) std::map<string, int>; */
 
-%template(VoidNewsgroupMap) std::map<void *, Newsgroup *>;
 
 %include "newsgroup.hpp"
 %include "post_set.hpp"
@@ -28,7 +27,24 @@ using std::string;
 %include "web_request.hpp"
 %include "stringpattern.hpp"
 %include "web_response.hpp"
+%include "rackam.hpp"
 
+%template(NewsgroupVector) std::vector<Newsgroup *>;
+
+%extend Newsgroup {
+  const char *get_max_message_no_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->max_message_no);
+    return temp;
+  }
+  const char *get_min_message_no_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->min_message_no);
+    return temp;
+  }
+}
 
 %{ 
 
