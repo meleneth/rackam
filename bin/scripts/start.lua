@@ -22,8 +22,8 @@ function handle_web_request(webrequest, webresponse)
 
   response_text = ""
   local i;
-  local max_i = Blackbeard.rackam.newsgroups:size()
-  for i = 0, max_i - 1 do
+  local max_i = Blackbeard.rackam.newsgroups:size() - 1
+  for i = 0, max_i do
     local ng = Blackbeard.rackam.newsgroups[i]
     response_text = response_text .. newsgroup_as_json(ng)
   end

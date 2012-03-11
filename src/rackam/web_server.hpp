@@ -22,12 +22,16 @@ class WebServer {
         void log_to_file(string filename);
         void handle_request(WebRequest *request);
         void handle_new_connection(void);
+        void register_file(string url, string filename);
         void tick(void);
 
         TCPListener *listener;
         list<TCPConnection *> connections;
         list<WebDataFetcher *> handlers;
         string web_root;
+
+        std::map<string, char *> static_contents;
+        std::map<string, int>    static_content_length;
 
 
     private:

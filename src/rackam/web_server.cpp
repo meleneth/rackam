@@ -3,6 +3,11 @@
 #include "web_response.hpp"
 #include "console.hpp"
 
+#include<stdio.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+
 #include<sstream>
 using std::stringstream;
 
@@ -65,5 +70,21 @@ void WebServer::log_to_file(string filename)
 void WebServer::handle_new_connection(void)
 {
     connections.push_back(listener->get_waiting_connection());
+}
+
+void WebServer::register_file(string url, string filename)
+{
+  struct stat file_stats;
+  stat(filename.c_str(), &file_stats);
+
+  int num_bytes = file_stats.st_size;
+  char *buffer = (char *)malloc(num_bytes);
+
+  static_contents[url] = buffer;
+  static_content_length[url] = num_bytes;
+  
+  FILE *fp = fopen(filename.c_str(), "r");
+  fread(buffer, num_bytes, 1, fp);
+  fclose(fp);
 }
 

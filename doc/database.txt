@@ -1,0 +1,80 @@
+Newsgroup:
+max_message_no
+min_message_no
+
+these are the responses from the server that say the lowest and highest message ID that the server knows about.  Cull all postsets from the database that have info that is older than min_message_no.
+
+SpanList downloaded_headers
+This is a SpanList (a data structure that will hold ranges of numbers that corresponds to message ID's that have been seen.  I.e. store 1-3, 5-9000, 9440-30000 etc)
+also has a count() method that will return the number of items seen.  In this way, the percentage of the newsgroup can be calculated.
+
+postsets
+this stores the postsets that have been gleaned from information in the newsgroup.  The postset knows the filter that created it, even if the filter does not exist anymore. (???)
+
+filters
+stores an in-order list of filters that are applied to headers.  If a filter handles a message, the rest of the filters do not see it.
+All filters can be reduced to a textual representation, for storage in the DB and manipulation via web
+
+
+
+-------
+
+
+
+PostSet:
+max_message_no
+min_message_no
+
+these are the range of message_no on the server.
+
+author
+
+newsgroup
+
+postfiles
+
+filter
+
+
+
+-------
+
+
+
+
+PostFile:
+max_message_no
+min_message_no
+
+filename
+
+postset
+
+newsgroup
+
+num_bytes
+num_bytes_downloaded
+
+is_par2()
+
+file_pieces
+  message_id
+  num_bytes
+  num_downloaded_bytes
+
+
+-------
+
+
+Instead of storing flags on instances, show ownership and status flags as being in a data structure somehow. i.e. newsgroup->fully_loaded_postsets, members of which are also stored in newsgroup->postsets but are fully loaded from the database.  It gets better - newsgroup->dirty_postsets stores postsets that need saving in the DB
+
+ that should probably be database->dirty_postsets, newsgroup has no business knowing about it .
+
+ that has wonderful implications for job control as well as locking everything so that we can get multithreading rocking out.
+ should probably get pthreads in as quickly as possible to start feeling all the multithreaded pain before things start taking off.
+
+ This feels really close.
+
+
+
+
