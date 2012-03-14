@@ -29,6 +29,16 @@ void WebServer::handle_request(WebRequest *request)
   WebResponse response;
 
   console->log(request->get_uri());
+  
+  if(request->path == "/") {
+    if(static_contents.find(request->filename) != static_contents.end()) {
+      response.prepare_response_for_bytes(static_content_length[request->filename]);
+      request->client->send_data((char *)response.full_response.c_str(), response.full_response.length());
+      request->client->send_data(static_contents[request->filename], static_content_length[request->filename]);
+      return;
+    }
+  }
+
   handle_web_request(request, &response);
   response.prepare_full_response();
 

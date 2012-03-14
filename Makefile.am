@@ -38,6 +38,8 @@ bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/web_request.hpp \
   src/rackam/web_server.cpp \
   src/rackam/web_server.hpp \
+  src/rackam/message_header.cpp \
+  src/rackam/message_header.hpp \
 	src/rackam/blackbeard_wrap.cxx
 
 
