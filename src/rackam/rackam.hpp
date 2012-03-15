@@ -16,9 +16,11 @@ class Rackam {
     Rackam();
     ~Rackam();
 
-    void start_web_server(string base_path, int port_no);
+    void start_web_server(std::string base_path, int port_no);
     void main_loop();
-    Newsgroup *newsgroup_for_name(string name);
+    Newsgroup *newsgroup_for_name(std::string name);
+
+    void load_headers_from_file(Newsgroup *group, std::string filename);
 
     WebServer *webserver;
     lua_State *lua_state;

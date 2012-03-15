@@ -1,6 +1,8 @@
 #include "message_header.hpp"
 
-MessageHeader::MessageHeader(NewsGroup *group, unsigned long long int article_no, string msg_id, string subject, string posted_by, int num_bytes)
+using std::string;
+
+MessageHeader::MessageHeader(Newsgroup *group, long long int article_no, string msg_id, string subject, string posted_by, int num_bytes)
 {
     this->group = group;
     this->subject = subject;

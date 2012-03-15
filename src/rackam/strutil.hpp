@@ -5,24 +5,21 @@
 #include <algorithm>
 #include <vector>
 
-using std::string;
-using std::vector;
-
-void Tokenize(const string& str, vector<string>& tokens, const string& delimiters);
-string bitviz(unsigned int showme);
-string trimmed(string shaggy);
+void Tokenize(const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters);
+std::string bitviz(unsigned int showme);
+std::string trimmed(std::string shaggy);
 unsigned int is_whitespace(char c);
-string get_crc_32(string process_me);
+std::string get_crc_32(std::string process_me);
 void generate_crc_table(unsigned int *table);
-string replace_all_substrings(string from_me, string take_me, string for_me);
-string replace_substrings(string from_me, string take_me, string for_me);
+std::string replace_all_substrings(std::string from_me, std::string take_me, std::string for_me);
+std::string replace_substrings(std::string from_me, std::string take_me, std::string for_me);
 
-string xml_escape(string escape_me);
-string xml_unescape(string unescape_me);
-string js_escape(string escape_me);
-string safe_dirname(string unsafe);
-string human_readable_bytes(unsigned long long int num_bytes);
+std::string xml_escape(std::string escape_me);
+std::string xml_unescape(std::string unescape_me);
+std::string js_escape(std::string escape_me);
+std::string safe_dirname(std::string unsafe);
+std::string human_readable_bytes(unsigned long long int num_bytes);
 
-string file_extension(string filename);
+std::string file_extension(std::string filename);
 
 #endif

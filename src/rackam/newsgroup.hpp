@@ -2,24 +2,25 @@
 #define NEWSGROUP_HPP
 
 #include"post_set.hpp"
+#include"message_header.hpp"
 
 #include<string>
 #include<map>
-
-using std::string;
-using std::map;
+#include<vector>
 
 class PostSet;
+class MessageHeader;
 class Newsgroup {
   public:
     Newsgroup();
     ~Newsgroup();
 
     string name;
-    unsigned long long int min_message_no;
-    unsigned long long int max_message_no;
+    long long int min_message_no;
+    long long int max_message_no;
 
-    map<void *, PostSet *> postsets;
+    std::map<void *, PostSet *> postsets;
+    std::vector<MessageHeader *> headers;
 };
 
 #endif

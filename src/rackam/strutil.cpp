@@ -14,7 +14,7 @@ using std::setprecision;
 using std::ofstream;
 using std::hex;
 
-void Tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ")
+void Tokenize(const string& str, std::vector<string>& tokens, const string& delimiters = " ")
 {
     // Skip delimiters at beginning.
     string::size_type lastPos = str.find_first_not_of(delimiters, 0);
@@ -207,7 +207,7 @@ string file_extension(string filename)
 {
     if(filename.size() < 4)
         return "";
-    vector<string> pieces;
+    std::vector<string> pieces;
 
     Tokenize(filename, pieces, ".");
     unsigned int num = pieces.size() -1;

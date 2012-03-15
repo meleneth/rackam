@@ -4,19 +4,17 @@
 #include "newsgroup.hpp"
 #include <string>
 
-using std::string;
-
-class NewsGroup;
+class Newsgroup;
 class MessageHeader {
     public:
-        MessageHeader(NewsGroup *group, unsigned long long int article_no, string msg_id, string subject, string posted_by, int num_bytes);
+        MessageHeader(Newsgroup *group, long long int article_no, std::string msg_id, std::string subject, std::string posted_by, int num_bytes);
         ~MessageHeader();
 
-        NewsGroup *group;
-        unsigned long long int article_no;
-        string msg_id;
-        string subject;
-        string posted_by;
+        Newsgroup *group;
+        long long int article_no;
+        std::string msg_id;
+        std::string subject;
+        std::string posted_by;
         int num_bytes;
     private:
     protected:

@@ -1,5 +1,12 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "rackam.hpp"
 #include "console.hpp"
+#include "strutil.hpp"
+
+using std::string;
 
 extern "C" {
   int luaopen_Blackbeard(lua_State* L);
@@ -91,4 +98,61 @@ Newsgroup *Rackam::newsgroup_for_name(string name)
   new_group->name = name;
   newsgroups.push_back(new_group);
   return new_group;
+}
+
+void Rackam::load_headers_from_file(Newsgroup *group, string filename)
+{
+  int total_bytes;
+  int bytes_read;
+
+  char linebuffer[1024];
+  std::ifstream in;
+  total_bytes = 0;
+  console->log("Loading full headers from " + filename);
+  struct stat my_stats;
+  if(stat(filename.c_str(), &my_stats) == -1){
+    return;
+  }
+  total_bytes = my_stats.st_size;
+  bytes_read = 0;
+
+  in.open(filename.c_str(), ios::in);
+  in.getline(linebuffer, 1024);
+  while(!in.eof()){
+    bytes_read += strlen(linebuffer);
+    vector<string> header_pieces;
+
+    string xover_line = linebuffer;
+    // scrub upper ASCII out of xover_line
+    unsigned int i;
+
+    // Upper ASCII gets discarded, don't parse the message at all (segfaults)
+    for(i = 0; i < xover_line.length(); i++) {
+      char c = xover_line[i];
+      //        console->log(s.str());
+      if (c < 0){
+       printf("Error.  Load of headers failed.  Check it out.\n");
+        return;
+      }
+    }
+
+    Tokenize(xover_line, header_pieces, "\t");
+
+    std::string msg_id = header_pieces[4];
+    msg_id = msg_id.substr(1, msg_id.length() - 2);
+    std::string subject = header_pieces[1];
+    std::string posted_by = header_pieces[2];
+
+    MessageHeader *info = new MessageHeader(group, 
+      atoll(header_pieces[0].c_str()), 
+      msg_id, 
+      subject, 
+      posted_by, 
+      atoi(header_pieces[5].c_str())
+    );
+    //26487885        Masters of the Universe DVD Set: Disk 8 [40/83] yEnc - "MOTU_Disk8.part38.rar" (101/114)        anonxyz29@hotmail.com (Ragnarock)       Sat, 18 Mar 2006 05:29:36 -0600    <-o2dnev5dJm9cobZRVn-sg@giganews.com>           456758  3508    Xref: number1.nntp.dca.giganews.com alt.binaries.multimedia.cartoons:26487885
+
+    group->headers.push_back(info);
+    in.getline(linebuffer, 1024);
+  }
 }
