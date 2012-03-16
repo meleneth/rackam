@@ -7,7 +7,8 @@ function newsgroup_as_json(newsgroup)
   output['min_message_no'] = newsgroup:get_min_message_no_str()
   output['max_message_no'] = newsgroup:get_max_message_no_str()
 
-  return JSON:encode_pretty(output)
+  return JSON:encode(output)
+  --return JSON:encode_pretty(output)
 end
 
 function header_as_json(header)
@@ -16,32 +17,48 @@ function header_as_json(header)
   output['msg_id']  = header.msg_id
   output['subject'] = header.subject
   output['article_no'] = header:get_article_no_str()
-  output['posted_by'] header.posted_by
+  output['posted_by'] = header.posted_by
   output['num_bytes'] = header.num_bytes
 
-  return JSON:encode_pretty(output)
+  return JSON:encode(output)
 end
 
-function handle_web_request(webrequest, webresponse)
-
---  local ng = Blackbeard.rackam.newsgroups[1]
---  print("Newsgroup retrieved")
---  local response_text = newsgroup_as_json(ng)
---
---  webresponse.body = "<html><head></head><body>" .. response_text .. "</body></html>"
---  return
---end
-
-  response_text = ""
+function web_response_newsgroups(webresponse)
+  local response_lines = {}
   local i;
   local max_i = Blackbeard.rackam.newsgroups:size() - 1
   for i = 0, max_i do
     local ng = Blackbeard.rackam.newsgroups[i]
-    -- Thrashing GC here, add them to a table and do a join instead
-    -- make a table then use concat - table.concat(mytable, "")
-    response_text = response_text .. newsgroup_as_json(ng)
+    table.insert(response_lines, newsgroup_as_json(ng))
   end
-  webresponse.body = "<html><head></head><body>" .. response_text .. "</body></html>"
+  webresponse.body = "<html><head></head><body>" .. table.concat(response_lines, "\n") .. "</body></html>"
+end
+
+function web_response_newsgroup_headers(newsgroup, webresponse)
+  local response_lines = {}
+  local i;
+  local max_i = newsgroup.headers:size() - 1
+
+  for i = 0, max_i do
+    local header = newsgroup.headers[i]
+    table.insert(response_lines, header_as_json(header))
+  end
+  webresponse.body = "<html><head></head><body>" .. table.concat(response_lines, "<br />\n") .. "</body></html>"
+end
+
+function handle_web_request(webrequest, webresponse)
+  if webrequest.path == "/" then
+    if webrequest.filename == "newsgroup_headers.cgi" then
+      local ng = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+      web_response_newsgroup_headers(ng, webresponse)
+      return
+    end
+    if webrequest.filename == "newsgroups.cgi" then
+      local ng = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+      web_response_newsgroup_headers(webresponse)
+      return
+    end
+  end
 end
 
 Blackbeard.rackam:newsgroup_for_name("alt.binaries.movies.divx")

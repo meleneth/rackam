@@ -8,6 +8,7 @@
 #include "web_request.hpp"
 #include "web_response.hpp"
 #include "stringpattern.hpp"
+#include "message_header.hpp"
 #include "rackam.hpp"
 
 #include <string>
@@ -30,8 +31,10 @@ using std::string;
 %include "stringpattern.hpp"
 %include "web_response.hpp"
 %include "rackam.hpp"
+%include "message_header.hpp"
 
 %template(NewsgroupVector) std::vector<Newsgroup *>;
+%template(MessageHeaderVector) std::vector<MessageHeader *>;
 
 %extend Newsgroup {
   const char *get_max_message_no_str()
@@ -44,6 +47,15 @@ using std::string;
   { 
     static char temp[1024];
     sprintf(temp, "%llu", $self->min_message_no);
+    return temp;
+  }
+}
+
+%extend MessageHeader {
+  const char *get_article_no_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->article_no);
     return temp;
   }
 }
