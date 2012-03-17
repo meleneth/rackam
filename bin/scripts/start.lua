@@ -6,6 +6,9 @@ function newsgroup_as_json(newsgroup)
   output['name'] = newsgroup.name
   output['min_message_no'] = newsgroup:get_min_message_no_str()
   output['max_message_no'] = newsgroup:get_max_message_no_str()
+  if newsgroup.headers then
+    output['num_headers']    = newsgroup.headers:size()
+  end
 
   return JSON:encode(output)
   --return JSON:encode_pretty(output)
@@ -26,7 +29,7 @@ end
 function web_response_newsgroups(webresponse)
   local response_lines = {}
   local i;
-  local max_i = Blackbeard.rackam.newsgroups:size() - 1
+  local max_i = Blackbeard.rackam.newsgroups:size() - 2
   for i = 0, max_i do
     local ng = Blackbeard.rackam.newsgroups[i]
     table.insert(response_lines, newsgroup_as_json(ng))
@@ -37,7 +40,7 @@ end
 function web_response_newsgroup_headers(newsgroup, webresponse)
   local response_lines = {}
   local i;
-  local max_i = newsgroup.headers:size() - 1
+  local max_i = newsgroup.headers:size() - 2
 
   for i = 0, max_i do
     local header = newsgroup.headers[i]
@@ -55,7 +58,7 @@ function handle_web_request(webrequest, webresponse)
     end
     if webrequest.filename == "newsgroups.cgi" then
       local ng = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-      web_response_newsgroup_headers(webresponse)
+      web_response_newsgroups(webresponse)
       return
     end
   end
@@ -72,6 +75,7 @@ Blackbeard.rackam:load_headers_from_file(n, "headers_snipper.log")
 Blackbeard.rackam.webserver:register_file("index.html", "htdocs/index.html")
 Blackbeard.rackam.webserver:register_file("favicon.ico", "htdocs/favicon.ico")
 Blackbeard.rackam.webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js")
+Blackbeard.rackam.webserver:register_file("rackam", "htdocs/rackam.js")
 
 print("Lua script finished.")
 
