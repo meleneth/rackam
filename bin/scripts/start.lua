@@ -34,7 +34,7 @@ function web_response_newsgroups(webresponse)
     local ng = Blackbeard.rackam.newsgroups[i]
     table.insert(response_lines, newsgroup_as_json(ng))
   end
-  webresponse.body = "<html><head></head><body>" .. table.concat(response_lines, "\n") .. "</body></html>"
+  webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]"
 end
 
 function web_response_newsgroup_headers(newsgroup, webresponse)

@@ -8,6 +8,14 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
+  $("#newsgroups").click(function() {
+    $.getJSON('newsgroups.cgi', function(data) {
+      $.each(data, function(i, ng) {
+        $("#celery").append(ng.name);
+      });
+    });
+  });
+
   $("#celery").append("JS says hello");
 });
 
@@ -16,7 +24,7 @@ $(document).ready(function() {
 <body>
 <div>
 Static content /waves hello!<br />
-<a href="/newsgroups.cgi">newsgroups</a><br />
+<a id="newsgroups">newsgroups</a><br />
 <a href="/newsgroup_headers.cgi?ng=alt.binaries.multimedia.cartoons">headers</a> for alt.binaries.multimedia.cartoons
 <div id="celery">Celery Div</div>
 </div>
