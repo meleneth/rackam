@@ -1,3 +1,4 @@
+/*
 this.$OuterDiv = $('<div></div>')
   .hide()
   .append($('<table></table>')
@@ -29,5 +30,6 @@ $.getJSON('ajax/test.json', function(data) {
     html: items.join('')
   }).appendTo('body');
 });
+*/
 
 
