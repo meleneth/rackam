@@ -29,44 +29,45 @@ end
 function web_response_newsgroups(webresponse)
   local response_lines = {}
   local i;
-  local max_i = Blackbeard.rackam.newsgroups:size() - 2
+  local max_i = Blackbeard.rackam.newsgroups:size() - 1
   for i = 0, max_i do
     local ng = Blackbeard.rackam.newsgroups[i]
     table.insert(response_lines, newsgroup_as_json(ng))
   end
-  webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]"
+  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
-function web_response_newsgroup_headers(newsgroup, webresponse)
+function web_response_newsgroup_headers(webrequest, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+
   local response_lines = {}
   local i;
-  local max_i = newsgroup.headers:size() - 2
+  local max_i = newsgroup.headers:size() - 1
+  local page_ipp = webrequest:paramn("page_ipp")
+  local page_first = webrequest:paramn("page_first")
+  if page_ipp   == 0 then page_ipp = 20 end
+  local page_last = page_first + page_ipp
+  if page_last > max_i then page_last = max_i end
 
-  for i = 0, max_i do
+  for i = page_first, page_last do
     local header = newsgroup.headers[i]
     table.insert(response_lines, header_as_json(header))
   end
-  webresponse.body = "<html><head></head><body>" .. table.concat(response_lines, "<br />\n") .. "</body></html>"
+  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
 function handle_web_request(webrequest, webresponse)
   if webrequest.path == "/" then
     if webrequest.filename == "newsgroup_headers.cgi" then
-      local ng = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-      web_response_newsgroup_headers(ng, webresponse)
+      web_response_newsgroup_headers(webrequest, webresponse)
       return
     end
     if webrequest.filename == "newsgroups.cgi" then
-      local ng = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
       web_response_newsgroups(webresponse)
       return
     end
   end
 end
-
-Blackbeard.rackam:newsgroup_for_name("alt.binaries.movies.divx")
-Blackbeard.rackam:newsgroup_for_name("alt.binaries.erotica.divx")
-Blackbeard.rackam:newsgroup_for_name("alt.binaries.multimedia")
 
 local n = Blackbeard.rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
 
@@ -75,7 +76,7 @@ Blackbeard.rackam:load_headers_from_file(n, "headers_snipper.log")
 Blackbeard.rackam.webserver:register_file("index.html", "htdocs/index.html")
 Blackbeard.rackam.webserver:register_file("favicon.ico", "htdocs/favicon.ico")
 Blackbeard.rackam.webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js")
-Blackbeard.rackam.webserver:register_file("rackam", "htdocs/rackam.js")
+Blackbeard.rackam.webserver:register_file("rackam.js", "htdocs/rackam.js")
 
 print("Lua script finished.")
 

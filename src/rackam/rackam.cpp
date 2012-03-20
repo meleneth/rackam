@@ -40,8 +40,8 @@ void Rackam::main_loop()
 { 
   fd_set read_fds;
   struct timeval tv;
-  tv.tv_sec = 0;
-  tv.tv_usec = 10;
+  tv.tv_sec = 1;
+  tv.tv_usec = 0;
   int fdmax = 0;
   list<TCPConnection *>::iterator c;
 

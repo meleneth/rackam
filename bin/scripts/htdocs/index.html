@@ -6,24 +6,13 @@
 <script type="text/javascript" src="/jquery.js"></script>
 <script type="text/javascript" src="/rackam.js"></script>
 <script type="text/javascript">
-
 $(document).ready(function() {
-  $("#newsgroups").click(function() {
-    $.getJSON('newsgroups.cgi', function(data) {
-      $.each(data, function(i, ng) {
-        $("#celery").append(ng.name);
-      });
-    });
-  });
-
-  $("#celery").append("JS says hello");
+    setup_initial_screen();
 });
-
 </script>
 </head>
 <body>
 <div>
-Static content /waves hello!<br />
 <a id="newsgroups">newsgroups</a><br />
 <a href="/newsgroup_headers.cgi?ng=alt.binaries.multimedia.cartoons">headers</a> for alt.binaries.multimedia.cartoons
 <div id="celery">Celery Div</div>

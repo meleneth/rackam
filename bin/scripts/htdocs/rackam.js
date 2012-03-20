@@ -32,4 +32,15 @@ $.getJSON('ajax/test.json', function(data) {
 });
 */
 
+function setup_initial_screen() {
+  $("#celery").append("<ul id=\"newsgroups-list\"></ul>")
+
+  $("#newsgroups").click(function() {
+    $.getJSON('newsgroups.cgi', function(data) {
+      $.each(data, function(i, ng) {
+        $("#newsgroups-list").append("<li>" + ng.name + "</li>");
+      });
+    });
+  });
+}
 
