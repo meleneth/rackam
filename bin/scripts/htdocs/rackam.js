@@ -32,13 +32,28 @@ $.getJSON('ajax/test.json', function(data) {
 });
 */
 
-function setup_initial_screen() {
-  $("#celery").append("<ul id=\"newsgroups-list\"></ul>")
+function load_newsgroup_pager(newsgroup) {
+  $("#celery").empty();
+  $("#celery").append("<div></div><div><ul id=\"newsgroup-headers\"></ul></div>")
+  $.getJSON("newsgroup_headers.cgi?ng=" + newsgroup + ";pager_ipp=30", function(data) {
+    $.each(data, function(i, header) {
+      $("#newsgroup-headers").append("<li>"+header.subject+"</li>");
+    });
+  });
+}
 
+function setup_initial_screen() {
   $("#newsgroups").click(function() {
+    $("#celery").empty();
+    $("#celery").append("<ul id=\"newsgroups-list\"></ul>")
+
     $.getJSON('newsgroups.cgi', function(data) {
       $.each(data, function(i, ng) {
-        $("#newsgroups-list").append("<li>" + ng.name + "</li>");
+        $("#newsgroups-list")
+          .append("<li>" + ng.name + "</li>")
+          .click(function() {
+            load_newsgroup_pager(ng.name)
+          });
       });
     });
   });
