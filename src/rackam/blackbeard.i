@@ -9,6 +9,7 @@
 #include "web_response.hpp"
 #include "stringpattern.hpp"
 #include "message_header.hpp"
+#include "author.hpp"
 #include "rackam.hpp"
 
 #include <string>
@@ -22,7 +23,6 @@ using std::string;
 %include <std_vector.i>
 /*%template(StringIntMap) std::map<string, int>; */
 
-
 %include "newsgroup.hpp"
 %include "post_set.hpp"
 %include "post_file.hpp"
@@ -30,11 +30,14 @@ using std::string;
 %include "web_server.hpp"
 %include "stringpattern.hpp"
 %include "web_response.hpp"
+%include "author.hpp"
 %include "rackam.hpp"
 %include "message_header.hpp"
 
 %template(NewsgroupVector) std::vector<Newsgroup *>;
 %template(MessageHeaderVector) std::vector<MessageHeader *>;
+%template(StringAuthorMap) std::map<string, Author *>;
+%template(AuthorVector) std::vector<Author *>;
 
 %extend Newsgroup {
   const char *get_max_message_no_str()

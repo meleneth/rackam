@@ -1,5 +1,17 @@
 JSON = (loadfile "JSON.lua")() -- one-time load of the routines
 
+function author_as_json(author)
+  local output = {}
+
+  output['name'] = author.name
+  output['newsgroup'] = author.newsgroup.name
+  if author.headers then
+    output['num_headers'] = author.headers:size()
+  end
+
+  return JSON:encode(output)
+end
+
 function newsgroup_as_json(newsgroup)
   local output = {}
 
@@ -20,10 +32,22 @@ function header_as_json(header)
   output['msg_id']  = header.msg_id
   output['subject'] = header.subject
   output['article_no'] = header:get_article_no_str()
-  output['posted_by'] = header.posted_by
+  output['posted_by'] = header.author.name
   output['num_bytes'] = header.num_bytes
 
   return JSON:encode(output)
+end
+
+function web_response_authors(webrequest, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+  local response_lines = {}
+  local i;
+  local max_i = newsgroup.authors:size() - 1
+  for i = 0, max_i do
+    local author = newsgroup.authors[i]
+    table.insert(response_lines, author_as_json(author))
+  end
+  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
 function web_response_newsgroups(webresponse)
@@ -58,12 +82,16 @@ end
 
 function handle_web_request(webrequest, webresponse)
   if webrequest.path == "/" then
-    if webrequest.filename == "newsgroup_headers.cgi" then
-      web_response_newsgroup_headers(webrequest, webresponse)
+    if webrequest.filename == "authors.cgi" then
+      web_response_authors(webrequest, webresponse)
       return
     end
     if webrequest.filename == "newsgroups.cgi" then
       web_response_newsgroups(webresponse)
+      return
+    end
+    if webrequest.filename == "newsgroup_headers.cgi" then
+      web_response_newsgroup_headers(webrequest, webresponse)
       return
     end
   end

@@ -11,6 +11,8 @@ src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i src/rackam/newsgroup.hp
 	swig -c++ -lua -o src/rackam/blackbeard_wrap.cxx src/rackam/blackbeard.i
 
 bin_rackam_SOURCES = src/rackam.cpp  \
+  src/rackam/author.cpp \
+  src/rackam/author.hpp \
   src/rackam/console.cpp \
   src/rackam/console.hpp \
   src/rackam/newsgroup.cpp \
