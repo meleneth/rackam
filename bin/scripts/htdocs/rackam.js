@@ -41,7 +41,7 @@ Page.prototype.load_page = function() {
 
     $.each(data, function(i, header) {
       $("#newsgroup-headers")
-        .append("<li>"+header.subject+"</li>")
+        .append("<tr><td>"+header.subject+"</td><td>"+header.posted_by +"</td><td>" +header.num_bytes+"</td></tr>")
     });
   });
 }
@@ -65,7 +65,7 @@ rackam_pager = null;
 
 function load_newsgroup_pager(newsgroup) {
   $("#celery").empty();
-  $("#celery").append("<div id=\"newsgroup-pager\"></div><div><ul id=\"newsgroup-headers\"></ul></div>");
+  $("#celery").append("<div id=\"newsgroup-pager\"></div><div><table id=\"newsgroup-headers\"></table></div>");
 
   rackam_pager = new Page("/newsgroup_headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers);
 
