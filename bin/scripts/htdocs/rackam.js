@@ -42,7 +42,6 @@ Page.prototype.load_page = function() {
     $.each(data, function(i, header) {
       $("#newsgroup-headers")
         .append("<li>"+header.subject+"</li>")
-        .css("text-decoration", "underline");
     });
   });
 }
@@ -70,22 +69,27 @@ function load_newsgroup_pager(newsgroup) {
 
   rackam_pager = new Page("/newsgroup_headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers);
 
-  $('<a>&lt;-</a>').click(function() {
-    rackam_pager.previous_page();
-  }).appendTo("#newsgroup-pager");
+  $('<input type="button" value="&lt;-"></input>')
+    .css("font-size", "48px")
+    .click(function() {
+      rackam_pager.previous_page();
+    }).appendTo("#newsgroup-pager");
 
-  $('<a>-&gt;</a>').click(function() {
-    rackam_pager.next_page();
-  }).appendTo("#newsgroup-pager");
-
+  $('<input type="button" value="-&gt;"></input>')
+    .css("font-size", "48px")
+    .css("margin-left", "100px")
+    .click(function() {
+      rackam_pager.next_page();
+    }).appendTo("#newsgroup-pager");
+  
   rackam_pager.load_page();
-
 }
 
 function setup_initial_screen() {
   $("#newsgroups").click(function() {
-    $("#celery").empty();
-    $("#celery").append("<ul id=\"newsgroups-list\"></ul>")
+    $("#celery")
+      .empty()
+      .append("<ul id=\"newsgroups-list\"></ul>")
 
     $.getJSON('newsgroups.cgi', function(data) {
       $.each(data, function(i, ng) {
