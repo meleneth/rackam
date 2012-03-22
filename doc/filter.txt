@@ -1,0 +1,11 @@
+(060/150) "3x3 Eyes - S01E05 - Desent.part09.rar" - 1.43 GB - yEnc (36/40)
+
+
+PostSet.num_files   %f
+PostSet.fileno      %e
+PostFile.num_pieces %n
+PostFile.piece_no   %p
+PostFile.filename   %a
+discard             %d
+
+(%e/%f) "%a"%d- yEnc (%p/%n)
