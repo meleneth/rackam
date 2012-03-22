@@ -1,10 +1,17 @@
 JSON = (loadfile "JSON.lua")() -- one-time load of the routines
 
+function web_escape(s)
+  s = string.gsub(s, "&", "&amp;")
+  s = string.gsub(s, ">", "&gt;")
+  s = string.gsub(s, "<", "&lt;")
+  return s
+end
+
 function author_as_json(author)
   local output = {}
 
-  output['name'] = author.name
-  output['newsgroup'] = author.newsgroup.name
+  output['name'] = web_escape(author.name)
+  output['newsgroup'] = web_escape(author.newsgroup.name)
   if author.headers then
     output['num_headers'] = author.headers:size()
   end
@@ -15,7 +22,7 @@ end
 function newsgroup_as_json(newsgroup)
   local output = {}
 
-  output['name'] = newsgroup.name
+  output['name'] = web_escape(newsgroup.name)
   output['min_message_no'] = newsgroup:get_min_message_no_str()
   output['max_message_no'] = newsgroup:get_max_message_no_str()
   if newsgroup.headers then
@@ -30,9 +37,9 @@ function header_as_json(header)
   local output = {}
   
   output['msg_id']  = header.msg_id
-  output['subject'] = header.subject
+  output['subject'] = web_escape(header.subject)
   output['article_no'] = header:get_article_no_str()
-  output['posted_by'] = header.author.name
+  output['posted_by'] = web_escape(header.author.name)
   output['num_bytes'] = header.num_bytes
 
   return JSON:encode(output)
