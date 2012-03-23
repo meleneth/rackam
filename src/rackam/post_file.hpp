@@ -2,7 +2,6 @@
 #define POSTFILE_HPP
 
 #include<string>
-using std::string;
 
 #include"newsgroup.hpp"
 
@@ -12,7 +11,7 @@ class PostFile {
     PostFile();
     ~PostFile();
 
-    string name;
+    std::string name;
     unsigned long long int max_message_no;
     unsigned long long int min_message_no;
 

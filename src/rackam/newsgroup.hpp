@@ -17,7 +17,7 @@ class Newsgroup {
     Newsgroup();
     ~Newsgroup();
 
-    string name;
+    std::string name;
     long long int min_message_no;
     long long int max_message_no;
 

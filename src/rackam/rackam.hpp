@@ -21,6 +21,7 @@ class Rackam {
     Newsgroup *newsgroup_for_name(std::string name);
 
     void load_headers_from_file(Newsgroup *group, std::string filename);
+    void load_header_line(Newsgroup *group, std::string line);
 
     WebServer *webserver;
     lua_State *lua_state;

@@ -2,8 +2,7 @@
 #define POSTSET_HPP
 
 #include<map>
-
-using std::map;
+#include<string>
 
 #include "post_file.hpp"
 
@@ -15,7 +14,9 @@ class PostSet {
 
     unsigned long long int min_message_no;
     unsigned long long int max_message_no;
-    map<void *, PostFile *> postfiles;
+    std::map<void *, PostFile *> postfiles;
+
+    std::string subject;
 };
 
 #endif

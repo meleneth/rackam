@@ -19,6 +19,24 @@ function author_as_json(author)
   return JSON:encode(output)
 end
 
+function postset_as_json(postset)
+  local output = {}
+
+  output['name'] = web_escape(postset.subject)
+  output['newsgroup'] = web_escape(postset.newsgroup.name)
+
+  return JSON:encode(output)
+end
+
+function postfile_as_json(postfile)
+  local output = {}
+
+  output['name'] = web_escape(postfile.subject)
+  output['newsgroup'] = web_escape(postfile.newsgroup.name)
+
+  return JSON:encode(output)
+end
+
 function newsgroup_as_json(newsgroup)
   local output = {}
 

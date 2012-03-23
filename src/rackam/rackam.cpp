@@ -118,25 +118,37 @@ void Rackam::load_headers_from_file(Newsgroup *group, string filename)
 
   in.open(filename.c_str(), ios::in);
   in.getline(linebuffer, 1024);
-  while(!in.eof()){
-    bytes_read += strlen(linebuffer);
-    vector<string> header_pieces;
+  while(!in.eof() && in){
+    string line(linebuffer);
+    bytes_read += line.length();
+    load_header_line(group, line);
 
-    string xover_line = linebuffer;
+    in.getline(linebuffer, 1024);
+  }
+  in.close();
+}
+
+void Rackam::load_header_line(Newsgroup *group, string line)
+{
+    vector<string> header_pieces;
     // scrub upper ASCII out of xover_line
     unsigned int i;
 
     // Upper ASCII gets discarded, don't parse the message at all (segfaults)
-    for(i = 0; i < xover_line.length(); i++) {
-      char c = xover_line[i];
+    for(i = 0; i < line.length(); i++) {
+      char c = line[i];
       //        console->log(s.str());
       if (c < 0){
+        return;
        printf("Error.  Load of headers failed.  Check it out.\n");
         return;
       }
     }
 
-    Tokenize(xover_line, header_pieces, "\t");
+    Tokenize(line, header_pieces, "\t");
+
+    if(header_pieces.size() < 8 ) return;
+    if(header_pieces.size() > 9 ) return;
 
     std::string msg_id = header_pieces[4];
     msg_id = msg_id.substr(1, msg_id.length() - 2);
@@ -154,7 +166,4 @@ void Rackam::load_headers_from_file(Newsgroup *group, string filename)
 
     group->headers.push_back(info);
     posted_by->headers.push_back(info);
-
-    in.getline(linebuffer, 1024);
-  }
 }
