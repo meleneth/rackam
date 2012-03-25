@@ -12,8 +12,8 @@ class PostSet {
     PostSet();
     ~PostSet();
 
-    unsigned long long int min_message_no;
-    unsigned long long int max_message_no;
+    long long int min_message_no;
+    long long int max_message_no;
     std::map<void *, PostFile *> postfiles;
 
     std::string subject;

@@ -13,6 +13,8 @@ src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i src/rackam/newsgroup.hp
 bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/author.cpp \
   src/rackam/author.hpp \
+  src/rackam/filter.cpp \
+  src/rackam/filter.hpp \
   src/rackam/console.cpp \
   src/rackam/console.hpp \
   src/rackam/newsgroup.cpp \

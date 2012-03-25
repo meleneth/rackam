@@ -4,6 +4,7 @@
 #include"post_set.hpp"
 #include"author.hpp"
 #include"message_header.hpp"
+#include"filter.hpp"
 
 #include<string>
 #include<map>
@@ -12,6 +13,7 @@
 class PostSet;
 class MessageHeader;
 class Author;
+class Filter;
 class Newsgroup {
   public:
     Newsgroup();
@@ -26,6 +28,7 @@ class Newsgroup {
     std::map<void *, PostSet *> postsets;
     std::vector<MessageHeader *> headers;
     std::vector<Author *> authors;
+    std::vector<Filter *> filters;
 };
 
 #endif

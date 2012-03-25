@@ -10,6 +10,7 @@
 #include "stringpattern.hpp"
 #include "message_header.hpp"
 #include "author.hpp"
+#include "filter.hpp"
 #include "rackam.hpp"
 
 #include <string>
@@ -32,12 +33,14 @@ using std::string;
 %include "web_response.hpp"
 %include "author.hpp"
 %include "rackam.hpp"
+%include "filter.hpp"
 %include "message_header.hpp"
 
 %template(NewsgroupVector) std::vector<Newsgroup *>;
 %template(MessageHeaderVector) std::vector<MessageHeader *>;
 %template(StringAuthorMap) std::map<string, Author *>;
 %template(AuthorVector) std::vector<Author *>;
+%template(FilterVector) std::vector<Filter *>;
 
 %extend Newsgroup {
   const char *get_max_message_no_str()

@@ -12,8 +12,8 @@ class PostFile {
     ~PostFile();
 
     std::string name;
-    unsigned long long int max_message_no;
-    unsigned long long int min_message_no;
+    long long int max_message_no;
+    long long int min_message_no;
 
     Newsgroup *newsgroup;
 };
