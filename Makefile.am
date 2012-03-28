@@ -7,7 +7,13 @@ bin_rackam_LDADD  = -llua5.1
 
 CLEANFILES = src/rackam/blackbeard_wrap.cxx
 
-src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i src/rackam/newsgroup.hpp
+src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i \
+  src/rackam/newsgroup.hpp \
+  src/rackam/post_file.hpp \
+  src/rackam/post_set.hpp \
+  src/rackam/rackam.hpp \
+  src/rackam/filter.hpp
+
 	swig -c++ -lua -o src/rackam/blackbeard_wrap.cxx src/rackam/blackbeard.i
 
 bin_rackam_SOURCES = src/rackam.cpp  \

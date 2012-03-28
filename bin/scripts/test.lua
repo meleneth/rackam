@@ -44,5 +44,16 @@ assert(f.filter_pieces[11] == "%n", "Raw data")
 assert(f.filter_pieces[12] == ")", "Raw data")
 assert(f.filter_pieces:size() == 13, "Number of filter fragments")
 
+local result = f:match("(40/102) \"The Real Ghostbusters 03.avi\" 3.4g - yEnc (37/60)");
+assert(result == true, "Matched")
+assert(40 == f.postset_fileno, "File number")
+assert(102 == f.postset_num_files, "Number of Files")
+assert("The Real Ghostbusters 03.avi" == f.postfile_filename, "Filename")
+assert(37 == f.postfile_piece_no, "Piece number in file")
+assert(60 == f.postfile_num_pieces, "Number of pieces in file")
+
+result = f:match("plenum")
+assert(result == false, "Didn't match bogus")
+
 print("Finished tests OK")
 
