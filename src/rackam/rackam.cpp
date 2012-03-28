@@ -163,7 +163,27 @@ void Rackam::load_header_line(Newsgroup *group, string line)
       atoi(header_pieces[5].c_str())
     );
     //26487885        Masters of the Universe DVD Set: Disk 8 [40/83] yEnc - "MOTU_Disk8.part38.rar" (101/114)        anonxyz29@hotmail.com (Ragnarock)       Sat, 18 Mar 2006 05:29:36 -0600    <-o2dnev5dJm9cobZRVn-sg@giganews.com>           456758  3508    Xref: number1.nntp.dca.giganews.com alt.binaries.multimedia.cartoons:26487885
+    integrate_header(info);
+}
 
-    group->headers.push_back(info);
-    posted_by->headers.push_back(info);
+void Rackam::integrate_header(MessageHeader *header)
+{
+    std::vector<Filter *>::iterator f;
+    for(f = header->group->filters.begin(); f != header->group->filters.end(); ++f){
+        if((*f)->match(header->subject)){
+            if(((*f)->postset_num_files!=0) && ((*f)->postfile_num_pieces !=0)) {
+              glean_postset_info(header, *f);
+              delete header;
+              return;
+            }
+        }
+    }
+  
+    header->group->headers.push_back(header);
+    header->author->headers.push_back(header);
+}
+
+void Rackam::glean_postset_info(MessageHeader *header, Filter *f)
+{
+
 }

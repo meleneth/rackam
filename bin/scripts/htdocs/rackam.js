@@ -104,10 +104,29 @@ function setup_initial_screen() {
           .append("<li>" + ng.name + "</li>")
           .css("text-decoration", "underline")
           .click(function() {
-            load_newsgroup_pager(ng)
+            load_newsgroup_screen(ng)
           });
       });
     });
   });
 }
 
+
+function load_newsgroup_screen(ng)
+{
+  $("#celery")
+    .empty()
+    .append("<div id=\"newsgroup\"><h1>" + ng.name + "</h1></div>")
+    .append("<ul id=\"newsgroup-items\"></ul>")
+    
+  $("#newsgroup-items")
+    .append("<li id=\"ng-headers\">Headers</li>");
+
+  $("#ng-headers")
+    .click(function() {
+      load_newsgroup_pager(ng)
+    });
+
+  $("#newsgroup-items")
+    .append("<li>PostSets</li><li>PostFiles</li><li>Authors</li></ul>")
+}
