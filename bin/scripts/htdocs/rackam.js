@@ -70,6 +70,7 @@
     var loader_func;
     loader_func = function(data) {
       $('#newsgroup-headers').empty();
+      $("#newsgroup-headers").append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>");
       return $.each(data, function(i, header) {
         return $("#newsgroup-headers").append("<tr><td>" + header.subject + "</td><td>" + header.posted_by + "</td><td>" + header.num_bytes + "</td></tr>");
       });

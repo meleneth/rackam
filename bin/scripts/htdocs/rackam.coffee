@@ -37,7 +37,7 @@ class Page
     @load_page()
 
   load_page: ->
-    $.getJSON(@url + ";page_ipp=" + @items_per_page + ";page_first=" + @start, @render_func);
+    $.getJSON(@url + ";page_ipp=" + @items_per_page + ";page_first=" + @start, @render_func)
 
   create_ui: ->
     $("#pager")
@@ -47,23 +47,24 @@ class Page
     $('<input type="button" value="&lt;-"></input>')
       .css("font-size", "48px")
       .click(-> eval "rackam_pager.previous_page();")
-      .appendTo("#pager-ui");
+      .appendTo("#pager-ui")
 
     $('<input type="button" value="-&gt;"></input>')
       .css("font-size", "48px")
       .css("margin-left", "100px")
       .click(-> eval "rackam_pager.next_page();")
-      .appendTo("#pager-ui");
+      .appendTo("#pager-ui")
 
 
 load_newsgroup_pager = (newsgroup) ->
-  loader_func = (data) -> 
+  loader_func = (data) ->
     $('#newsgroup-headers').empty()
+    $("#newsgroup-headers").append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>")
     $.each data, (i, header) ->
       $("#newsgroup-headers").append "<tr><td>"+header.subject + "</td><td>" + header.posted_by + "</td><td>" + header.num_bytes + "</td></tr>"
   rackam_pager = new Page "/newsgroup_headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func
   $("#celery").append "<div><table id=\"newsgroup-headers\"></table></div>"
-  rackam_pager.create_ui();
+  rackam_pager.create_ui()
   rackam_pager.load_page()
 
 
