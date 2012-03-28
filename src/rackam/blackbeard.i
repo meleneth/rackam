@@ -41,6 +41,7 @@ using std::string;
 %template(StringAuthorMap) std::map<string, Author *>;
 %template(AuthorVector) std::vector<Author *>;
 %template(FilterVector) std::vector<Filter *>;
+%template(StringVector) std::vector<std::string>;
 
 %extend Newsgroup {
   const char *get_max_message_no_str()
