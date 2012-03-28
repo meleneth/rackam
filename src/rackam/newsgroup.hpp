@@ -24,6 +24,7 @@ class Newsgroup {
     long long int max_message_no;
 
     Author *author_for_name(std::string authorname);
+    void add_filter(std::string filter);
 
     std::map<void *, PostSet *> postsets;
     std::vector<MessageHeader *> headers;

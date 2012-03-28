@@ -22,3 +22,15 @@ Author *Newsgroup::author_for_name(std::string authorname)
   author->newsgroup = this;
   return author;
 }
+
+void Newsgroup::add_filter(std::string filter)
+{
+  std::vector<Filter *>::iterator i;
+  for(i = filters.begin(); i != filters.end(); ++i) {
+    if((*i)->text == filter)
+      return;
+  }
+  Filter *new_filter = new Filter();
+  new_filter->parse_filter(filter);
+  filters.push_back(new_filter);
+}

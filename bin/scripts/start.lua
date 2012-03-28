@@ -123,6 +123,7 @@ function handle_web_request(webrequest, webresponse)
 end
 
 local n = Blackbeard.rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
+n:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
 
 Blackbeard.rackam:load_headers_from_file(n, "headers_snipper.log")
 
@@ -130,6 +131,7 @@ Blackbeard.rackam.webserver:register_file("index.html", "htdocs/index.html")
 Blackbeard.rackam.webserver:register_file("favicon.ico", "htdocs/favicon.ico")
 Blackbeard.rackam.webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js")
 Blackbeard.rackam.webserver:register_file("rackam.js", "htdocs/rackam.js")
+
 
 print("Lua script finished.")
 
