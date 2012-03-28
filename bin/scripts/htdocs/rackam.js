@@ -9,7 +9,15 @@ this.$OuterDiv = $('<div></div>')
 */
 
 function Page(url, start, items_per_page, num_items, render_func) {
-  $("#celery")
+  this.url = url;
+  this.start = start;
+  this.items_per_page = items_per_page;
+  this.num_items = num_items;
+  this.render_func = render_func;
+}
+
+Page.prototype.create_ui = function() {
+  $("#pager")
     .empty()
     .append("<div id=\"pager-ui\"></div>")
 
@@ -25,12 +33,6 @@ function Page(url, start, items_per_page, num_items, render_func) {
     .click(function() {
       eval("rackam_pager.next_page();");
     }).appendTo("#pager-ui");
-
-  this.url = url;
-  this.start = start;
-  this.items_per_page = items_per_page;
-  this.num_items = num_items;
-  this.render_func = render_func;
 }
 
 Page.prototype.get_num_pages = function () {
@@ -116,8 +118,13 @@ function load_newsgroup_screen(ng)
 {
   $("#celery")
     .empty()
-    .append("<div id=\"newsgroup\"><h1>" + ng.name + "</h1></div>")
-    .append("<ul id=\"newsgroup-items\"></ul>")
+    .append("<div id=\"newsgroup\"><h1>" + ng.name + "</h1><ul id=\"newsgroup-items\"></ul></div>")
+    .append("<div id=\"pager\"></div>")
+
+  rackam_pager.create_ui();
+
+  $("#newsgroup")
+    .css("float", "right")
     
   $("#newsgroup-items")
     .append("<li id=\"ng-headers\">Headers</li>");
