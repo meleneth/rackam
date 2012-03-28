@@ -1,0 +1,10 @@
+I want to use pthreads.  As far as I know it is the only way to get hardware into the thread mix.
+
+Main thread: spawns worker threads then calls join()
+
+web listener thread
+
+web response thread(x) (one per active web_response)
+
+worker thread(x) (one per active newsgroup connection + one per active [decode, par2-verify, extract])
+
