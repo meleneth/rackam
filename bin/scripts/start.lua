@@ -24,6 +24,10 @@ function postset_as_json(postset)
 
   output['name'] = web_escape(postset.subject)
   output['newsgroup'] = web_escape(postset.newsgroup.name)
+  output['author'] = web_escape(postset.author.name)
+  output['min_message_no'] = postset:get_min_message_no_str()
+  output['max_message_no'] = postset:get_max_message_no_str()
+  output['size'] = postset:get_size_str()
 
   return JSON:encode(output)
 end
@@ -33,6 +37,10 @@ function postfile_as_json(postfile)
 
   output['name'] = web_escape(postfile.subject)
   output['newsgroup'] = web_escape(postfile.newsgroup.name)
+  output['author'] = web_escape(postfile.author.name)
+  output['min_message_no'] = postfile:get_min_message_no_str()
+  output['max_message_no'] = postfile:get_max_message_no_str()
+  output['size'] = postfile:get_size_str()
 
   return JSON:encode(output)
 end
@@ -43,6 +51,7 @@ function newsgroup_as_json(newsgroup)
   output['name'] = web_escape(newsgroup.name)
   output['min_message_no'] = newsgroup:get_min_message_no_str()
   output['max_message_no'] = newsgroup:get_max_message_no_str()
+  output['size'] = newsgroup:get_size_str()
   if newsgroup.headers then
     output['num_headers']    = newsgroup.headers:size()
   end
@@ -131,6 +140,7 @@ Blackbeard.rackam.webserver:register_file("index.html", "htdocs/index.html")
 Blackbeard.rackam.webserver:register_file("favicon.ico", "htdocs/favicon.ico")
 Blackbeard.rackam.webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js")
 Blackbeard.rackam.webserver:register_file("rackam.js", "htdocs/rackam.js")
+Blackbeard.rackam.webserver:register_file("rackam.css", "htdocs/rackam.css")
 
 
 print("Lua script finished.")

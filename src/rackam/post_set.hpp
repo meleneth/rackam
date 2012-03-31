@@ -14,6 +14,7 @@ class PostSet {
 
     long long int min_message_no;
     long long int max_message_no;
+    long long int size;
     std::map<void *, PostFile *> postfiles;
 
     std::string subject;

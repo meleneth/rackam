@@ -4,8 +4,10 @@
 #include<string>
 
 #include"newsgroup.hpp"
+#include"author.hpp"
 
 class Newsgroup;
+class Author;
 class PostFile {
   public:
     PostFile();
@@ -14,8 +16,10 @@ class PostFile {
     std::string name;
     long long int max_message_no;
     long long int min_message_no;
+    long long int size;
 
     Newsgroup *newsgroup;
+    Author *author;
 };
 
 #endif

@@ -171,9 +171,10 @@ void Rackam::integrate_header(MessageHeader *header)
     std::vector<Filter *>::iterator f;
     for(f = header->group->filters.begin(); f != header->group->filters.end(); ++f){
         if((*f)->match(header->subject)){
-            if(((*f)->postset_num_files!=0) && ((*f)->postfile_num_pieces !=0)) {
+            if( ((*f)->postset_num_files!=0) 
+                 && ((*f)->postfile_num_pieces !=0)
+                 && ((*f)->postfile_filename.length() != 0) ) {
               glean_postset_info(header, *f);
-              delete header;
               return;
             }
         }
@@ -185,5 +186,41 @@ void Rackam::integrate_header(MessageHeader *header)
 
 void Rackam::glean_postset_info(MessageHeader *header, Filter *f)
 {
+  // Start at the beginning.  Just make PostFile, don't even need to actually
+  // keep the message id's yet
 
+  // f has saved values on it for the duration of this call.
+
+  // This will all run through the database somehow soon, don't worry about it.
+ 
+  PostFile *file = get_postfile_for_filename(header->author, f->postfile_filename);
+
+  // omg denormalized someone shoot me
+  file->size += header->size;
+  header->author->size += header->size;
+  header->author->newsgroup->size += header->size;
+
+  delete header;
 }
+
+PostFile *Rackam::get_postfile_for_filename(Author *author, std::string filename)
+{
+  // SHIP IT
+  // uh I mean naive implementation here re-write plz
+  std::vector<PostFile *>::iterator i;
+  for(i = author->postfiles.begin(); i != author->postfiles.end(); ++i) {
+    if((*i)->name == filename) {
+      return *i;
+    }
+  }
+  PostFile *new_file = new PostFile();
+  new_file->name = filename;
+  new_file->author = author;
+  
+  author->postfiles.push_back(new_file);
+  author->newsgroup->postfiles.push_back(new_file);
+
+  return new_file;
+}
+
+

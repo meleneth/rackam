@@ -56,6 +56,54 @@ using std::string;
     sprintf(temp, "%llu", $self->min_message_no);
     return temp;
   }
+  const char *get_size_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->size);
+    return temp;
+  }
+}
+
+%extend PostSet {
+  const char *get_max_message_no_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->max_message_no);
+    return temp;
+  }
+  const char *get_min_message_no_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->min_message_no);
+    return temp;
+  }
+  const char *get_size_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->size);
+    return temp;
+  }
+}
+
+%extend PostFile {
+  const char *get_max_message_no_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->max_message_no);
+    return temp;
+  }
+  const char *get_min_message_no_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->min_message_no);
+    return temp;
+  }
+  const char *get_size_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->size);
+    return temp;
+  }
 }
 
 %extend MessageHeader {
@@ -63,6 +111,12 @@ using std::string;
   { 
     static char temp[1024];
     sprintf(temp, "%llu", $self->article_no);
+    return temp;
+  }
+  const char *get_size_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->size);
     return temp;
   }
 }

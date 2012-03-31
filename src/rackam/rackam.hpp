@@ -19,6 +19,7 @@ class Rackam {
     void start_web_server(std::string base_path, int port_no);
     void main_loop();
     Newsgroup *newsgroup_for_name(std::string name);
+    PostFile *get_postfile_for_filename(Author *author, std::string filename);
 
     void load_headers_from_file(Newsgroup *group, std::string filename);
     void load_header_line(Newsgroup *group, std::string line);
