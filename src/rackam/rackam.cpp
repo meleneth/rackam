@@ -216,6 +216,9 @@ PostFile *Rackam::get_postfile_for_filename(Author *author, std::string filename
   PostFile *new_file = new PostFile();
   new_file->name = filename;
   new_file->author = author;
+
+  author->max_postfile_id++;
+  new_file->id = author->max_postfile_id;
   
   author->postfiles.push_back(new_file);
   author->newsgroup->postfiles.push_back(new_file);

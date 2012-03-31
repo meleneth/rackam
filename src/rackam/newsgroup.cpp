@@ -2,8 +2,9 @@
 
 Newsgroup::Newsgroup()
 {
-//  max_message_no = 0;
-//  min_message_no = 0;
+  max_message_no = 0;
+  min_message_no = 0;
+  max_author_id = 0;
 }
 
 Newsgroup::~Newsgroup()
@@ -18,9 +19,25 @@ Author *Newsgroup::author_for_name(std::string authorname)
       return *i;
   }
   Author *author = new Author(authorname);
+  max_author_id++;
+  author->id = max_author_id;
   authors.push_back(author);
   author->newsgroup = this;
   return author;
+}
+
+Author *Newsgroup::author_for_id(int author_id)
+{
+  if(author_id > max_author_id){
+    return NULL;
+  }
+
+  std::vector<Author *>::iterator i;
+  for(i = authors.begin() ; i != authors.end() ; ++i) {
+    if((*i)->id == author_id)
+      return *i;
+  }
+  return NULL;
 }
 
 void Newsgroup::add_filter(std::string filter)

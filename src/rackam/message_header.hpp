@@ -17,7 +17,7 @@ class MessageHeader {
         std::string msg_id;
         std::string subject;
         Author *author;
-        int num_bytes;
+        int size;
     private:
     protected:
 };

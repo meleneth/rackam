@@ -10,8 +10,10 @@ end
 function author_as_json(author)
   local output = {}
 
+  output['id'] = author.id
   output['name'] = web_escape(author.name)
   output['newsgroup'] = web_escape(author.newsgroup.name)
+  output['size'] = author.size
   if author.headers then
     output['num_headers'] = author.headers:size()
   end
@@ -22,6 +24,7 @@ end
 function postset_as_json(postset)
   local output = {}
 
+  output['id'] = postset.id
   output['name'] = web_escape(postset.subject)
   output['newsgroup'] = web_escape(postset.newsgroup.name)
   output['author'] = web_escape(postset.author.name)
@@ -34,7 +37,8 @@ end
 
 function postfile_as_json(postfile)
   local output = {}
-
+  
+  output['id'] = postfile.id
   output['name'] = web_escape(postfile.subject)
   output['newsgroup'] = web_escape(postfile.newsgroup.name)
   output['author'] = web_escape(postfile.author.name)
@@ -67,7 +71,7 @@ function header_as_json(header)
   output['subject'] = web_escape(header.subject)
   output['article_no'] = header:get_article_no_str()
   output['posted_by'] = web_escape(header.author.name)
-  output['num_bytes'] = header.num_bytes
+  output['size'] = header.size
 
   return JSON:encode(output)
 end

@@ -26,7 +26,10 @@ class Newsgroup {
     long long int max_message_no;
     long long int size;
 
+    int max_author_id;
+
     Author *author_for_name(std::string authorname);
+    Author *author_for_id(int author_id);
     void add_filter(std::string filter);
 
     std::map<void *, PostSet *> postsets;

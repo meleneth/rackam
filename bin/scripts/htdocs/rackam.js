@@ -1,12 +1,12 @@
 (function() {
-  var Page, load_newsgroup_list_screen, load_newsgroup_pager, load_newsgroup_screen, rackam_pager;
+  var Page, html_tr, load_newsgroup_list_screen, load_newsgroup_pager, load_newsgroup_screen, rackam_pager,
+    __slice = Array.prototype.slice;
 
   rackam_pager = null;
 
   load_newsgroup_list_screen = function() {
     $("#celery").empty().append("<ul id=\"newsgroups-list\"></ul>");
-    $("#breadcrumbs").empty().append("<ul></ul>");
-    $("#breadcrumbs ul").append("<li>Newsgroups</li>");
+    $("#breadcrumbs").append("<li>Newsgroups</li>");
     return $.getJSON('newsgroups.cgi', function(data) {
       var ng, _i, _len, _results;
       _results = [];
@@ -72,6 +72,24 @@
 
   })();
 
+  html_tr = function() {
+    var element, elements, result, _fn, _i, _len;
+    elements = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    result = [];
+    result.push("<tr>");
+    _fn = function(element) {
+      result.push("<td>");
+      result.push(element);
+      return result.push("</td>");
+    };
+    for (_i = 0, _len = elements.length; _i < _len; _i++) {
+      element = elements[_i];
+      _fn(element);
+    }
+    result.push("</tr>");
+    return result.join("");
+  };
+
   load_newsgroup_pager = function(newsgroup) {
     var loader_func;
     loader_func = function(data) {
@@ -82,7 +100,7 @@
       for (_i = 0, _len = data.length; _i < _len; _i++) {
         header = data[_i];
         _results.push((function(header) {
-          return $("<tr><td>" + header.subject + "</td><td>" + header.posted_by + "</td><td>" + header.num_bytes + "</td></tr>").appendTo("#newsgroup-headers");
+          return $(html_tr(header.subject, header.posted_by, header.size)).appendTo("#newsgroup-headers");
         })(header));
       }
       return _results;

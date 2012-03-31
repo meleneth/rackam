@@ -6,10 +6,6 @@ load_newsgroup_list_screen = ->
     .append("<ul id=\"newsgroups-list\"></ul>")
 
   $("#breadcrumbs")
-    .empty()
-    .append("<ul></ul>")
-
-  $("#breadcrumbs ul")
     .append("<li>Newsgroups</li>")
 
   $.getJSON 'newsgroups.cgi', (data) ->
@@ -62,6 +58,17 @@ class Page
       .click(-> eval "rackam_pager.next_page();")
       .appendTo("#pager-ui")
 
+html_tr = (elements...) ->
+  result = []
+  result.push "<tr>"
+  for element in elements
+    do (element) ->
+      result.push "<td>"
+      result.push element
+      result.push "</td>"
+  result.push "</tr>"
+  result.join ""
+      
 
 load_newsgroup_pager = (newsgroup) ->
   loader_func = (data) ->
@@ -69,7 +76,7 @@ load_newsgroup_pager = (newsgroup) ->
     $("#newsgroup-headers").append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>")
     for header in data
       do (header) ->
-        $("<tr><td>" + header.subject + "</td><td>" + header.posted_by + "</td><td>" + header.num_bytes + "</td></tr>")
+        $(html_tr(header.subject, header.posted_by, header.size))
           .appendTo("#newsgroup-headers")
 
   rackam_pager = new Page "/newsgroup_headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func

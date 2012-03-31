@@ -17,6 +17,7 @@ class PostFile {
     long long int max_message_no;
     long long int min_message_no;
     long long int size;
+    int id;
 
     Newsgroup *newsgroup;
     Author *author;

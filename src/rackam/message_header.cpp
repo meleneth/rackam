@@ -9,7 +9,7 @@ MessageHeader::MessageHeader(Newsgroup *group, long long int article_no, string 
     this->author = posted_by;
     this->msg_id = msg_id;
     this->article_no = article_no;
-    this->num_bytes = num_bytes;
+    this->size = num_bytes;
 }
 
 MessageHeader::~MessageHeader()
