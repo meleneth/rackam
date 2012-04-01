@@ -32,7 +32,7 @@ class Newsgroup {
     Author *author_for_id(int author_id);
     void add_filter(std::string filter);
 
-    std::map<void *, PostSet *> postsets;
+    std::vector<PostSet *> postsets;
     std::vector<PostFile *> postfiles;
     std::vector<MessageHeader *> headers;
     std::vector<Author *> authors;

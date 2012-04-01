@@ -13,7 +13,14 @@ function author_as_json(author)
   output['id'] = author.id
   output['name'] = web_escape(author.name)
   output['newsgroup'] = web_escape(author.newsgroup.name)
-  output['size'] = author.size
+  output['size'] = author:get_size_str()
+
+  if author.postsets then
+    output['num_postsets'] = author.postsets:size()
+  end
+  if author.postfiles then
+    output['num_postfiles'] = author.postfiles:size()
+  end
   if author.headers then
     output['num_headers'] = author.headers:size()
   end
@@ -59,6 +66,15 @@ function newsgroup_as_json(newsgroup)
   if newsgroup.headers then
     output['num_headers']    = newsgroup.headers:size()
   end
+  if newsgroup.authors then
+    output['num_authors']    = newsgroup.authors:size()
+  end
+  if newsgroup.postsets then
+    output['num_postsets']    = newsgroup.postsets:size()
+  end
+  if newsgroup.postfiles then
+    output['num_postfiles']    = newsgroup.postfiles:size()
+  end
 
   return JSON:encode(output)
   --return JSON:encode_pretty(output)
@@ -81,7 +97,13 @@ function web_response_authors(webrequest, webresponse)
   local response_lines = {}
   local i;
   local max_i = newsgroup.authors:size() - 1
-  for i = 0, max_i do
+  local page_ipp = webrequest:paramn("page_ipp")
+  local page_first = webrequest:paramn("page_first")
+  if page_ipp   == 0 then page_ipp = 20 end
+  local page_last = page_first + page_ipp
+  if page_last > max_i then page_last = max_i end
+
+  for i = page_first, page_last do
     local author = newsgroup.authors[i]
     table.insert(response_lines, author_as_json(author))
   end

@@ -1,5 +1,5 @@
 (function() {
-  var Page, html_tr, load_newsgroup_list_screen, load_newsgroup_pager, load_newsgroup_screen, rackam_pager,
+  var Page, html_tr, load_authors_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, rackam_pager,
     __slice = Array.prototype.slice;
 
   rackam_pager = null;
@@ -59,7 +59,7 @@
     };
 
     Page.prototype.create_ui = function() {
-      $("#pager").empty().append("<div id=\"pager-ui\"></div>");
+      $("#pager").empty().append("<div id=\"pager-ui\"></div>").append("<div><table id=\"pager-data\"></table></div>");
       $('<input type="button" value="&lt;-"></input>').css("font-size", "48px").click(function() {
         return eval("rackam_pager.previous_page();");
       }).appendTo("#pager-ui");
@@ -90,23 +90,42 @@
     return result.join("");
   };
 
-  load_newsgroup_pager = function(newsgroup) {
+  load_authors_pager = function(newsgroup) {
+    var loader_func;
+    loader_func = function(data) {
+      var author, _i, _len, _results;
+      $('#pager-data').empty();
+      $("#pager-data").append("<tr><th>Name</th><th>PostSets</th><th>PostFiles</th><th>Headers</th><th>Bytes Posted</th></tr>");
+      _results = [];
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        author = data[_i];
+        _results.push((function(author) {
+          return $(html_tr(author.name, author.num_postsets, author.num_postfiles, author.num_headers, author.size)).appendTo("#pager-data");
+        })(author));
+      }
+      return _results;
+    };
+    rackam_pager = new Page("/authors.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_authors, loader_func);
+    rackam_pager.create_ui();
+    return rackam_pager.load_page();
+  };
+
+  load_headers_pager = function(newsgroup) {
     var loader_func;
     loader_func = function(data) {
       var header, _i, _len, _results;
-      $('#newsgroup-headers').empty();
-      $("#newsgroup-headers").append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>");
+      $('#pager-data').empty();
+      $("#pager-data").append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>");
       _results = [];
       for (_i = 0, _len = data.length; _i < _len; _i++) {
         header = data[_i];
         _results.push((function(header) {
-          return $(html_tr(header.subject, header.posted_by, header.size)).appendTo("#newsgroup-headers");
+          return $(html_tr(header.subject, header.posted_by, header.size)).appendTo("#pager-data");
         })(header));
       }
       return _results;
     };
     rackam_pager = new Page("/newsgroup_headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func);
-    $("#celery").append("<div><table id=\"newsgroup-headers\"></table></div>");
     rackam_pager.create_ui();
     return rackam_pager.load_page();
   };
@@ -115,9 +134,12 @@
     $("#celery").empty().append("<div id=\"newsgroup\"><h1>" + ng.name + "</h1><ul id=\"newsgroup-items\"></ul></div>").append("<div id=\"pager\"></div>");
     $("#newsgroup-items").append;
     $("<li id=\"ng-headers\">Headers</li>").click(function() {
-      return load_newsgroup_pager(ng);
+      return load_headers_pager(ng);
     }).appendTo("#newsgroup-items");
-    return $("#newsgroup-items").append("<li>PostSets</li><li>PostFiles</li><li>Authors</li></ul>");
+    $("#newsgroup-items").append("<li>PostSets</li><li>PostFiles</li>");
+    return $("<li>Authors</li>").click(function() {
+      return load_authors_pager(ng);
+    }).appendTo("#newsgroup-items");
   };
 
 }).call(this);

@@ -6,6 +6,7 @@ Author::Author(std::string authorname)
   id = 0;
   max_postset_id = 0;
   max_postfile_id = 0;
+  size = 0;
 }
 
 Author::~Author()

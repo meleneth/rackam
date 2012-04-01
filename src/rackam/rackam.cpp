@@ -182,6 +182,7 @@ void Rackam::integrate_header(MessageHeader *header)
   
     header->group->headers.push_back(header);
     header->author->headers.push_back(header);
+    header->author->size += header->size;
 }
 
 void Rackam::glean_postset_info(MessageHeader *header, Filter *f)

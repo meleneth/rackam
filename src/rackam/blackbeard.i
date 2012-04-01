@@ -42,6 +42,8 @@ using std::string;
 %template(AuthorVector) std::vector<Author *>;
 %template(FilterVector) std::vector<Filter *>;
 %template(StringVector) std::vector<std::string>;
+%template(PostSetVector) std::vector<PostSet *>;
+%template(PostFileVector) std::vector<PostFile *>;
 
 %extend Newsgroup {
   const char *get_max_message_no_str()
@@ -113,6 +115,15 @@ using std::string;
     sprintf(temp, "%llu", $self->article_no);
     return temp;
   }
+  const char *get_size_str()
+  { 
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->size);
+    return temp;
+  }
+}
+
+%extend Author {
   const char *get_size_str()
   { 
     static char temp[1024];
