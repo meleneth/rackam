@@ -6,14 +6,18 @@ load_newsgroup_list_screen = ->
     .append("<ul id=\"newsgroups-list\"></ul>")
 
   $("#breadcrumbs")
-    .append("<li>Newsgroups</li>")
+    .empty()
+
+  $("<li>Newsgroups</li>")
+    .click -> load_newsgroup_list_screen()
+    .appendTo("#breadcrumbs")
 
   $.getJSON 'newsgroups.cgi', (data) ->
-    for ng in data
-      do (ng) ->
-        $("#newsgroups-list")
-          .append("<li>" + ng.name + "</li>")
-          .click -> load_newsgroup_screen(ng)
+      for ng in data
+        do (ng) ->
+          $("#newsgroups-list")
+            .append("<li>" + ng.name + "</li>")
+            .click -> load_newsgroup_screen(ng)
 
 $ ->
   `load_newsgroup_list_screen()`
@@ -69,27 +73,66 @@ html_tr = (elements...) ->
       result.push "</td>"
   result.push "</tr>"
   result.join ""
-      
+
+readable_storage = (number) ->
+  length = number.length
+  return number.slice(0, -12) + "TB" if length > 12
+  return number.slice(0, -9) + "GB" if length > 9
+  return number.slice(0, -6) + "MB" if length > 6
+  return number.slice(0, -3) + "kB" if length > 6
+  return number
 
 load_authors_pager = (newsgroup) ->
   loader_func = (data) ->
-    $('#pager-data').empty()
-    $("#pager-data").append("<tr><th>Name</th><th>PostSets</th><th>PostFiles</th><th>Headers</th><th>Bytes Posted</th></tr>")
+    $("#pager-data")
+      .empty()
+      .append("<tr><th>Name</th><th>PostSets</th><th>PostFiles</th><th>Headers</th><th>Bytes Posted</th></tr>")
     for author in data
       do (author) ->
-        $(html_tr(author.name, author.num_postsets, author.num_postfiles, author.num_headers, author.size))
+        row = $("<tr></tr>")
+        cell = $("<td>" + author.name + "</td>")
+        cell.click -> load_author_headers_pager(newsgroup, author)
+        row.append(cell)
+        
+        $("<td>" + author.num_postsets + "</td>")
+          .appendTo(row)
+        $("<td>" + author.num_postfiles + "</td>")
+          .appendTo(row)
+        $("<td>" + author.num_headers + "</td>")
+          .appendTo(row)
+        $("<td>" + readable_storage(author.size) + "</td>")
+          .appendTo(row)
+
+        row
           .appendTo("#pager-data")
+
   rackam_pager = new Page("/authors.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_authors, loader_func)
   rackam_pager.create_ui()
   rackam_pager.load_page()
   
-load_headers_pager = (newsgroup) ->
+load_author_headers_pager = (newsgroup, author) ->
   loader_func = (data) ->
-    $('#pager-data').empty()
-    $("#pager-data").append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>")
+    $('#pager-data')
+      .empty()
+      .append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>")
     for header in data
       do (header) ->
-        $(html_tr(header.subject, header.posted_by, header.size))
+        $(html_tr(header.subject, header.posted_by, readable_storage(header.size)))
+          .appendTo("#pager-data")
+
+  url = "/author_headers.cgi?ng=" + newsgroup.name + ";author_id=" + author.id
+  rackam_pager = new Page url, 0, 30, newsgroup.num_headers, loader_func
+  rackam_pager.create_ui()
+  rackam_pager.load_page()
+
+load_headers_pager = (newsgroup) ->
+  loader_func = (data) ->
+    $('#pager-data')
+      .empty()
+      .append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>")
+    for header in data
+      do (header) ->
+        $(html_tr(header.subject, header.posted_by, readable_storage(header.size)))
           .appendTo("#pager-data")
 
   rackam_pager = new Page "/newsgroup_headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func
@@ -102,12 +145,13 @@ load_newsgroup_screen = (ng) ->
     .append("<div id=\"newsgroup\"><h1>" + ng.name + "</h1><ul id=\"newsgroup-items\"></ul></div>")
     .append("<div id=\"pager\"></div>")
 
-  $("#newsgroup-items").append
   $("<li id=\"ng-headers\">Headers</li>")
     .click(-> load_headers_pager(ng))
     .appendTo("#newsgroup-items")
 
-  $("#newsgroup-items").append "<li>PostSets</li><li>PostFiles</li>"
+  $("#newsgroup-items")
+    .append "<li>PostSets</li><li>PostFiles</li>"
+
   $("<li>Authors</li>")
     .click(-> load_authors_pager(ng))
     .appendTo("#newsgroup-items")

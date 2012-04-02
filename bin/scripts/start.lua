@@ -121,6 +121,25 @@ function web_response_newsgroups(webresponse)
   webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
+function web_response_newsgroup_author_headers(webrequest, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+  local author = newsgroup:author_for_id(webrequest:paramn("author_id"))
+  local response_lines = {}
+  local i;
+  local max_i = author.headers:size() - 1
+  local page_ipp = webrequest:paramn("page_ipp")
+  local page_first = webrequest:paramn("page_first")
+  if page_ipp   == 0 then page_ipp = 20 end
+  local page_last = page_first + page_ipp
+  if page_last > max_i then page_last = max_i end
+
+  for i = page_first, page_last do
+    local header = author.headers[i]
+    table.insert(response_lines, header_as_json(header))
+  end
+  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
+end
+
 function web_response_newsgroup_headers(webrequest, webresponse)
   local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
 
@@ -148,6 +167,10 @@ function handle_web_request(webrequest, webresponse)
     end
     if webrequest.filename == "newsgroups.cgi" then
       web_response_newsgroups(webresponse)
+      return
+    end
+    if webrequest.filename == "author_headers.cgi" then
+      web_response_newsgroup_author_headers(webrequest, webresponse)
       return
     end
     if webrequest.filename == "newsgroup_headers.cgi" then

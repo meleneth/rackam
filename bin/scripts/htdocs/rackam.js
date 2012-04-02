@@ -1,12 +1,15 @@
 (function() {
-  var Page, html_tr, load_authors_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, rackam_pager,
+  var Page, html_tr, load_author_headers_pager, load_authors_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, rackam_pager, readable_storage,
     __slice = Array.prototype.slice;
 
   rackam_pager = null;
 
   load_newsgroup_list_screen = function() {
     $("#celery").empty().append("<ul id=\"newsgroups-list\"></ul>");
-    $("#breadcrumbs").append("<li>Newsgroups</li>");
+    $("#breadcrumbs").empty();
+    $("<li>Newsgroups</li>").click(function() {
+      return load_newsgroup_list_screen().appendTo("#breadcrumbs");
+    });
     return $.getJSON('newsgroups.cgi', function(data) {
       var ng, _i, _len, _results;
       _results = [];
@@ -90,17 +93,37 @@
     return result.join("");
   };
 
+  readable_storage = function(number) {
+    var length;
+    length = number.length;
+    if (length > 12) return number.slice(0, -12) + "TB";
+    if (length > 9) return number.slice(0, -9) + "GB";
+    if (length > 6) return number.slice(0, -6) + "MB";
+    if (length > 6) return number.slice(0, -3) + "kB";
+    return number;
+  };
+
   load_authors_pager = function(newsgroup) {
     var loader_func;
     loader_func = function(data) {
       var author, _i, _len, _results;
-      $('#pager-data').empty();
-      $("#pager-data").append("<tr><th>Name</th><th>PostSets</th><th>PostFiles</th><th>Headers</th><th>Bytes Posted</th></tr>");
+      $("#pager-data").empty().append("<tr><th>Name</th><th>PostSets</th><th>PostFiles</th><th>Headers</th><th>Bytes Posted</th></tr>");
       _results = [];
       for (_i = 0, _len = data.length; _i < _len; _i++) {
         author = data[_i];
         _results.push((function(author) {
-          return $(html_tr(author.name, author.num_postsets, author.num_postfiles, author.num_headers, author.size)).appendTo("#pager-data");
+          var cell, row;
+          row = $("<tr></tr>");
+          cell = $("<td>" + author.name + "</td>");
+          cell.click(function() {
+            return load_author_headers_pager(newsgroup, author);
+          });
+          row.append(cell);
+          $("<td>" + author.num_postsets + "</td>").appendTo(row);
+          $("<td>" + author.num_postfiles + "</td>").appendTo(row);
+          $("<td>" + author.num_headers + "</td>").appendTo(row);
+          $("<td>" + readable_storage(author.size) + "</td>").appendTo(row);
+          return row.appendTo("#pager-data");
         })(author));
       }
       return _results;
@@ -110,17 +133,36 @@
     return rackam_pager.load_page();
   };
 
-  load_headers_pager = function(newsgroup) {
-    var loader_func;
+  load_author_headers_pager = function(newsgroup, author) {
+    var loader_func, url;
     loader_func = function(data) {
       var header, _i, _len, _results;
-      $('#pager-data').empty();
-      $("#pager-data").append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>");
+      $('#pager-data').empty().append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>");
       _results = [];
       for (_i = 0, _len = data.length; _i < _len; _i++) {
         header = data[_i];
         _results.push((function(header) {
-          return $(html_tr(header.subject, header.posted_by, header.size)).appendTo("#pager-data");
+          return $(html_tr(header.subject, header.posted_by, readable_storage(header.size))).appendTo("#pager-data");
+        })(header));
+      }
+      return _results;
+    };
+    url = "/author_headers.cgi?ng=" + newsgroup.name + ";author_id=" + author.id;
+    rackam_pager = new Page(url, 0, 30, newsgroup.num_headers, loader_func);
+    rackam_pager.create_ui();
+    return rackam_pager.load_page();
+  };
+
+  load_headers_pager = function(newsgroup) {
+    var loader_func;
+    loader_func = function(data) {
+      var header, _i, _len, _results;
+      $('#pager-data').empty().append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>");
+      _results = [];
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        header = data[_i];
+        _results.push((function(header) {
+          return $(html_tr(header.subject, header.posted_by, readable_storage(header.size))).appendTo("#pager-data");
         })(header));
       }
       return _results;
@@ -132,7 +174,6 @@
 
   load_newsgroup_screen = function(ng) {
     $("#celery").empty().append("<div id=\"newsgroup\"><h1>" + ng.name + "</h1><ul id=\"newsgroup-items\"></ul></div>").append("<div id=\"pager\"></div>");
-    $("#newsgroup-items").append;
     $("<li id=\"ng-headers\">Headers</li>").click(function() {
       return load_headers_pager(ng);
     }).appendTo("#newsgroup-items");
