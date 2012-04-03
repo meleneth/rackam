@@ -182,6 +182,7 @@ end
 
 local n = Blackbeard.rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
 n:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
+n:add_filter("%s [%e/%f] - \"%a\"%d yEnc (%p/%n)")
 
 Blackbeard.rackam:load_headers_from_file(n, "headers_snipper.log")
 
@@ -193,4 +194,5 @@ Blackbeard.rackam.webserver:register_file("rackam.css", "htdocs/rackam.css")
 
 
 print("Lua script finished.")
+Blackbeard.rackam.still_running = false
 

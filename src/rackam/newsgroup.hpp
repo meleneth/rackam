@@ -35,8 +35,10 @@ class Newsgroup {
     std::vector<PostSet *> postsets;
     std::vector<PostFile *> postfiles;
     std::vector<MessageHeader *> headers;
-    std::vector<Author *> authors;
     std::vector<Filter *> filters;
+
+    std::vector<Author *> authors;
+    std::map<std::string, Author *> authors_by_name;
 };
 
 #endif

@@ -13,16 +13,17 @@ Newsgroup::~Newsgroup()
 
 Author *Newsgroup::author_for_name(std::string authorname)
 {
-  std::vector<Author *>::iterator i;
-  for(i = authors.begin() ; i != authors.end() ; ++i) {
-    if((*i)->name == authorname)
-      return *i;
+  std::map<std::string, Author *>::iterator result;
+  result = authors_by_name.find(authorname);
+  if(result != authors_by_name.end()){
+    return result->second;
   }
   Author *author = new Author(authorname);
   max_author_id++;
   author->id = max_author_id;
   authors.push_back(author);
   author->newsgroup = this;
+  authors_by_name[authorname] = author;
   return author;
 }
 

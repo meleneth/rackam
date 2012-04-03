@@ -63,7 +63,8 @@ void Rackam::main_loop()
 
     int result;
     do {
-      result = select(fdmax+1, &read_fds, NULL, NULL, &tv);
+      //result = select(fdmax+1, &read_fds, NULL, NULL, &tv);
+      result = select(fdmax+1, &read_fds, NULL, NULL, NULL);
     } while ((result == -1) && (errno == EINTR));
 
     if(result == -1){

@@ -22,7 +22,10 @@ void Filter::parse_filter(std::string filter)
   while(position < size) {
     int result = filter.find('%', position);
     if(result != std::string::npos) {
-      filter_pieces.push_back(filter.substr(position, result - position));
+      // don't add to the filter if the first piece is a flag
+      if(result != 0){
+        filter_pieces.push_back(filter.substr(position, result - position));
+      }
       filter_pieces.push_back(filter.substr(result, 2));
       position = result + 2;
     }else{
@@ -86,6 +89,9 @@ bool Filter::match(std::string haystack)
           break;
         case 'a':
           postfile_filename = percent_matched;
+          break;
+        case 's':
+          postset_subject = percent_matched;
           break;
         case 'd':
           break;

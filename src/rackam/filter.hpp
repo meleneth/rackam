@@ -15,6 +15,7 @@ class Filter {
     std::string text;
     std::vector<std::string> filter_pieces;
 
+    std::string postset_subject;
     int postset_num_files;
     int postset_fileno;
     int postfile_num_pieces;
