@@ -31,6 +31,7 @@ class Author {
     std::vector<MessageHeader *> headers;
     std::vector<PostSet *> postsets;
     std::vector<PostFile *> postfiles;
+    std::map<std::string, PostFile *> postfiles_by_name;
 };
 
 #endif

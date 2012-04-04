@@ -209,12 +209,12 @@ PostFile *Rackam::get_postfile_for_filename(Author *author, std::string filename
 {
   // SHIP IT
   // uh I mean naive implementation here re-write plz
-  std::vector<PostFile *>::iterator i;
-  for(i = author->postfiles.begin(); i != author->postfiles.end(); ++i) {
-    if((*i)->name == filename) {
-      return *i;
-    }
+  std::map<std::string, PostFile *>::iterator result;
+  result = author->postfiles_by_name.find(filename);
+  if(result != author->postfiles_by_name.end()) {
+    return result->second;
   }
+
   PostFile *new_file = new PostFile();
   new_file->name = filename;
   new_file->author = author;
@@ -223,6 +223,7 @@ PostFile *Rackam::get_postfile_for_filename(Author *author, std::string filename
   new_file->id = author->max_postfile_id;
   
   author->postfiles.push_back(new_file);
+  author->postfiles_by_name[filename] = new_file;
   author->newsgroup->postfiles.push_back(new_file);
 
   return new_file;

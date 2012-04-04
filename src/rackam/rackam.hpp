@@ -10,6 +10,7 @@
 #include <lualib.h>
 
 #include"web_server.hpp"
+#include"author.hpp"
 
 class Rackam {
   public:
