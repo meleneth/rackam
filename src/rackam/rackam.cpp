@@ -15,6 +15,7 @@ extern "C" {
 
 Rackam::Rackam()
 {
+  pthread_mutex_init(&self_mutex, NULL);
   lua_state = lua_open();
   luaopen_base(lua_state);
   luaopen_table(lua_state);
@@ -24,6 +25,7 @@ Rackam::Rackam()
 
   console->log("Lua initialized.");
   still_running = 1;
+  running_threads = 0;
 }
 
 Rackam::~Rackam()
@@ -36,6 +38,8 @@ Rackam::~Rackam()
   lua_close(lua_state);
   if(webserver)
     delete webserver;
+
+  pthread_mutex_destroy(&self_mutex);
 }
 
 void Rackam::start_web_server(string base_path, int port_no)
@@ -104,7 +108,11 @@ Newsgroup *Rackam::newsgroup_for_name(string name)
 
   Newsgroup *new_group = new Newsgroup();
   new_group->name = name;
+
+  pthread_mutex_lock(&self_mutex);
   newsgroups.push_back(new_group);
+  pthread_mutex_unlock(&self_mutex);
+
   return new_group;
 }
 
@@ -188,29 +196,37 @@ void Rackam::queue_header(MessageHeader *info)
 
   if(!info){
     // Special argument!  info == NULL, flush our headers, wait for threads to finish
+    // well, it USED to wait for threads to finish... 
+    // now it does it by looking for running_threads to hit 0
     if(headers){
-      pthread_attr_t attr;
-      pthread_attr_init(&attr);
-      pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-      pthread_create(&new_thread, &attr, Rackam_integrate_headers, (void *)headers);
-      threads.push_back(new_thread);
-    }
-    std::vector<pthread_t>::iterator i;
-    for(i = threads.begin(); i != threads.end(); ++i){
-      void *status;
-      pthread_join(*i, &status);
+      pthread_mutex_lock(&self_mutex);
+      running_threads++;
+      pthread_mutex_unlock(&self_mutex);
 
+      pthread_create(&new_thread, NULL, Rackam_integrate_headers, (void *)headers);
+      pthread_detach(new_thread);
+    }
+
+    if(running_threads) {
+      pthread_mutex_lock(&self_mutex);
+    }
+    while(running_threads) {
+      pthread_mutex_unlock(&self_mutex);
+      sched_yield();
+      pthread_mutex_lock(&self_mutex);
     }
     return;
   }
 
   headers->push_back(info);
-  if(headers->size() > 5000) {
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    pthread_create(&new_thread, &attr, Rackam_integrate_headers, (void *) headers);
+  if(headers->size() > 50) {
+    pthread_create(&new_thread, NULL, Rackam_integrate_headers, (void *) headers);
+    pthread_detach(new_thread);
     threads.push_back(new_thread);
+
+    pthread_mutex_lock(&self_mutex);
+    running_threads++;
+    pthread_mutex_unlock(&self_mutex);
 
     // Spawn thread, save it in our list for later, empty out headers
     headers = NULL;
@@ -227,42 +243,60 @@ void *Rackam_integrate_headers(void *h)
   }
   headers->empty();
   delete headers;
+  pthread_mutex_lock(&rackam->self_mutex);
+  rackam->running_threads--;
+  pthread_mutex_unlock(&rackam->self_mutex);
 }
 
 void Rackam::integrate_header(MessageHeader *header)
 {
     std::vector<Filter *>::iterator f;
     for(f = header->group->filters.begin(); f != header->group->filters.end(); ++f){
-        if((*f)->match(header->subject)){
-            if( ((*f)->postset_num_files!=0) 
-                 && ((*f)->postfile_num_pieces !=0)
-                 && ((*f)->postfile_filename.length() != 0) ) {
-              glean_postset_info(header, *f);
+      FilterMatch *match = (*f)->match(header->subject);
+        if(match){
+            if( (match->postset_num_files!=0) 
+                 && (match->postfile_num_pieces !=0)
+                 && (match->postfile_filename.length() != 0) ) {
+              glean_postset_info(header, match);
+              delete match;
               return;
             }
         }
     }
   
+    pthread_mutex_lock(&header->group->self_mutex);
     header->group->headers.push_back(header);
+    pthread_mutex_unlock(&header->group->self_mutex);
+
+    pthread_mutex_lock(&header->author->self_mutex);
     header->author->headers.push_back(header);
     header->author->size += header->size;
+    pthread_mutex_unlock(&header->author->self_mutex);
 }
 
-void Rackam::glean_postset_info(MessageHeader *header, Filter *f)
+void Rackam::glean_postset_info(MessageHeader *header, FilterMatch *match)
 {
   // Start at the beginning.  Just make PostFile, don't even need to actually
   // keep the message id's yet
 
-  // f has saved values on it for the duration of this call.
-
   // This will all run through the database somehow soon, don't worry about it.
+
+  //Don't worry about it he says, do you even KNOW what that did to threading...
  
-  PostFile *file = get_postfile_for_filename(header->author, f->postfile_filename);
+  PostFile *file = get_postfile_for_filename(header->author, match->postfile_filename);
 
   // omg denormalized someone shoot me
+  pthread_mutex_lock(&file->self_mutex);
   file->size += header->size;
+  pthread_mutex_unlock(&file->self_mutex);
+
+  pthread_mutex_lock(&header->author->self_mutex);
   header->author->size += header->size;
+  pthread_mutex_unlock(&header->author->self_mutex);
+
+  pthread_mutex_lock(&header->author->newsgroup->self_mutex);
   header->author->newsgroup->size += header->size;
+  pthread_mutex_unlock(&header->author->newsgroup->self_mutex);
 
   delete header;
 }
@@ -272,21 +306,29 @@ PostFile *Rackam::get_postfile_for_filename(Author *author, std::string filename
   // SHIP IT
   // uh I mean naive implementation here re-write plz
   std::map<std::string, PostFile *>::iterator result;
+
+  pthread_mutex_lock(&author->self_mutex); // is this one needed?
   result = author->postfiles_by_name.find(filename);
   if(result != author->postfiles_by_name.end()) {
+    pthread_mutex_unlock(&author->self_mutex);
     return result->second;
   }
+  pthread_mutex_unlock(&author->self_mutex);
 
   PostFile *new_file = new PostFile();
   new_file->name = filename;
   new_file->author = author;
 
+  pthread_mutex_lock(&author->self_mutex);
   author->max_postfile_id++;
   new_file->id = author->max_postfile_id;
-  
   author->postfiles.push_back(new_file);
   author->postfiles_by_name[filename] = new_file;
+  pthread_mutex_unlock(&author->self_mutex);
+
+  pthread_mutex_lock(&author->newsgroup->self_mutex);
   author->newsgroup->postfiles.push_back(new_file);
+  pthread_mutex_unlock(&author->newsgroup->self_mutex);
 
   return new_file;
 }

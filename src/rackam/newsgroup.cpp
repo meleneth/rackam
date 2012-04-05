@@ -5,6 +5,7 @@ Newsgroup::Newsgroup()
   max_message_no = 0;
   min_message_no = 0;
   max_author_id = 0;
+  pthread_mutex_init(&self_mutex, NULL);
 }
 
 Newsgroup::~Newsgroup()
@@ -40,6 +41,7 @@ Newsgroup::~Newsgroup()
     delete *f;
   }
   filters.empty();
+  pthread_mutex_destroy(&self_mutex);
 }
 
 Author *Newsgroup::author_for_name(std::string authorname)

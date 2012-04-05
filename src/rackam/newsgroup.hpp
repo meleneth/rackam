@@ -1,15 +1,16 @@
 #ifndef NEWSGROUP_HPP
 #define NEWSGROUP_HPP
 
+#include<string>
+#include<map>
+#include<vector>
+#include<pthread.h>
+
 #include"post_set.hpp"
 #include"post_file.hpp"
 #include"author.hpp"
 #include"message_header.hpp"
 #include"filter.hpp"
-
-#include<string>
-#include<map>
-#include<vector>
 
 class PostSet;
 class PostFile;
@@ -39,6 +40,8 @@ class Newsgroup {
 
     std::vector<Author *> authors;
     std::map<std::string, Author *> authors_by_name;
+
+    pthread_mutex_t self_mutex;
 };
 
 #endif

@@ -4,7 +4,8 @@
 #include<string>
 #include<vector>
 
-/* Include the Lua API header files. */
+#include<pthread.h>
+
 #include <lua.hpp>
 #include <lauxlib.h>
 #include <lualib.h>
@@ -25,13 +26,16 @@ class Rackam {
     void load_headers_from_file(Newsgroup *group, std::string filename);
     void load_header_line(Newsgroup *group, std::string line);
     void integrate_header(MessageHeader *header);
-    void glean_postset_info(MessageHeader *header, Filter *f);
+    void glean_postset_info(MessageHeader *header, FilterMatch *match);
     void queue_header(MessageHeader *info);
 
     WebServer *webserver;
     lua_State *lua_state;
     bool still_running;
     std::vector<Newsgroup *> newsgroups;
+
+    int running_threads;
+    pthread_mutex_t self_mutex;
 };
 
 extern Rackam *rackam;

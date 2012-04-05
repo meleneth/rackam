@@ -7,10 +7,12 @@ Author::Author(std::string authorname)
   max_postset_id = 0;
   max_postfile_id = 0;
   size = 0;
+  pthread_mutex_init(&self_mutex, NULL);
 }
 
 Author::~Author()
 {
+  pthread_mutex_destroy(&self_mutex);
 }
 
 PostSet *Author::postset_for_id(int postset_id)

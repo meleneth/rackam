@@ -4,6 +4,8 @@
 #include<vector>
 #include<string>
 
+#include<pthread.h>
+
 #include"message_header.hpp"
 #include"newsgroup.hpp"
 #include"post_file.hpp"
@@ -25,6 +27,8 @@ class Author {
     int id;
     int max_postset_id;
     int max_postfile_id;
+
+    pthread_mutex_t self_mutex;
 
     Newsgroup *newsgroup;
 

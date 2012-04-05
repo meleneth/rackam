@@ -2,6 +2,7 @@
 #define POSTFILE_HPP
 
 #include<string>
+#include<pthread.h>
 
 #include"newsgroup.hpp"
 #include"author.hpp"
@@ -21,6 +22,8 @@ class PostFile {
 
     Newsgroup *newsgroup;
     Author *author;
+
+    pthread_mutex_t self_mutex;
 };
 
 #endif

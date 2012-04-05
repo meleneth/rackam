@@ -4,6 +4,20 @@
 #include "filter.hpp"
 #include "console.hpp"
 
+FilterMatch::FilterMatch()
+{
+  postset_subject.clear();
+  postset_num_files = 0;
+  postset_fileno = 0;
+  postfile_num_pieces = 0;
+  postfile_piece_no = 0;
+  postfile_filename.clear();
+}
+
+FilterMatch::~FilterMatch()
+{
+}
+
 Filter::Filter()
 {
 }
@@ -36,14 +50,21 @@ void Filter::parse_filter(std::string filter)
   
 }
 
-bool Filter::match(std::string haystack)
+FilterMatch *Filter::match(std::string haystack)
 {
   int needle_position = 0;
   int match_position = 0;
   int size = filter_pieces.size();
 
+  std::string postset_subject;
+  int postset_num_files;
+  int postset_fileno;
+  int postfile_num_pieces;
+  int postfile_piece_no;
+  std::string postfile_filename;
+
   if(0 == size)
-    return false;
+    return NULL;
 
   std::string match_fragment = filter_pieces[0];
   // Match engine is written for %field followed by a match, so match any leading 
@@ -52,10 +73,10 @@ bool Filter::match(std::string haystack)
   if('%' != match_fragment.at(0)) {
     int result = haystack.find(match_fragment);
     if(std::string::npos == result) {
-      return false;
+      return NULL;
     }
     if(0 != result){
-      return false;
+      return NULL;
     }
     needle_position++;
     match_position = match_fragment.length();
@@ -71,7 +92,7 @@ bool Filter::match(std::string haystack)
 
       int result = haystack.find(match_fragment, match_position);
       if(std::string::npos == result) {
-        return false;
+        return NULL;
       }
       std::string percent_matched = haystack.substr(match_position, result - match_position);
       switch(match_percent.at(1)) {
@@ -105,8 +126,17 @@ bool Filter::match(std::string haystack)
         console->log("Matcher very confused.  %flag at end of filter?");
       }
     }
-
-  return true;
+  
+  FilterMatch *match = new FilterMatch();
+  match->postset_subject = postset_subject;
+  match->postset_num_files = postset_num_files;
+  match->postset_fileno = postset_fileno;
+  match->postfile_num_pieces = postfile_num_pieces;
+  match->postfile_piece_no = postfile_piece_no;
+  match->postfile_filename = postfile_filename;
+  
+  return match;
+    
 }
 
 
