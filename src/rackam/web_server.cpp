@@ -13,13 +13,20 @@ using std::stringstream;
 
 WebServer::WebServer(string web_root, int port_no)
 {
-    listener = new TCPListener(port_no);
-    this->web_root = web_root;
+  listener = new TCPListener(port_no);
+  this->web_root = web_root;
 }
 
 WebServer::~WebServer()
 {
-    delete listener;
+  delete listener;
+
+  std::map<string, char *>::iterator sc;
+  for(sc = static_contents.begin(); sc != static_contents.end(); ++sc) {
+    free(sc->second);
+  }
+  static_contents.empty();
+  static_content_length.empty();
 }
 
 extern void handle_web_request(WebRequest *request, WebResponse *response);

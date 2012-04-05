@@ -9,6 +9,37 @@ Newsgroup::Newsgroup()
 
 Newsgroup::~Newsgroup()
 {
+  authors_by_name.empty();
+
+  std::vector<Author *>::iterator a;
+  for(a = authors.begin(); a != authors.end(); ++a) {
+    delete *a;
+  }
+  authors.empty();
+
+  std::vector<PostSet *>::iterator ps;
+  for(ps = postsets.begin(); ps != postsets.end(); ++ps) {
+    delete *ps;
+  }
+  postsets.empty();
+
+  std::vector<PostFile *>::iterator pf;
+  for(pf = postfiles.begin(); pf != postfiles.end(); ++pf) {
+    delete *pf;
+  }
+  postfiles.empty();
+
+  std::vector<MessageHeader *>::iterator mh;
+  for(mh = headers.begin(); mh != headers.end(); ++mh) {
+    delete *mh;
+  }
+  headers.empty();
+
+  std::vector<Filter *>::iterator f;
+  for(f = filters.begin(); f != filters.end(); ++f) {
+    delete *f;
+  }
+  filters.empty();
 }
 
 Author *Newsgroup::author_for_name(std::string authorname)

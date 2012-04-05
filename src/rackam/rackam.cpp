@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include<pthread.h>
 
 #include "rackam.hpp"
 #include "console.hpp"
@@ -27,6 +28,12 @@ Rackam::Rackam()
 
 Rackam::~Rackam()
 {
+  std::vector<Newsgroup *>::iterator ng;
+  for(ng = newsgroups.begin(); ng != newsgroups.end(); ++ng) {
+    delete *ng;
+  }
+
+  lua_close(lua_state);
   if(webserver)
     delete webserver;
 }
@@ -127,6 +134,7 @@ void Rackam::load_headers_from_file(Newsgroup *group, string filename)
     in.getline(linebuffer, 1024);
   }
   in.close();
+  queue_header(NULL); // pthread_join
 }
 
 void Rackam::load_header_line(Newsgroup *group, string line)
@@ -164,7 +172,61 @@ void Rackam::load_header_line(Newsgroup *group, string line)
       atoi(header_pieces[5].c_str())
     );
     //26487885        Masters of the Universe DVD Set: Disk 8 [40/83] yEnc - "MOTU_Disk8.part38.rar" (101/114)        anonxyz29@hotmail.com (Ragnarock)       Sat, 18 Mar 2006 05:29:36 -0600    <-o2dnev5dJm9cobZRVn-sg@giganews.com>           456758  3508    Xref: number1.nntp.dca.giganews.com alt.binaries.multimedia.cartoons:26487885
-    integrate_header(info);
+    //integrate_header(info);
+    queue_header(info);
+}
+
+void Rackam::queue_header(MessageHeader *info)
+{
+  static std::vector<MessageHeader *> *headers = NULL;
+  static std::vector<pthread_t> threads;
+  pthread_t new_thread;
+  
+  if(!headers){
+    headers = new std::vector<MessageHeader *>;
+  }
+
+  if(!info){
+    // Special argument!  info == NULL, flush our headers, wait for threads to finish
+    if(headers){
+      pthread_attr_t attr;
+      pthread_attr_init(&attr);
+      pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+      pthread_create(&new_thread, &attr, Rackam_integrate_headers, (void *)headers);
+      threads.push_back(new_thread);
+    }
+    std::vector<pthread_t>::iterator i;
+    for(i = threads.begin(); i != threads.end(); ++i){
+      void *status;
+      pthread_join(*i, &status);
+
+    }
+    return;
+  }
+
+  headers->push_back(info);
+  if(headers->size() > 5000) {
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    pthread_create(&new_thread, &attr, Rackam_integrate_headers, (void *) headers);
+    threads.push_back(new_thread);
+
+    // Spawn thread, save it in our list for later, empty out headers
+    headers = NULL;
+  }
+  
+}
+
+void *Rackam_integrate_headers(void *h)
+{
+  std::vector<MessageHeader *> *headers = (std::vector<MessageHeader *> *) h;
+  std::vector<MessageHeader *>::iterator i;
+  for(i = headers->begin(); i != headers->end(); ++i){
+    rackam->integrate_header(*i);
+  }
+  headers->empty();
+  delete headers;
 }
 
 void Rackam::integrate_header(MessageHeader *header)

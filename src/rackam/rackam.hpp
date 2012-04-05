@@ -26,6 +26,7 @@ class Rackam {
     void load_header_line(Newsgroup *group, std::string line);
     void integrate_header(MessageHeader *header);
     void glean_postset_info(MessageHeader *header, Filter *f);
+    void queue_header(MessageHeader *info);
 
     WebServer *webserver;
     lua_State *lua_state;
@@ -34,5 +35,6 @@ class Rackam {
 };
 
 extern Rackam *rackam;
+void *Rackam_integrate_headers(void *h);
 
 #endif

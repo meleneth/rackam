@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
   rackam->main_loop();
 
   console->log("Shutting down.");
+  delete rackam;
+  delete console;
   return 0;
 }
 
