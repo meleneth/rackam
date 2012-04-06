@@ -1,7 +1,7 @@
 #include "headers_parser.hpp"
 #include"strutil.hpp"
 
-#define HEADERSPARSER_WORKSIZE 500
+#define HEADERSPARSER_WORKSIZE 5000
 
 HeadersParser::HeadersParser(Newsgroup *newsgroup)
 {
