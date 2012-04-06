@@ -8,3 +8,20 @@ web response thread(x) (one per active web_response)
 
 worker thread(x) (one per active newsgroup connection + one per active [decode, par2-verify, extract])
 
+Lolz.  Threadz workz nowz.
+
+Ok, moving on.
+
+Currently the rackam object handles all the parsing.
+Need a seperate parser object, to encapsulate all the threading stuff.
+HeaderParser ->
+  Multithreaded Grand Central Station for a import job.
+  newsgroup
+  header string
+  Tokenize->subject->pieces
+
+But I only get 1 param passed in to the thread.
+
+I need to pass 2 things, the newsgroup and the pointer the vector of strings to parse.
+Make a struct to pass them in?  Solves, feels ugly.  Solves.  Yarp.
+

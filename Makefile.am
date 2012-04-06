@@ -2,7 +2,7 @@ bin_PROGRAMS = bin/rackam
 
 ACLOCAL_AMFLAGS = -I m4
 
-AM_CXXFLAGS = -I src/rackam -I/usr/include/lua5.1 -lpthread
+AM_CXXFLAGS = -I src/rackam -I/usr/include/lua5.1 -lpthread -D_FILE_OFFSET_BITS=64
 bin_rackam_LDADD  = -llua5.1
 
 CLEANFILES = src/rackam/blackbeard_wrap.cxx
@@ -17,6 +17,8 @@ src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i \
 	swig -c++ -lua -o src/rackam/blackbeard_wrap.cxx src/rackam/blackbeard.i
 
 bin_rackam_SOURCES = src/rackam.cpp  \
+  src/rackam/headers_parser.hpp \
+  src/rackam/headers_parser.cpp \
   src/rackam/author.cpp \
   src/rackam/author.hpp \
   src/rackam/filter.cpp \
