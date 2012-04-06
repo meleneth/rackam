@@ -21,6 +21,7 @@ class Author {
     ~Author();
     PostSet   *postset_for_id(int postset_id);
     PostFile *postfile_for_id(int postfile_id);
+    PostFile *find_or_create_postfile_for_filename_fileno(std::string filename, int fileno);
 
     std::string name;
     long long int size;
