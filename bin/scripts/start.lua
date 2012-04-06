@@ -194,5 +194,5 @@ Blackbeard.rackam.webserver:register_file("rackam.css", "htdocs/rackam.css")
 
 
 print("Lua script finished.")
-Blackbeard.rackam.still_running = false
+--Blackbeard.rackam.still_running = false
 

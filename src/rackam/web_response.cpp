@@ -19,7 +19,7 @@ void WebResponse::prepare_full_response()
 
   s << "HTTP/1.1 200 OK\r\n";
   s << "Content-length: " << body.length() << "\r\n";
-  s << "Content-type: text/html\r\n";
+  s << "Content-type: text/html; charset=UTF-8\r\n";
   s << "Connection: close\r\n";
   s << "\r\n";
   s << body;

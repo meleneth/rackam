@@ -152,16 +152,19 @@ void Rackam::load_header_line(Newsgroup *group, string line)
     unsigned int i;
 
     // Upper ASCII gets discarded, don't parse the message at all (segfaults)
+    // new plan, fix the segfault.  Skip this section.
+    /*
     for(i = 0; i < line.length(); i++) {
       char c = line[i];
       //        console->log(s.str());
       if (c < 0){
+        printf("%s\n", line.c_str());
         return;
        printf("Error.  Load of headers failed.  Check it out.\n");
         return;
       }
     }
-
+*/
     Tokenize(line, header_pieces, "\t");
 
     if(header_pieces.size() < 8 ) return;
@@ -180,8 +183,8 @@ void Rackam::load_header_line(Newsgroup *group, string line)
       atoi(header_pieces[5].c_str())
     );
     //26487885        Masters of the Universe DVD Set: Disk 8 [40/83] yEnc - "MOTU_Disk8.part38.rar" (101/114)        anonxyz29@hotmail.com (Ragnarock)       Sat, 18 Mar 2006 05:29:36 -0600    <-o2dnev5dJm9cobZRVn-sg@giganews.com>           456758  3508    Xref: number1.nntp.dca.giganews.com alt.binaries.multimedia.cartoons:26487885
-    //integrate_header(info);
-    queue_header(info);
+    integrate_header(info);
+    //queue_header(info);
 }
 
 void Rackam::queue_header(MessageHeader *info)
@@ -219,7 +222,7 @@ void Rackam::queue_header(MessageHeader *info)
   }
 
   headers->push_back(info);
-  if(headers->size() > 50) {
+  if(headers->size() > 500) {
     pthread_create(&new_thread, NULL, Rackam_integrate_headers, (void *) headers);
     pthread_detach(new_thread);
     threads.push_back(new_thread);
