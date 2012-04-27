@@ -3,6 +3,7 @@
 
 #include<string>
 #include<vector>
+#include<pthread.h>
 
 class FilterMatch {
   public:
@@ -27,7 +28,8 @@ class Filter {
 
     std::string text;
     std::vector<std::string> filter_pieces;
-
+    long long int num_matched;
+    pthread_mutex_t self_mutex;
 };
 
 #endif

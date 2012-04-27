@@ -1,5 +1,5 @@
 (function() {
-  var Page, html_tr, load_author_headers_pager, load_authors_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, rackam_pager, readable_storage,
+  var Page, html_tr, load_author_headers_pager, load_author_screen, load_authors_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, rackam_pager, readable_storage,
     __slice = Array.prototype.slice;
 
   rackam_pager = null;
@@ -116,7 +116,7 @@
           row = $("<tr></tr>");
           cell = $("<td>" + author.name + "</td>");
           cell.click(function() {
-            return load_author_headers_pager(newsgroup, author);
+            return load_author_screen(newsgroup, author);
           });
           row.append(cell);
           $("<td>" + author.num_postsets + "</td>").appendTo(row);
@@ -181,6 +181,26 @@
     return $("<li>Authors</li>").click(function() {
       return load_authors_pager(ng);
     }).appendTo("#newsgroup-items");
+  };
+
+  load_author_screen = function(ng, author) {
+    $("#celery").empty().append("<div id=\"author\"><h1>" + author.name + "</h1><ul id=\"author-items\"></ul></div>").append("<div id=\"pager\"></div>");
+    $("#breadcrumbs").empty();
+    $("<li>" + ng.name + "</li>").click(function() {
+      return load_newsgroup_screen(ng);
+    }).appendTo("#breadcrumbs");
+    $("<li>Authors</li>").click(function() {
+      return load_authors_pager(ng);
+    }).appendTo("#breadcrumbs");
+    $("<li>" + author.num_headers + " Headers</li>").click(function() {
+      return load_author_headers_pager(ng, author);
+    }).appendTo("#author-items");
+    $("<li>" + author.num_postsets + " PostSets</li>").click(function() {
+      return load_author_postsets_pager(ng, author);
+    }).appendTo("#author-items");
+    return $("<li>" + author.num_postfiles + " PostFiles</li>").click(function() {
+      return load_author_postfiles_pager(ng, author);
+    }).appendTo("#author-items");
   };
 
 }).call(this);

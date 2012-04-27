@@ -110,6 +110,12 @@ function web_response_authors(webrequest, webresponse)
   webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
+--create_paged_handler("author", "authors", "Name|PostSets|PostFiles|Headers")
+
+--function create_paged_handler(field_name, plural_field_name, headers)
+  
+--end
+
 function web_response_newsgroups(webresponse)
   local response_lines = {}
   local i;
@@ -159,6 +165,25 @@ function web_response_newsgroup_headers(webrequest, webresponse)
   webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
+function web_response_newsgroup_postfiles(webrequest, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+
+  local response_lines = {}
+  local i;
+  local max_i = newsgroup.postfiles:size() - 1
+  local page_ipp = webrequest:paramn("page_ipp")
+  local page_first = webrequest:paramn("page_first")
+  if page_ipp   == 0 then page_ipp = 20 end
+  local page_last = page_first + page_ipp
+  if page_last > max_i then page_last = max_i end
+
+  for i = page_first, page_last do
+    local postfile = newsgroup.postfiles[i]
+    table.insert(response_lines, postfile_as_json(postfile))
+  end
+  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
+end
+
 function handle_web_request(webrequest, webresponse)
   if webrequest.path == "/" then
     if webrequest.filename == "authors.cgi" then
@@ -170,11 +195,27 @@ function handle_web_request(webrequest, webresponse)
       return
     end
     if webrequest.filename == "author_headers.cgi" then
-      web_response_newsgroup_author_headers(webrequest, webresponse)
+      web_response_author_headers(webrequest, webresponse)
       return
     end
     if webrequest.filename == "newsgroup_headers.cgi" then
       web_response_newsgroup_headers(webrequest, webresponse)
+      return
+    end
+    if webrequest.filename == "author_postfiles.cgi" then
+      web_response_author_postfiles(webrequest, webresponse)
+      return
+    end
+    if webrequest.filename == "newsgroup_postfiles.cgi" then
+      web_response_newsgroup_postfiles(webrequest, webresponse)
+      return
+    end
+    if webrequest.filename == "author_postsets.cgi" then
+      web_response_author_postsets(webrequest, webresponse)
+      return
+    end
+    if webrequest.filename == "newsgroup_postsets.cgi" then
+      web_response_newsgroup_postsets(webrequest, webresponse)
       return
     end
   end
@@ -183,6 +224,7 @@ end
 local n = Blackbeard.rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
 n:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
 n:add_filter("%s [%e/%f] - \"%a\"%d yEnc (%p/%n)")
+n:add_filter("[%e/%f] - \"%a\" (%p/%n)")
 
 Blackbeard.rackam:load_headers_from_file(n, "headers_snipper.log")
 
@@ -194,5 +236,5 @@ Blackbeard.rackam.webserver:register_file("rackam.css", "htdocs/rackam.css")
 
 
 print("Lua script finished.")
-Blackbeard.rackam.still_running = false
+--Blackbeard.rackam.still_running = false
 

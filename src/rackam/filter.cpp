@@ -20,10 +20,13 @@ FilterMatch::~FilterMatch()
 
 Filter::Filter()
 {
+  pthread_mutex_init(&self_mutex, NULL);
+  num_matched = 0;
 }
 
 Filter::~Filter()
 {
+  pthread_mutex_destroy(&self_mutex);
 }
 
 void Filter::parse_filter(std::string filter)
@@ -134,7 +137,11 @@ FilterMatch *Filter::match(std::string haystack)
   match->postfile_num_pieces = postfile_num_pieces;
   match->postfile_piece_no = postfile_piece_no;
   match->postfile_filename = postfile_filename;
-  
+
+  pthread_mutex_lock(&self_mutex);
+  num_matched++;
+  pthread_mutex_unlock(&self_mutex);
+
   return match;
     
 }

@@ -91,7 +91,7 @@ load_authors_pager = (newsgroup) ->
       do (author) ->
         row = $("<tr></tr>")
         cell = $("<td>" + author.name + "</td>")
-        cell.click -> load_author_headers_pager(newsgroup, author)
+        cell.click -> load_author_screen(newsgroup, author)
         row.append(cell)
         
         $("<td>" + author.num_postsets + "</td>")
@@ -139,6 +139,19 @@ load_headers_pager = (newsgroup) ->
   rackam_pager.create_ui()
   rackam_pager.load_page()
 
+load_postfiles_pager(newsgroup) ->
+  load_func = (data) ->
+    $('#pager-data')
+      .empty()
+      .append("<tr><th>PostFile Name</th><th>Author</th><th># bytes</th></tr>")
+    for postfile in data
+      do (postfile) ->
+        $(html_tr(postfile.name, postfile.posted_by, readable_storage(postfile.size)))
+          .appendTo("#pager-data")
+  rackam_pager = new Page "/newsgroup_postfiles.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_postfiles, loader_func
+  rackam_pager.create_ui()
+  rackam_pager.load_page()
+    
 load_newsgroup_screen = (ng) ->
   $("#celery")
     .empty()
@@ -155,4 +168,34 @@ load_newsgroup_screen = (ng) ->
   $("<li>Authors</li>")
     .click(-> load_authors_pager(ng))
     .appendTo("#newsgroup-items")
+
+load_author_screen = (ng, author) ->
+  $("#celery")
+    .empty()
+    .append("<div id=\"author\"><h1>" + author.name + "</h1><ul id=\"author-items\"></ul></div>")
+    .append("<div id=\"pager\"></div>")
+
+  $("#breadcrumbs")
+    .empty()
+
+  $("<li>" + ng.name + "</li>")
+    .click(-> load_newsgroup_screen(ng))
+    .appendTo("#breadcrumbs")
+
+  $("<li>Authors</li>")
+    .click(-> load_authors_pager(ng))
+    .appendTo("#breadcrumbs")
+
+  $("<li>" + author.num_headers + " Headers</li>")
+    .click(-> load_author_headers_pager(ng, author))
+    .appendTo("#author-items")
+
+  $("<li>" + author.num_postsets + " PostSets</li>")
+    .click(-> load_author_postsets_pager(ng, author))
+    .appendTo("#author-items")
+
+  $("<li>" + author.num_postfiles + " PostFiles</li>")
+    .click(-> load_author_postfiles_pager(ng, author))
+    .appendTo("#author-items")
+
 
