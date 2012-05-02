@@ -132,6 +132,15 @@ using std::string;
   }
 }
 
+%extend Filter {
+  const char *get_num_matched_str()
+  {
+    static char temp[1024];
+    sprintf(temp, "%llu", $self->num_matched);
+    return temp;
+  }
+}
+
 %{ 
 
 string newsgroup_as_json(Newsgroup *newsgroup) 

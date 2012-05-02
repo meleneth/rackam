@@ -28,6 +28,14 @@ function author_as_json(author)
   return JSON:encode(output)
 end
 
+function filter_as_json(filter)
+  local output = {}
+
+  output['text'] = filter.text
+  output['num_matched'] = filter:get_num_matched_str()
+  return JSON:encode(output)
+end
+
 function postset_as_json(postset)
   local output = {}
 
@@ -118,7 +126,7 @@ end
 
 function web_response_newsgroups(webresponse)
   local response_lines = {}
-  local i;
+  local i
   local max_i = Blackbeard.rackam.newsgroups:size() - 1
   for i = 0, max_i do
     local ng = Blackbeard.rackam.newsgroups[i]
@@ -127,31 +135,30 @@ function web_response_newsgroups(webresponse)
   webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
-function web_response_newsgroup_author_headers(webrequest, webresponse)
-  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-  local author = newsgroup:author_for_id(webrequest:paramn("author_id"))
+function web_response_filters(webrequest, webresponse)
   local response_lines = {}
-  local i;
-  local max_i = author.headers:size() - 1
-  local page_ipp = webrequest:paramn("page_ipp")
-  local page_first = webrequest:paramn("page_first")
-  if page_ipp   == 0 then page_ipp = 20 end
-  local page_last = page_first + page_ipp
-  if page_last > max_i then page_last = max_i end
-
-  for i = page_first, page_last do
-    local header = author.headers[i]
-    table.insert(response_lines, header_as_json(header))
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+  local i
+  local max_i = newsgroup.filters:size() - 1
+  for i = 0, max_i do
+    local filter = newsgroup.filters[i]
+    table.insert(response_lines, filter_as_json(filter))
   end
   webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
-function web_response_newsgroup_headers(webrequest, webresponse)
+function web_response_headers(webrequest, webresponse)
   local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+
+  local headers = newsgroup.headers
+  if webrequest:has_param("author_id") then
+    local author = newsgroup:author_for_id(webrequest:paramn("author_id"))
+    headers = author.headers
+  end
 
   local response_lines = {}
   local i;
-  local max_i = newsgroup.headers:size() - 1
+  local max_i = headers:size() - 1
   local page_ipp = webrequest:paramn("page_ipp")
   local page_first = webrequest:paramn("page_first")
   if page_ipp   == 0 then page_ipp = 20 end
@@ -159,7 +166,7 @@ function web_response_newsgroup_headers(webrequest, webresponse)
   if page_last > max_i then page_last = max_i end
 
   for i = page_first, page_last do
-    local header = newsgroup.headers[i]
+    local header = headers[i]
     table.insert(response_lines, header_as_json(header))
   end
   webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
@@ -194,12 +201,12 @@ function handle_web_request(webrequest, webresponse)
       web_response_newsgroups(webresponse)
       return
     end
-    if webrequest.filename == "author_headers.cgi" then
-      web_response_author_headers(webrequest, webresponse)
+    if webrequest.filename == "filters.cgi" then
+      web_response_filters(webrequest, webresponse)
       return
     end
-    if webrequest.filename == "newsgroup_headers.cgi" then
-      web_response_newsgroup_headers(webrequest, webresponse)
+    if webrequest.filename == "headers.cgi" then
+      web_response_headers(webrequest, webresponse)
       return
     end
     if webrequest.filename == "author_postfiles.cgi" then

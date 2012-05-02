@@ -120,7 +120,7 @@ load_author_headers_pager = (newsgroup, author) ->
         $(html_tr(header.subject, header.posted_by, readable_storage(header.size)))
           .appendTo("#pager-data")
 
-  url = "/author_headers.cgi?ng=" + newsgroup.name + ";author_id=" + author.id
+  url = "/headers.cgi?ng=" + newsgroup.name + ";author_id=" + author.id
   rackam_pager = new Page url, 0, 30, newsgroup.num_headers, loader_func
   rackam_pager.create_ui()
   rackam_pager.load_page()
@@ -135,11 +135,11 @@ load_headers_pager = (newsgroup) ->
         $(html_tr(header.subject, header.posted_by, readable_storage(header.size)))
           .appendTo("#pager-data")
 
-  rackam_pager = new Page "/newsgroup_headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func
+  rackam_pager = new Page "/headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func
   rackam_pager.create_ui()
   rackam_pager.load_page()
 
-load_postfiles_pager(newsgroup) ->
+load_postfiles_pager = (newsgroup) ->
   load_func = (data) ->
     $('#pager-data')
       .empty()

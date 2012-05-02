@@ -54,9 +54,12 @@ Author *Newsgroup::author_for_name(std::string authorname)
   Author *author = new Author(authorname);
   max_author_id++;
   author->id = max_author_id;
-  authors.push_back(author);
   author->newsgroup = this;
+
+  pthread_mutex_lock(&self_mutex);
+  authors.push_back(author);
   authors_by_name[authorname] = author;
+  pthread_mutex_unlock(&self_mutex);
   return author;
 }
 

@@ -1,5 +1,5 @@
 (function() {
-  var Page, html_tr, load_author_headers_pager, load_author_screen, load_authors_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, rackam_pager, readable_storage,
+  var Page, html_tr, load_author_headers_pager, load_author_screen, load_authors_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, load_postfiles_pager, rackam_pager, readable_storage,
     __slice = Array.prototype.slice;
 
   rackam_pager = null;
@@ -147,7 +147,7 @@
       }
       return _results;
     };
-    url = "/author_headers.cgi?ng=" + newsgroup.name + ";author_id=" + author.id;
+    url = "/headers.cgi?ng=" + newsgroup.name + ";author_id=" + author.id;
     rackam_pager = new Page(url, 0, 30, newsgroup.num_headers, loader_func);
     rackam_pager.create_ui();
     return rackam_pager.load_page();
@@ -167,7 +167,26 @@
       }
       return _results;
     };
-    rackam_pager = new Page("/newsgroup_headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func);
+    rackam_pager = new Page("/headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func);
+    rackam_pager.create_ui();
+    return rackam_pager.load_page();
+  };
+
+  load_postfiles_pager = function(newsgroup) {
+    var load_func;
+    load_func = function(data) {
+      var postfile, _i, _len, _results;
+      $('#pager-data').empty().append("<tr><th>PostFile Name</th><th>Author</th><th># bytes</th></tr>");
+      _results = [];
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        postfile = data[_i];
+        _results.push((function(postfile) {
+          return $(html_tr(postfile.name, postfile.posted_by, readable_storage(postfile.size))).appendTo("#pager-data");
+        })(postfile));
+      }
+      return _results;
+    };
+    rackam_pager = new Page("/newsgroup_postfiles.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_postfiles, loader_func);
     rackam_pager.create_ui();
     return rackam_pager.load_page();
   };

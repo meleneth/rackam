@@ -29,6 +29,7 @@ class WebRequest {
         void delete_param(string name);
         void param(string name, string value);
         void param(string name, unsigned int value);
+        bool has_param(string name);
 
         TCPConnection *client;
         string request_string;

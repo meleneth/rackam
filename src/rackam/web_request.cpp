@@ -216,4 +216,15 @@ void WebRequest::delete_param(string name)
     }
 }
 
+bool WebRequest::has_param(string name)
+{
+  vector<string>::iterator i;
+  for(i = param_names.begin(); i != param_names.end(); ++i) {
+      if(0 == (*i).compare(name)){
+        return true;
+      }
+  }
+  return false;
+}
+
 
