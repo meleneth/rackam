@@ -140,7 +140,7 @@ load_headers_pager = (newsgroup) ->
   rackam_pager.load_page()
 
 load_postfiles_pager = (newsgroup) ->
-  load_func = (data) ->
+  loader_func = (data) ->
     $('#pager-data')
       .empty()
       .append("<tr><th>PostFile Name</th><th>Author</th><th># bytes</th></tr>")
@@ -151,7 +151,35 @@ load_postfiles_pager = (newsgroup) ->
   rackam_pager = new Page "/newsgroup_postfiles.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_postfiles, loader_func
   rackam_pager.create_ui()
   rackam_pager.load_page()
-    
+
+load_filters_pager = (ng) ->
+  $("#celery")
+    .empty()
+    append(
+  doc_text = "
+  <table>
+  <tr><td>PostSet.num_files   </td><td>%f</td></tr>
+  <tr><td>PostSet.fileno      </td><td>%e</td></tr>
+  <tr><td>PostSet.name        </td><td>%s</td></tr>
+  <tr><td>PostFile.num_pieces </td><td>%n</td></tr>
+  <tr><td>PostFile.piece_no   </td><td>%p</td></tr>
+  <tr><td>PostFile.filename   </td><td>%a</td></tr>
+  <tr><td>discard             </td><td>%d</td></tr>
+  </table>
+  "
+
+  loader_func = (data) ->
+    $('#pager-data')
+      .empty()
+      .append("<tr><th>Filter</th><th># Matches</th></tr>")
+    for filter in data
+      do (filter) ->
+        $(html_tr(filter.text, filter.num_matched))
+          .appendTo("#pager-data")
+  rackam_pager = new Page "/filters.cgi?ng=" + ng.name, 0, 30, ng.num_postfiles, loader_func
+  rackam_pager.create_ui()
+  rackam_pager.load_page()
+  
 load_newsgroup_screen = (ng) ->
   $("#celery")
     .empty()
@@ -160,6 +188,10 @@ load_newsgroup_screen = (ng) ->
 
   $("<li id=\"ng-headers\">Headers</li>")
     .click(-> load_headers_pager(ng))
+    .appendTo("#newsgroup-items")
+
+  $("<li>Filters</li>")
+    .click(-> load_filters_pager(ng))
     .appendTo("#newsgroup-items")
 
   $("#newsgroup-items")

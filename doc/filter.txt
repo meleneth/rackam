@@ -3,6 +3,7 @@
 
 PostSet.num_files   %f
 PostSet.fileno      %e
+PostSet.name        %s
 PostFile.num_pieces %n
 PostFile.piece_no   %p
 PostFile.filename   %a

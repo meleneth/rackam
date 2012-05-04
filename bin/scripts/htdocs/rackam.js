@@ -1,5 +1,5 @@
 (function() {
-  var Page, html_tr, load_author_headers_pager, load_author_screen, load_authors_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, load_postfiles_pager, rackam_pager, readable_storage,
+  var Page, html_tr, load_author_headers_pager, load_author_screen, load_authors_pager, load_filters_pager, load_headers_pager, load_newsgroup_list_screen, load_newsgroup_screen, load_postfiles_pager, rackam_pager, readable_storage,
     __slice = Array.prototype.slice;
 
   rackam_pager = null;
@@ -173,8 +173,8 @@
   };
 
   load_postfiles_pager = function(newsgroup) {
-    var load_func;
-    load_func = function(data) {
+    var loader_func;
+    loader_func = function(data) {
       var postfile, _i, _len, _results;
       $('#pager-data').empty().append("<tr><th>PostFile Name</th><th>Author</th><th># bytes</th></tr>");
       _results = [];
@@ -191,10 +191,32 @@
     return rackam_pager.load_page();
   };
 
+  load_filters_pager = function(ng) {
+    var loader_func;
+    loader_func = function(data) {
+      var filter, _i, _len, _results;
+      $('#pager-data').empty().append("<tr><th>Filter</th><th># Matches</th></tr>");
+      _results = [];
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        filter = data[_i];
+        _results.push((function(filter) {
+          return $(html_tr(filter.text, filter.num_matched)).appendTo("#pager-data");
+        })(filter));
+      }
+      return _results;
+    };
+    rackam_pager = new Page("/filters.cgi?ng=" + ng.name, 0, 30, ng.num_postfiles, loader_func);
+    rackam_pager.create_ui();
+    return rackam_pager.load_page();
+  };
+
   load_newsgroup_screen = function(ng) {
     $("#celery").empty().append("<div id=\"newsgroup\"><h1>" + ng.name + "</h1><ul id=\"newsgroup-items\"></ul></div>").append("<div id=\"pager\"></div>");
     $("<li id=\"ng-headers\">Headers</li>").click(function() {
       return load_headers_pager(ng);
+    }).appendTo("#newsgroup-items");
+    $("<li>Filters</li>").click(function() {
+      return load_filters_pager(ng);
     }).appendTo("#newsgroup-items");
     $("#newsgroup-items").append("<li>PostSets</li><li>PostFiles</li>");
     return $("<li>Authors</li>").click(function() {

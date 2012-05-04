@@ -89,15 +89,22 @@ FilterMatch *Filter::match(std::string haystack)
   // match and then handling the match and incrementing the state machine
   while(needle_position < size) {
     match_fragment = filter_pieces[needle_position];
+    std::string percent_matched;
     if('%' == match_fragment.at(0)) {
       std::string match_percent = match_fragment;
-      match_fragment = filter_pieces[needle_position + 1];
 
-      int result = haystack.find(match_fragment, match_position);
-      if(std::string::npos == result) {
-        return NULL;
+      if(needle_position + 1 < filter_pieces.size()) {
+        match_fragment = filter_pieces[needle_position + 1];
+
+        int result = haystack.find(match_fragment, match_position);
+        if(std::string::npos == result) {
+          return NULL;
+        }
+        percent_matched = haystack.substr(match_position, result - match_position);
+        match_position = result + match_fragment.length();
+      } else {
+        percent_matched = haystack.substr(match_position, haystack.length());
       }
-      std::string percent_matched = haystack.substr(match_position, result - match_position);
       switch(match_percent.at(1)) {
         case 'f':
           postset_num_files = atoi(percent_matched.c_str());
@@ -123,7 +130,6 @@ FilterMatch *Filter::match(std::string haystack)
           console->log("Unhandled percent flag: " + match_percent.at(1));
         }
         
-        match_position = result + match_fragment.length();
         needle_position += 2;
       } else {
         console->log("Matcher very confused.  %flag at end of filter?");

@@ -231,7 +231,21 @@ end
 local n = Blackbeard.rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
 n:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
 n:add_filter("%s [%e/%f] - \"%a\"%d yEnc (%p/%n)")
+n:add_filter("%s[%e/%f] - \"%a\"%d yEnc (%p/%n)")
+n:add_filter("%s[%e/%f] - yEnc \"%a\" (%p/%n)")
+n:add_filter("%s [%e/%f] \"%a\"%d(%p/%n)")
 n:add_filter("[%e/%f] - \"%a\" (%p/%n)")
+n:add_filter("%d\"%a\" [%e/%f] yEnc (%p/%n)")
+n:add_filter("%s - \"%a\" yEnc (%p/%n)")
+n:add_filter("%a [%e/%f] yEnc (%p/%n)")
+n:add_filter("\"%a\" (%p/%n) yEnc - %e of %f")
+n:add_filter("%s - \"%a\" (%p/%n)")
+n:add_filter("%d - [%s] - [%e/%f] - %a yEnc (%p/%n)")
+n:add_filter("] - \"%a\" yEnc (%p/%n)")
+n:add_filter("[%e/%f] - \"%a\"%d(%p/%n)")
+n:add_filter("%a - [%e/%f] (%p/%n)")
+-- this next one is /really/ broad
+n:add_filter("%a (%p/%n)")
 
 Blackbeard.rackam:load_headers_from_file(n, "headers_snipper.log")
 
