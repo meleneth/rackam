@@ -153,11 +153,7 @@ load_postfiles_pager = (newsgroup) ->
   rackam_pager.load_page()
 
 load_filters_pager = (ng) ->
-  $("#celery")
-    .empty()
-    append(
-  doc_text = "
-  <table>
+  doc_text = "<table>
   <tr><td>PostSet.num_files   </td><td>%f</td></tr>
   <tr><td>PostSet.fileno      </td><td>%e</td></tr>
   <tr><td>PostSet.name        </td><td>%s</td></tr>
@@ -165,8 +161,11 @@ load_filters_pager = (ng) ->
   <tr><td>PostFile.piece_no   </td><td>%p</td></tr>
   <tr><td>PostFile.filename   </td><td>%a</td></tr>
   <tr><td>discard             </td><td>%d</td></tr>
-  </table>
-  "
+  </table> "
+
+  $("#info")
+    .empty()
+    .append(doc_text)
 
   loader_func = (data) ->
     $('#pager-data')

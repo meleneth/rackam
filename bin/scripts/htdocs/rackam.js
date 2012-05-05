@@ -192,7 +192,9 @@
   };
 
   load_filters_pager = function(ng) {
-    var loader_func;
+    var doc_text, loader_func;
+    doc_text = "<table>  <tr><td>PostSet.num_files   </td><td>%f</td></tr>  <tr><td>PostSet.fileno      </td><td>%e</td></tr>  <tr><td>PostSet.name        </td><td>%s</td></tr>  <tr><td>PostFile.num_pieces </td><td>%n</td></tr>  <tr><td>PostFile.piece_no   </td><td>%p</td></tr>  <tr><td>PostFile.filename   </td><td>%a</td></tr>  <tr><td>discard             </td><td>%d</td></tr>  </table> ";
+    $("#info").empty().append(doc_text);
     loader_func = function(data) {
       var filter, _i, _len, _results;
       $('#pager-data').empty().append("<tr><th>Filter</th><th># Matches</th></tr>");
