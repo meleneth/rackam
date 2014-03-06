@@ -178,7 +178,7 @@ load_filters_pager = (ng) ->
   rackam_pager = new Page "/filters.cgi?ng=" + ng.name, 0, 30, ng.num_postfiles, loader_func
   rackam_pager.create_ui()
   rackam_pager.load_page()
-  
+
 load_newsgroup_screen = (ng) ->
   $("#celery")
     .empty()
@@ -228,5 +228,3 @@ load_author_screen = (ng, author) ->
   $("<li>" + author.num_postfiles + " PostFiles</li>")
     .click(-> load_author_postfiles_pager(ng, author))
     .appendTo("#author-items")
-
-
