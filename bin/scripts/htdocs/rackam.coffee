@@ -1,16 +1,24 @@
 rackam_pager = null
 
-load_newsgroup_list_screen = ->
-  $("#celery")
-    .empty()
-    .append("<ul id=\"newsgroups-list\"></ul>")
+reset_ui = ->
+  $("#newsgroup-list-screen")
+    .hide()
 
   $("#breadcrumbs")
     .empty()
+  
 
-  $("<li>Newsgroups</li>")
+load_newsgroup_list_screen = ->
+  reset_ui()
+
+  $("#newsgroup-list-screen")
+    .show()
+
+  $("#newsgroups-list")
+    .empty()
+
+  $("#newsgroups-link")
     .click -> load_newsgroup_list_screen()
-    .appendTo("#breadcrumbs")
 
   $.getJSON 'newsgroups.cgi', (data) ->
       for ng in data
@@ -180,10 +188,10 @@ load_filters_pager = (ng) ->
   rackam_pager.load_page()
 
 load_newsgroup_screen = (ng) ->
-  $("#celery")
-    .empty()
-    .append("<div id=\"newsgroup\"><h1>" + ng.name + "</h1><ul id=\"newsgroup-items\"></ul></div>")
-    .append("<div id=\"pager\"></div>")
+  reset_ui()
+
+  $("#newsgroup-name")
+    .text(ng.name)
 
   $("<li id=\"ng-headers\">Headers</li>")
     .click(-> load_headers_pager(ng))
@@ -199,6 +207,9 @@ load_newsgroup_screen = (ng) ->
   $("<li>Authors</li>")
     .click(-> load_authors_pager(ng))
     .appendTo("#newsgroup-items")
+
+  $("#newsgroup-screen")
+    .show()
 
 load_author_screen = (ng, author) ->
   $("#celery")

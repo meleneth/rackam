@@ -5,11 +5,12 @@
     %title rackam
     %link{:href => "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", :rel => "stylesheet"}/
     %link{:href => "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css", :rel => "stylesheet"}/
+    %link{:href => "/rackam.css", :rel => "stylesheet"}/
+    %script{:src => "http://code.jquery.com/jquery-1.11.0.min.js"}
+    %script{:src => "http://code.jquery.com/jquery-migrate-1.2.1.min.js"}
     %script{:src => "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"}
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
-    %script{:src => "/jquery.js", :type => "text/javascript"}
     %script{:src => "/rackam.js", :type => "text/javascript"}
-    %link{:href => "/rackam.css", :rel => "stylesheet"}/
   %body
     .navbar.navbar-inverse.navbar-fixed-top{:role => "navigation"}
       .container-fluid
@@ -23,7 +24,7 @@
         .navbar-collapse.collapse
           %ul.nav.navbar-nav.navbar-right
             %li
-              %a{:href => "#"} Dashboard
+              %a#newsgroups-link{:href => "#"} Newsgroups
             %li
               %a{:href => "#"} Settings
             %li
@@ -33,15 +34,22 @@
     %br{:clear => "both"}
     %br{:clear => "both"}
     %br{:clear => "both"}
-    %br{:clear => "both"}
-    %br{:clear => "both"}
-    %br{:clear => "both"}
-    %br{:clear => "both"}
     .container
       .row
         .col-xs-2
-          %div
-            %ul#breadcrumbs
+          %div#sidebar
+            %ul
           #info
-        .col-xs-10
-          #celery
+        .col-xs-10.panel.panel-default
+          .panel-body
+            #newsgroup-list-screen{:style => "display: none;"}
+              %ul#newsgroups-list
+            #newsgroup-screen{:style => "display: none;"}
+              #newsgroup
+                %h1{:id => "newsgroup-name"}
+                %ul#newsgroup-items
+              #pager
+            #author-screen{:style => "display: none;"}
+              #author
+                %h1
+                  %ul#author-items
