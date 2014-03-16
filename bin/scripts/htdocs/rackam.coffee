@@ -1,24 +1,15 @@
 rackam_pager = null
 
 reset_ui = ->
-  $("#newsgroup-list-screen")
-    .hide()
-
-  $("#breadcrumbs")
-    .empty()
-  
+  $("#newsgroup-list-screen").hide()
+  $("#breadcrumbs").empty()
 
 load_newsgroup_list_screen = ->
   reset_ui()
 
-  $("#newsgroup-list-screen")
-    .show()
-
-  $("#newsgroups-list")
-    .empty()
-
-  $("#newsgroups-link")
-    .click -> load_newsgroup_list_screen()
+  $("#newsgroup-list-screen").show()
+  $("#newsgroups-link").click -> load_newsgroup_list_screen()
+  $("#newsgroups-list").empty()
 
   $.getJSON 'newsgroups.cgi', (data) ->
       for ng in data
@@ -55,21 +46,9 @@ class Page
     $.getJSON(@url + ";page_ipp=" + @items_per_page + ";page_first=" + @start, @render_func)
 
   create_ui: ->
-    $("#pager")
-      .empty()
-      .append("<div id=\"pager-ui\"></div>")
-      .append("<div><table id=\"pager-data\"></table></div>")
-
-    $('<input type="button" value="&lt;-"></input>')
-      .css("font-size", "48px")
-      .click(-> eval "rackam_pager.previous_page();")
-      .appendTo("#pager-ui")
-
-    $('<input type="button" value="-&gt;"></input>')
-      .css("font-size", "48px")
-      .css("margin-left", "100px")
-      .click(-> eval "rackam_pager.next_page();")
-      .appendTo("#pager-ui")
+    $('#prev-page-button').click(-> eval "rackam_pager.previous_page();")
+    $('#next-page-button').click(-> eval "rackam_pager.next_page();")
+    $('#pager').show()
 
 html_tr = (elements...) ->
   result = []
@@ -102,17 +81,12 @@ load_authors_pager = (newsgroup) ->
         cell.click -> load_author_screen(newsgroup, author)
         row.append(cell)
         
-        $("<td>" + author.num_postsets + "</td>")
-          .appendTo(row)
-        $("<td>" + author.num_postfiles + "</td>")
-          .appendTo(row)
-        $("<td>" + author.num_headers + "</td>")
-          .appendTo(row)
-        $("<td>" + readable_storage(author.size) + "</td>")
-          .appendTo(row)
+        $("<td>" + author.num_postsets + "</td>").appendTo(row)
+        $("<td>" + author.num_postfiles + "</td>").appendTo(row)
+        $("<td>" + author.num_headers + "</td>").appendTo(row)
+        $("<td>" + readable_storage(author.size) + "</td>").appendTo(row)
 
-        row
-          .appendTo("#pager-data")
+        row.appendTo("#pager-data")
 
   rackam_pager = new Page("/authors.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_authors, loader_func)
   rackam_pager.create_ui()
@@ -190,35 +164,16 @@ load_filters_pager = (ng) ->
 load_newsgroup_screen = (ng) ->
   reset_ui()
 
-  $("#newsgroup-name")
-    .text(ng.name)
+  $("#newsgroup-name").text(ng.name)
 
-  $("<li id=\"ng-headers\">Headers</li>")
-    .click(-> load_headers_pager(ng))
-    .appendTo("#newsgroup-items")
+  $("#newsgroup-screen-headers").click(-> load_headers_pager(ng))
+  $("#newsgroup-screen-filters").click(-> load_filters_pager(ng))
+  $("#newsgroup-screen-authors").click(-> load_authors_pager(ng))
 
-  $("<li>Filters</li>")
-    .click(-> load_filters_pager(ng))
-    .appendTo("#newsgroup-items")
-
-  $("#newsgroup-items")
-    .append "<li>PostSets</li><li>PostFiles</li>"
-
-  $("<li>Authors</li>")
-    .click(-> load_authors_pager(ng))
-    .appendTo("#newsgroup-items")
-
-  $("#newsgroup-screen")
-    .show()
+  $("#newsgroup-screen").show()
 
 load_author_screen = (ng, author) ->
-  $("#celery")
-    .empty()
-    .append("<div id=\"author\"><h1>" + author.name + "</h1><ul id=\"author-items\"></ul></div>")
-    .append("<div id=\"pager\"></div>")
-
-  $("#breadcrumbs")
-    .empty()
+  $("#author-screen-name").text(author.name)
 
   $("<li>" + ng.name + "</li>")
     .click(-> load_newsgroup_screen(ng))
@@ -237,5 +192,6 @@ load_author_screen = (ng, author) ->
     .appendTo("#author-items")
 
   $("<li>" + author.num_postfiles + " PostFiles</li>")
-    .click(-> load_author_postfiles_pager(ng, author))
+
+    .click(-> load_author_postfiles_pager(ng, outho ))
     .appendTo("#author-items")

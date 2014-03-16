@@ -42,14 +42,27 @@
           #info
         .col-xs-10.panel.panel-default
           .panel-body
-            #newsgroup-list-screen{:style => "display: none;"}
-              %ul#newsgroups-list
-            #newsgroup-screen{:style => "display: none;"}
-              #newsgroup
-                %h1{:id => "newsgroup-name"}
-                %ul#newsgroup-items
-              #pager
-            #author-screen{:style => "display: none;"}
-              #author
-                %h1
-                  %ul#author-items
+    #newsgroup-list-screen{:style => "display: none;"}
+      %ul#newsgroups-list
+      
+    #newsgroup-screen{:style => "display: none;"}
+      #newsgroup
+        %h1{:id => "newsgroup-name"}
+        %ul#newsgroup-items{:style => "display: inline;"}
+        %li#newsgroup-screen-headers Headers
+        %li#newsgroup-screen-filters Filters
+        %li PostSets
+        %li PostFiles
+        %li#newsgroup-screen-authors Authors
+
+    #author-screen{:style => "display: none;"}
+      #author
+        %h1{:id => "author-screen-name"}
+        %ul#author-items
+          
+    #pager{:style => "display: none;"}
+      #pager-ui
+        %button#prev-page-button{:value => "<-", :style => "font-size: 48px;"}
+        %button#next-page-button{:value => "->", :style => "font-size: 48px;"}
+      .hooligan
+        %table#pager-data
