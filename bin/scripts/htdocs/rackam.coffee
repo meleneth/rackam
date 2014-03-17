@@ -1,25 +1,35 @@
 rackam_pager = null
 
+rackam_setup = ->
+  $("#newsgroups-link").click -> load_newsgroup_list_screen()
+  load_newsgroup_list_screen()
+
+reset_pager = ->
+  $('#pager-data thead').empty()
+  $('#pager-data tbody').empty()
+
 reset_ui = ->
   $("#newsgroup-list-screen").hide()
+  $('#newsgroups-list').empty()
   $("#breadcrumbs").empty()
+  $('#filter-info').hide()
+  $('#pager').hide()
+  reset_pager()
 
 load_newsgroup_list_screen = ->
   reset_ui()
 
   $("#newsgroup-list-screen").show()
-  $("#newsgroups-link").click -> load_newsgroup_list_screen()
-  $("#newsgroups-list").empty()
 
   $.getJSON 'newsgroups.cgi', (data) ->
-      for ng in data
-        do (ng) ->
-          $("#newsgroups-list")
-            .append("<li>" + ng.name + "</li>")
-            .click -> load_newsgroup_screen(ng)
+    for ng in data
+      do (ng) ->
+        $("#newsgroups-list")
+          .append("<li>" + ng.name + "</li>")
+          .click -> load_newsgroup_screen(ng)
 
 $ ->
-  `load_newsgroup_list_screen()`
+  `rackam_setup()`
 
 class Page
   constructor: (url, start, items_per_page, num_items, render_func) ->
@@ -61,6 +71,17 @@ html_tr = (elements...) ->
   result.push "</tr>"
   result.join ""
 
+html_trh = (elements...) ->
+  result = []
+  result.push "<tr>"
+  for element in elements
+    do (element) ->
+      result.push "<th>"
+      result.push element
+      result.push "</th>"
+  result.push "</tr>"
+  result.join ""
+
 readable_storage = (number) ->
   length = number.length
   return number.slice(0, -12) + "TB" if length > 12
@@ -73,34 +94,28 @@ load_authors_pager = (newsgroup) ->
   loader_func = (data) ->
     $("#pager-data")
       .empty()
-      .append("<tr><th>Name</th><th>PostSets</th><th>PostFiles</th><th>Headers</th><th>Bytes Posted</th></tr>")
+      .append(html_trh("Name", "PostSets", "PostFiles", "Headers", "Bytes Posted"))
+
     for author in data
       do (author) ->
-        row = $("<tr></tr>")
-        cell = $("<td>" + author.name + "</td>")
-        cell.click -> load_author_screen(newsgroup, author)
-        row.append(cell)
-        
-        $("<td>" + author.num_postsets + "</td>").appendTo(row)
-        $("<td>" + author.num_postfiles + "</td>").appendTo(row)
-        $("<td>" + author.num_headers + "</td>").appendTo(row)
-        $("<td>" + readable_storage(author.size) + "</td>").appendTo(row)
-
-        row.appendTo("#pager-data")
+        row = html_tr(author.name, author.num_postsets, author.num_postfiles, author.num_headers, readable_storage(author.size))
+        row.firstChild().click(-> load_author_screen(newsgroup, author))
+        row.appendTo("#pager-data tbody")
 
   rackam_pager = new Page("/authors.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_authors, loader_func)
   rackam_pager.create_ui()
   rackam_pager.load_page()
   
 load_author_headers_pager = (newsgroup, author) ->
+  $('#pager-data thead')
+    .empty()
+    .append(html_trh("Subject", "Author", "# bytes"))
+
   loader_func = (data) ->
-    $('#pager-data')
-      .empty()
-      .append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>")
     for header in data
       do (header) ->
         $(html_tr(header.subject, header.posted_by, readable_storage(header.size)))
-          .appendTo("#pager-data")
+          .appendTo("#pager-data tbody")
 
   url = "/headers.cgi?ng=" + newsgroup.name + ";author_id=" + author.id
   rackam_pager = new Page url, 0, 30, newsgroup.num_headers, loader_func
@@ -108,55 +123,50 @@ load_author_headers_pager = (newsgroup, author) ->
   rackam_pager.load_page()
 
 load_headers_pager = (newsgroup) ->
+  reset_ui()
+  $('#pager').show()
+
   loader_func = (data) ->
-    $('#pager-data')
-      .empty()
-      .append("<tr><th>Subject</th><th>Author</th><th># bytes</th></tr>")
+    $('#pager-data thead')
+      .append(html_trh("Subject", "Author", "# Bytes"))
+
     for header in data
       do (header) ->
         $(html_tr(header.subject, header.posted_by, readable_storage(header.size)))
-          .appendTo("#pager-data")
+          .appendTo("#pager-data tbody")
 
   rackam_pager = new Page "/headers.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_headers, loader_func
   rackam_pager.create_ui()
   rackam_pager.load_page()
 
 load_postfiles_pager = (newsgroup) ->
+  reset_pager()
+  $('#pager-data thead')
+    .append(html_trh("PostFile Name", "Author", "# bytes"))
+
   loader_func = (data) ->
-    $('#pager-data')
-      .empty()
-      .append("<tr><th>PostFile Name</th><th>Author</th><th># bytes</th></tr>")
     for postfile in data
       do (postfile) ->
         $(html_tr(postfile.name, postfile.posted_by, readable_storage(postfile.size)))
-          .appendTo("#pager-data")
+          .appendTo("#pager-data tbody")
+
   rackam_pager = new Page "/newsgroup_postfiles.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_postfiles, loader_func
   rackam_pager.create_ui()
   rackam_pager.load_page()
 
 load_filters_pager = (ng) ->
-  doc_text = "<table>
-  <tr><td>PostSet.num_files   </td><td>%f</td></tr>
-  <tr><td>PostSet.fileno      </td><td>%e</td></tr>
-  <tr><td>PostSet.name        </td><td>%s</td></tr>
-  <tr><td>PostFile.num_pieces </td><td>%n</td></tr>
-  <tr><td>PostFile.piece_no   </td><td>%p</td></tr>
-  <tr><td>PostFile.filename   </td><td>%a</td></tr>
-  <tr><td>discard             </td><td>%d</td></tr>
-  </table> "
-
-  $("#info")
-    .empty()
-    .append(doc_text)
+  reset_ui()
+  $('#filter-info').show()
+  $('#pager').show()
+  $('#pager-data thead').empty().append(html_trh("Filter", "# Matches"))
+  $('#pager-data tbody').empty()
 
   loader_func = (data) ->
-    $('#pager-data')
-      .empty()
-      .append("<tr><th>Filter</th><th># Matches</th></tr>")
     for filter in data
       do (filter) ->
         $(html_tr(filter.text, filter.num_matched))
-          .appendTo("#pager-data")
+          .appendTo("#pager-data tbody")
+
   rackam_pager = new Page "/filters.cgi?ng=" + ng.name, 0, 30, ng.num_postfiles, loader_func
   rackam_pager.create_ui()
   rackam_pager.load_page()
@@ -173,6 +183,7 @@ load_newsgroup_screen = (ng) ->
   $("#newsgroup-screen").show()
 
 load_author_screen = (ng, author) ->
+  reset_ui()
   $("#author-screen-name").text(author.name)
 
   $("<li>" + ng.name + "</li>")

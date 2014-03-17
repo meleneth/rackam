@@ -26,11 +26,15 @@
             %li
               %a#newsgroups-link{:href => "#"} Newsgroups
             %li
-              %a{:href => "#"} Settings
+              %a#headers-link{:href => "#"} Headers
             %li
-              %a{:href => "#"} Profile
+              %a#filters-link{:href => "#"} Filters
             %li
-              %a{:href => "#"} Help
+              %a#postsets-link{:href => "#"} PostSets
+            %li
+              %a#postfiles-link{:href => "#"} PostFiles
+            %li
+              %a#authers-link{:href => "#"} Authors
     %br{:clear => "both"}
     %br{:clear => "both"}
     %br{:clear => "both"}
@@ -38,8 +42,29 @@
       .row
         .col-xs-2
           %div#sidebar
-            %ul
-          #info
+          #filter-info{:style => "display: none;"}
+            .table
+              .tr
+                .td PostSet.num_files
+                .td %f
+              .tr
+                .td PostSet.fileno
+                .td %e
+              .tr
+                .td PostSet.name
+                .td %s
+              .tr
+                .td PostFile.num_pieces
+                .td %n
+              .tr
+                .td PostFile.piece_no
+                .td %p
+              .tr
+                .td PostFile.filename
+                .td %a
+              .tr
+                .td discard
+                .td %d
         .col-xs-10.panel.panel-default
           .panel-body
     #newsgroup-list-screen{:style => "display: none;"}
@@ -62,7 +87,9 @@
           
     #pager{:style => "display: none;"}
       #pager-ui
-        %button#prev-page-button{:value => "<-", :style => "font-size: 48px;"}
-        %button#next-page-button{:value => "->", :style => "font-size: 48px;"}
+        %button#prev-page-button{:value => "&lt;-", :style => "font-size: 48px;"}
+        %button#next-page-button{:value => "-&gt;", :style => "font-size: 48px;"}
       .hooligan
         %table#pager-data
+          %thead
+          %tbody
