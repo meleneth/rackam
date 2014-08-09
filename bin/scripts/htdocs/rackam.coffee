@@ -62,14 +62,15 @@ class Page
 
 html_tr = (elements...) ->
   result = []
-  result.push "<tr>"
   for element in elements
     do (element) ->
       result.push "<td>"
       result.push element
       result.push "</td>"
-  result.push "</tr>"
-  result.join ""
+  result_row = $(document.createElement("tr"))
+  $(result.join("")).appendTo(result_row)
+  result_row
+
 
 html_trh = (elements...) ->
   result = []
@@ -92,14 +93,14 @@ readable_storage = (number) ->
 
 load_authors_pager = (newsgroup) ->
   loader_func = (data) ->
-    $("#pager-data")
+    $("#pager-data thead")
       .empty()
       .append(html_trh("Name", "PostSets", "PostFiles", "Headers", "Bytes Posted"))
 
     for author in data
       do (author) ->
         row = html_tr(author.name, author.num_postsets, author.num_postfiles, author.num_headers, readable_storage(author.size))
-        row.firstChild().click(-> load_author_screen(newsgroup, author))
+        row.first().click(-> load_author_screen(newsgroup, author))
         row.appendTo("#pager-data tbody")
 
   rackam_pager = new Page("/authors.cgi?ng=" + newsgroup.name, 0, 30, newsgroup.num_authors, loader_func)
@@ -203,6 +204,5 @@ load_author_screen = (ng, author) ->
     .appendTo("#author-items")
 
   $("<li>" + author.num_postfiles + " PostFiles</li>")
-
     .click(-> load_author_postfiles_pager(ng, outho ))
     .appendTo("#author-items")
