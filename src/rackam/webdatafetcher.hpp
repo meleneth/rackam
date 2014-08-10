@@ -5,9 +5,7 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-
+namespace Blackbeard {
 class WebDataFetcher {
     public:
         WebDataFetcher(WebRequest *request);
@@ -15,17 +13,18 @@ class WebDataFetcher {
 
         virtual int tick(void);
         virtual string info_update_string(void);
-        string table_id(string id);
+        string table_id(std::string id);
 
         WebRequest *request;
 
-        vector<string> output_lines;
+        std::vector<string> output_lines;
         unsigned int line_no;
         unsigned int num_lines;
-        string title;
+        std::string title;
 
     private:
     protected:
 };
+}
 
 #endif

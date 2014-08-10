@@ -1,12 +1,9 @@
 #ifndef HEADERSPARSER_HPP
 #define HEADERSPARSER_HPP
 
-#include<string>
-#include<pthread.h>
+#include<rackam_types.hpp>
 
-#include"newsgroup.hpp"
-
-class HeadersParser;
+namespace Blackbeard {
 
 typedef struct {
   HeadersParser * parser;
@@ -31,5 +28,7 @@ class HeadersParser {
     Newsgroup * newsgroup;
     int running_threads;
 };
+
+}
 
 #endif

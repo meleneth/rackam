@@ -3,12 +3,19 @@
 #include <unistd.h>
 #include<pthread.h>
 
+#include "rackam_types.hpp"
+
 #include "rackam.hpp"
 #include "console.hpp"
 #include "strutil.hpp"
 #include "headers_parser.hpp"
+#include "web_server.hpp"
+#include "newsgroup.hpp"
+#include "tcpconnection.hpp"
+#include "tcplistener.hpp"
 
 using std::string;
+using namespace Blackbeard;
 
 extern "C" {
   int luaopen_Blackbeard(lua_State* L);

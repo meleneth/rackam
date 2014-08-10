@@ -1,5 +1,12 @@
 #include "author.hpp"
 
+#include"message_header.hpp"
+#include"newsgroup.hpp"
+#include"post_file.hpp"
+#include"post_set.hpp"
+
+using namespace Blackbeard;
+
 Author::Author(std::string authorname)
 {
   this->name = authorname;

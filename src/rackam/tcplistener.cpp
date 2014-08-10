@@ -3,6 +3,8 @@
 
 #define BACKLOG 4
 
+using namespace Blackbeard;
+
 TCPListener::TCPListener(int port_num)
 {
     port_no = port_num;

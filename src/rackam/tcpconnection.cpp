@@ -1,6 +1,7 @@
 #include "tcpconnection.hpp"
 #include "console.hpp"
 
+using namespace Blackbeard;
 // Public data members go here.
 TCPConnection::TCPConnection(string hostname, int port) // Constructor
 {

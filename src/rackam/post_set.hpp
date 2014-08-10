@@ -1,12 +1,9 @@
 #ifndef POSTSET_HPP
 #define POSTSET_HPP
 
-#include<map>
-#include<string>
+#include <rackam_types.hpp>
 
-#include "post_file.hpp"
-
-class PostFile;
+namespace Blackbeard {
 class PostSet {
   public:
     PostSet();
@@ -20,5 +17,6 @@ class PostSet {
 
     std::string subject;
 };
+}
 
 #endif

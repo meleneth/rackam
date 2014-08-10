@@ -12,6 +12,7 @@
 using std::string;
 using std::vector;
 
+namespace Blackbeard {
 class WebRequest {
     public:
         WebRequest(TCPConnection *client);
@@ -51,5 +52,7 @@ class WebRequest {
     private:
     protected:
 };
+
+}
 
 #endif

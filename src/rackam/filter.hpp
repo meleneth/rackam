@@ -1,10 +1,9 @@
 #ifndef FILTER_HPP
 #define FILTER_HPP
 
-#include<string>
-#include<vector>
-#include<pthread.h>
+#include<rackam_types.hpp>
 
+namespace Blackbeard {
 class FilterMatch {
   public:
     FilterMatch();
@@ -31,5 +30,6 @@ class Filter {
     long long int num_matched;
     pthread_mutex_t self_mutex;
 };
+}
 
 #endif

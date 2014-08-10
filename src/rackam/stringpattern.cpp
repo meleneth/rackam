@@ -1,7 +1,9 @@
 #include"stringpattern.hpp"
-#include"console.hpp"
 
 #include <stdlib.h>
+
+using namespace Blackbeard;
+using std::string;
 
 StringPattern::StringPattern(unsigned int max_part_no)
 {
@@ -29,7 +31,7 @@ void StringPattern::add_breaker(unsigned int target)
 
 int StringPattern::match(string target)
 {
-    list<string>::iterator s;
+    std::list<string>::iterator s;
 
     for(unsigned int i=0; i<max_part_no; i++){
         results[i] = "";

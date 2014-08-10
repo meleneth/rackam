@@ -1,20 +1,9 @@
 #ifndef AUTHOR_HPP
 #define AUTHOR_HPP
 
-#include<vector>
-#include<string>
+#include<rackam_types.hpp>
 
-#include<pthread.h>
-
-#include"message_header.hpp"
-#include"newsgroup.hpp"
-#include"post_file.hpp"
-#include"post_set.hpp"
-
-class MessageHeader;
-class Newsgroup;
-class PostFile;
-class PostSet;
+namespace Blackbeard {
 class Author {
   public:
     Author(std::string name);
@@ -33,10 +22,12 @@ class Author {
 
     Newsgroup *newsgroup;
 
-    std::vector<MessageHeader *> headers;
-    std::vector<PostSet *> postsets;
-    std::vector<PostFile *> postfiles;
-    std::map<std::string, PostFile *> postfiles_by_name;
+    MessageHeaderVector headers;
+    PostSetVector postsets;
+    PostFileVector postfiles;
+    StringToPostFileMap postfiles_by_name;
 };
+
+}
 
 #endif

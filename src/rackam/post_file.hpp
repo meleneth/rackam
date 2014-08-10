@@ -1,14 +1,11 @@
 #ifndef POSTFILE_HPP
 #define POSTFILE_HPP
 
-#include<string>
 #include<pthread.h>
 
-#include"newsgroup.hpp"
-#include"author.hpp"
+#include<rackam_types.hpp>
 
-class Newsgroup;
-class Author;
+namespace Blackbeard {
 class PostFile {
   public:
     PostFile();
@@ -25,5 +22,6 @@ class PostFile {
 
     pthread_mutex_t self_mutex;
 };
+}
 
 #endif

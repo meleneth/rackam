@@ -1,6 +1,7 @@
 #include "message_header.hpp"
 
 using std::string;
+using namespace Blackbeard;
 
 MessageHeader::MessageHeader(Newsgroup *group, long long int article_no, string msg_id, string subject, Author *posted_by, int num_bytes)
 {

@@ -17,6 +17,9 @@ using std::ofstream;
 using std::ios;
 using std::endl;
 
+#include<rackam_types.hpp>
+
+namespace Blackbeard {
 class Console {
     public:
         // Public data members go here.
@@ -44,5 +47,7 @@ class Console {
 };
 
 extern Console *console;
+
+}
 
 #endif

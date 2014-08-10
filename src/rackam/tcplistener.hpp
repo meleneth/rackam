@@ -3,6 +3,7 @@
 
 #include "tcpconnection.hpp"
 
+namespace Blackbeard {
 class TCPListener {
     public:
         TCPListener(int port_num);
@@ -19,5 +20,7 @@ class TCPListener {
     private:
     protected:
 };
+
+}
 
 #endif

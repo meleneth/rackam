@@ -6,6 +6,7 @@
 
 using std::string;
 
+namespace Blackbeard {
 class WebResponse {
   public:
     WebResponse();
@@ -19,5 +20,6 @@ class WebResponse {
     string full_response;
 
 };
+}
 
 #endif

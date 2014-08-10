@@ -1,5 +1,7 @@
 #include "post_set.hpp"
 
+using namespace Blackbeard;
+
 PostSet::PostSet()
 {
   max_message_no = 0;

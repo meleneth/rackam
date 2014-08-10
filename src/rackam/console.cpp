@@ -6,6 +6,7 @@ using std::string;
 using std::stringstream;
 using std::list;
 using std::setprecision;
+using namespace Blackbeard;
 
 #define CONSOLE_MAX_SIZE 1000
 

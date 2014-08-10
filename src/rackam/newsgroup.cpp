@@ -1,5 +1,13 @@
 #include "newsgroup.hpp"
 
+#include"post_set.hpp"
+#include"post_file.hpp"
+#include"author.hpp"
+#include"message_header.hpp"
+#include"filter.hpp"
+
+using namespace Blackbeard;
+
 Newsgroup::Newsgroup()
 {
   max_message_no = 0;

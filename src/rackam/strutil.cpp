@@ -14,6 +14,7 @@ using std::setprecision;
 using std::ofstream;
 using std::hex;
 
+using namespace Blackbeard;
 void Tokenize(const string& str, std::vector<string>& tokens, const string& delimiters = " ")
 {
     // Skip delimiters at beginning.

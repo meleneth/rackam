@@ -1,12 +1,9 @@
 #ifndef ___messageheader_inc
 #define ___messageheader_inc 1
 
-#include "newsgroup.hpp"
-#include "author.hpp"
-#include <string>
+#include<rackam_types.hpp>
 
-class Newsgroup;
-class Author;
+namespace Blackbeard {
 class MessageHeader {
     public:
         MessageHeader(Newsgroup *group, long long int article_no, std::string msg_id, std::string subject, Author *posted_by, int num_bytes);
@@ -21,5 +18,6 @@ class MessageHeader {
     private:
     protected:
 };
+}
 
 #endif

@@ -24,24 +24,23 @@
 
 #define MAXDATASIZE 960000
 
-using std::list;
-using std::string;
 
+namespace Blackbeard {
 class TCPConnection {
     public:
         // Public data members go here.
-        TCPConnection(string hostname, int port); // Constructor
+        TCPConnection(std::string hostname, int port); // Constructor
         TCPConnection(); // Constructor
         virtual ~TCPConnection(); // Destructor
 
         void send_data(char *buf, size_t size);
         int has_data_waiting(void);
-        void send_line(string line);
+        void send_line(std::string line);
         void slice_buffer_strings(void);
         unsigned int read_packets(void);
         unsigned int num_ticks(struct timeval *now);
-        virtual void send_command(string command);
-        void sendall(string cmd);
+        virtual void send_command(std::string command);
+        void sendall(std::string cmd);
         void close_connection(void);
         unsigned int get_krate(void);
         std::string get_line(void);
@@ -51,7 +50,7 @@ class TCPConnection {
         int buf_start_pos, buf_end_pos;
         struct hostent *he;
         struct sockaddr_in their_addr; // connector's address information 
-        list<string> lines;
+        std::list<std::string> lines;
         int connected;
         struct timeval last_time;
         unsigned int bytes_since_last_time;
@@ -63,4 +62,5 @@ class TCPConnection {
         // Protected members go here.
 };
 
+}
 #endif

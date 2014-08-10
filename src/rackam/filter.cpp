@@ -4,6 +4,8 @@
 #include "filter.hpp"
 #include "console.hpp"
 
+using namespace Blackbeard;
+
 FilterMatch::FilterMatch()
 {
   postset_subject.clear();

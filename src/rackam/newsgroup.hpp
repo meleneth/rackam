@@ -1,22 +1,11 @@
 #ifndef NEWSGROUP_HPP
 #define NEWSGROUP_HPP
 
-#include<string>
-#include<map>
-#include<vector>
+#include<rackam_types.hpp>
+
 #include<pthread.h>
 
-#include"post_set.hpp"
-#include"post_file.hpp"
-#include"author.hpp"
-#include"message_header.hpp"
-#include"filter.hpp"
-
-class PostSet;
-class PostFile;
-class MessageHeader;
-class Author;
-class Filter;
+namespace Blackbeard {
 class Newsgroup {
   public:
     Newsgroup();
@@ -43,5 +32,7 @@ class Newsgroup {
 
     pthread_mutex_t self_mutex;
 };
+
+}
 
 #endif

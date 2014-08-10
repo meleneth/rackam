@@ -1,7 +1,11 @@
+#include <rackam_types.hpp>
+
 #include "web_server.hpp"
 #include "web_request.hpp"
 #include "web_response.hpp"
 #include "console.hpp"
+#include "webdatafetcher.hpp"
+#include "tcplistener.hpp"
 
 #include<stdio.h>
 #include<sys/types.h>
@@ -9,9 +13,13 @@
 #include<unistd.h>
 
 #include<sstream>
-using std::stringstream;
 
-WebServer::WebServer(string web_root, int port_no)
+using std::stringstream;
+using std::string;
+using std::list;
+using namespace Blackbeard;
+
+WebServer::WebServer(std::string web_root, int port_no)
 {
   listener = new TCPListener(port_no);
   this->web_root = web_root;
@@ -29,7 +37,9 @@ WebServer::~WebServer()
   static_content_length.empty();
 }
 
-extern void handle_web_request(WebRequest *request, WebResponse *response);
+namespace Blackbeard {
+  extern void handle_web_request(WebRequest *request, WebResponse *response);
+}
 
 void WebServer::handle_request(WebRequest *request)
 {

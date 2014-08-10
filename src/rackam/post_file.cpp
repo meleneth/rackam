@@ -1,5 +1,6 @@
 #include "post_file.hpp"
 
+using namespace Blackbeard;
 PostFile::PostFile()
 {
   max_message_no = 0;

@@ -1,7 +1,15 @@
 #include "headers_parser.hpp"
-#include"strutil.hpp"
+
+#include "strutil.hpp"
+#include "newsgroup.hpp"
+#include "message_header.hpp"
+#include "author.hpp"
+#include "post_file.hpp"
+#include "filter.hpp"
 
 #define HEADERSPARSER_WORKSIZE 5000
+
+using namespace Blackbeard;
 
 HeadersParser::HeadersParser(Newsgroup *newsgroup)
 {
@@ -84,6 +92,10 @@ void HeadersParser::process_line(std::string line)
     pthread_mutex_unlock(&header->author->self_mutex);
 }
 
+namespace Blackbeard {
+  void *HeadersParser_process_lines(void *s);
+}
+
 void HeadersParser::queue_line(std::string line)
 {
   static std::vector<std::string> *headers = NULL;
@@ -137,6 +149,7 @@ void HeadersParser::queue_line(std::string line)
   
 }
 
+namespace Blackbeard {
 void *HeadersParser_process_lines(void *s)
 {
   HeadersParser_thread_info_t *thread_data = (HeadersParser_thread_info_t *) s;
@@ -153,4 +166,6 @@ void *HeadersParser_process_lines(void *s)
   pthread_mutex_unlock(&thread_data->parser->self_mutex);
   delete thread_data->headers;
   delete thread_data;
+}
+
 }

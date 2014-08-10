@@ -1,13 +1,17 @@
 #include <iostream>
 
-#include <rackam.hpp>
-#include <console.hpp>
+#include<rackam_types.hpp>
+#include<rackam.hpp>
+#include<console.hpp>
 #include<newsgroup.hpp>
 
 using namespace std;
+using namespace Blackbeard;
 
-Console *console;
-Rackam *rackam;
+namespace Blackbeard {
+  Console *console;
+  Rackam *rackam;
+}
 
 extern string newsgroup_as_json(Newsgroup *newsgroup);
 

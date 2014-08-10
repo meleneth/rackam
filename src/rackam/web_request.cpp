@@ -6,6 +6,7 @@
 #include <sstream>
 
 using std::stringstream;
+using namespace Blackbeard;
 
 WebRequest::WebRequest(TCPConnection *tcp)
 {

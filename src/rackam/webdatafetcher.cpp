@@ -3,6 +3,8 @@
 
 #include <sstream>
 
+using namespace Blackbeard;
+
 using std::stringstream;
 
 WebDataFetcher::WebDataFetcher(WebRequest *r)

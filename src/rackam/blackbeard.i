@@ -1,6 +1,7 @@
 %module Blackbeard
 %{
 /* Includes the header in the wrapper code */
+#include "rackam_types.hpp"
 #include "newsgroup.hpp"
 #include "post_set.hpp"
 #include "post_file.hpp"
@@ -16,6 +17,7 @@
 #include <string>
 
 using std::string;
+using namespace Blackbeard;
 %}
 
 /* Parse the header file to generate wrappers */
@@ -36,16 +38,16 @@ using std::string;
 %include "filter.hpp"
 %include "message_header.hpp"
 
-%template(NewsgroupVector) std::vector<Newsgroup *>;
-%template(MessageHeaderVector) std::vector<MessageHeader *>;
-%template(StringAuthorMap) std::map<string, Author *>;
-%template(AuthorVector) std::vector<Author *>;
-%template(FilterVector) std::vector<Filter *>;
+%template(NewsgroupVector) std::vector<Blackbeard::Newsgroup *>;
+%template(MessageHeaderVector) std::vector<Blackbeard::MessageHeader *>;
+%template(StringAuthorMap) std::map<string, Blackbeard::Author *>;
+%template(AuthorVector) std::vector<Blackbeard::Author *>;
+%template(FilterVector) std::vector<Blackbeard::Filter *>;
 %template(StringVector) std::vector<std::string>;
-%template(PostSetVector) std::vector<PostSet *>;
-%template(PostFileVector) std::vector<PostFile *>;
+%template(PostSetVector) std::vector<Blackbeard::PostSet *>;
+%template(PostFileVector) std::vector<Blackbeard::PostFile *>;
 
-%extend Newsgroup {
+%extend Blackbeard::Newsgroup {
   const char *get_max_message_no_str()
   { 
     static char temp[1024];
@@ -66,7 +68,7 @@ using std::string;
   }
 }
 
-%extend PostSet {
+%extend Blackbeard::PostSet {
   const char *get_max_message_no_str()
   { 
     static char temp[1024];
@@ -87,7 +89,7 @@ using std::string;
   }
 }
 
-%extend PostFile {
+%extend Blackbeard::PostFile {
   const char *get_max_message_no_str()
   { 
     static char temp[1024];
@@ -108,7 +110,7 @@ using std::string;
   }
 }
 
-%extend MessageHeader {
+%extend Blackbeard::MessageHeader {
   const char *get_article_no_str()
   { 
     static char temp[1024];
@@ -123,7 +125,7 @@ using std::string;
   }
 }
 
-%extend Author {
+%extend Blackbeard::Author {
   const char *get_size_str()
   { 
     static char temp[1024];
@@ -132,7 +134,7 @@ using std::string;
   }
 }
 
-%extend Filter {
+%extend Blackbeard::Filter {
   const char *get_num_matched_str()
   {
     static char temp[1024];
@@ -143,10 +145,11 @@ using std::string;
 
 %{ 
 
+namespace Blackbeard {
 string newsgroup_as_json(Newsgroup *newsgroup) 
 {
   lua_getfield(rackam->lua_state, LUA_GLOBALSINDEX, "newsgroup_as_json");
-  SWIG_Lua_NewPointerObj(rackam->lua_state, newsgroup, SWIGTYPE_p_Newsgroup, 0);
+  SWIG_Lua_NewPointerObj(rackam->lua_state, newsgroup, SWIGTYPE_p_Blackbeard__Newsgroup, 0);
   lua_call(rackam->lua_state, 1, 1);
   
   int top;
@@ -161,9 +164,11 @@ string newsgroup_as_json(Newsgroup *newsgroup)
 void handle_web_request(WebRequest *request, WebResponse *response)
 {
   lua_getfield(rackam->lua_state, LUA_GLOBALSINDEX, "handle_web_request");
-  SWIG_Lua_NewPointerObj(rackam->lua_state, request, SWIGTYPE_p_WebRequest, 0);
-  SWIG_Lua_NewPointerObj(rackam->lua_state, response, SWIGTYPE_p_WebResponse, 0);
+  SWIG_Lua_NewPointerObj(rackam->lua_state, request, SWIGTYPE_p_Blackbeard__WebRequest, 0);
+  SWIG_Lua_NewPointerObj(rackam->lua_state, response, SWIGTYPE_p_Blackbeard__WebResponse, 0);
   lua_call(rackam->lua_state, 2, 0);
+}
+
 }
 
 %}

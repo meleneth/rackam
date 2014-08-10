@@ -1,18 +1,13 @@
 #ifndef RACKAM_HPP
 #define RACKAM_HPP
 
-#include<string>
-#include<vector>
-
-#include<pthread.h>
+#include<rackam_types.hpp>
 
 #include <lua.hpp>
 #include <lauxlib.h>
 #include <lualib.h>
 
-#include"web_server.hpp"
-#include"author.hpp"
-
+namespace Blackbeard {
 class Rackam {
   public:
     Rackam();
@@ -32,6 +27,7 @@ class Rackam {
     pthread_mutex_t self_mutex;
 };
 
-extern Rackam *rackam;
+extern Blackbeard::Rackam *rackam;
 
+}
 #endif
