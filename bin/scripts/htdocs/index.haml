@@ -38,6 +38,7 @@
     %br{:clear => "both"}
     %br{:clear => "both"}
     %br{:clear => "both"}
+    #newsgroup-name
     .container
       .row
         .col-xs-2
@@ -72,13 +73,15 @@
       
     #newsgroup-screen{:style => "display: none;"}
       #newsgroup
-        %h1{:id => "newsgroup-name"}
-        %ul#newsgroup-items{:style => "display: inline;"}
-        %li#newsgroup-screen-headers Headers
-        %li#newsgroup-screen-filters Filters
-        %li PostSets
-        %li PostFiles
-        %li#newsgroup-screen-authors Authors
+        %dl
+          %dt#newsgroup-screen-headers Headers
+          %dd#newsgroup-screen-headers-count
+          %dt#newsgroup-screen-postsets PostSets
+          %dd#newsgroup-screen-postsets-count
+          %dt#newsgroup-screen-postfiles PostFiles
+          %dd#newsgroup-screen-postfiles-count
+          %dt#newsgroup-screen-authors Authors
+          %dd#newsgroup-screen-authors-count
 
     #author-screen{:style => "display: none;"}
       #author
@@ -90,6 +93,6 @@
         %button#prev-page-button{:value => "&lt;-", :style => "font-size: 48px;"}
         %button#next-page-button{:value => "-&gt;", :style => "font-size: 48px;"}
       .hooligan
-        %table#pager-data
+        %table#pager-data.table.table-striped
           %thead
           %tbody

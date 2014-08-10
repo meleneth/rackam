@@ -92,6 +92,8 @@ readable_storage = (number) ->
   return number
 
 load_authors_pager = (newsgroup) ->
+  $("#newsgroup-name").text(newsgroup.name)
+  
   loader_func = (data) ->
     $("#pager-data thead")
       .empty()
@@ -180,6 +182,8 @@ load_newsgroup_screen = (ng) ->
   $("#newsgroup-screen-headers").click(-> load_headers_pager(ng))
   $("#newsgroup-screen-filters").click(-> load_filters_pager(ng))
   $("#newsgroup-screen-authors").click(-> load_authors_pager(ng))
+  $("#newsgroup-screen-authors-count").text(ng.num_authors)
+  $("#authors-link").click(-> load_authors_pager(ng))
 
   $("#newsgroup-screen").show()
 
