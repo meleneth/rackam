@@ -28,13 +28,16 @@ namespace Blackbeard {
   class WebRequest;
   class WebResponse;
   class WebDataFetcher;
+  class WebStaticFile;
 
 
   typedef std::list<Author*> AuthorList;
+  typedef std::list<WebStaticFile*> WebStaticFileList;
+  typedef std::list<WebStaticFile*>::iterator WebStaticFile_list_iterator;
 
-  typedef std::vector<MessageHeader*> MessageHeaderVector;
-  typedef std::vector<PostSet*> PostSetVector;
-  typedef std::vector<PostFile*> PostFileVector;
+  typedef std::vector<MessageHeader*> MessageHeader_vector;
+  typedef std::vector<PostSet*> PostSet_vector;
+  typedef std::vector<PostFile*> PostFile_vector;
 
   typedef std::map<std::string, PostFile*> StringToPostFileMap;
 }

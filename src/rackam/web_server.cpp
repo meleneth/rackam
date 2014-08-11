@@ -6,6 +6,7 @@
 #include "console.hpp"
 #include "webdatafetcher.hpp"
 #include "tcplistener.hpp"
+#include "web_static_file.hpp"
 
 #include<stdio.h>
 #include<sys/types.h>
@@ -29,12 +30,9 @@ WebServer::~WebServer()
 {
   delete listener;
 
-  std::map<string, char *>::iterator sc;
-  for(sc = static_contents.begin(); sc != static_contents.end(); ++sc) {
-    free(sc->second);
+  for(WebStaticFile *sc : static_contents) {
+    delete sc;
   }
-  static_contents.empty();
-  static_content_length.empty();
 }
 
 namespace Blackbeard {
@@ -48,11 +46,16 @@ void WebServer::handle_request(WebRequest *request)
   console->log(request->get_uri());
   
   if(request->path == "/") {
-    if(static_contents.find(request->filename) != static_contents.end()) {
-      response.prepare_response_for_bytes(static_content_length[request->filename]);
-      request->client->send_data((char *)response.full_response.c_str(), response.full_response.length());
-      request->client->send_data(static_contents[request->filename], static_content_length[request->filename]);
-      return;
+    for(auto sc : static_contents) {
+      console->log("Checking static: " + sc->filename);
+      if (sc->filename == request->filename) {
+        console->log("Serving static content: " + request->filename);
+        response.content_type = sc->content_type;
+        response.prepare_response_for_bytes(sc->content_length);
+        request->client->send_data((char *)response.full_response.c_str(), response.full_response.length());
+        request->client->send_data(sc->buffer, sc->content_length);
+        return;
+      }
     }
   }
 
@@ -99,17 +102,22 @@ void WebServer::handle_new_connection(void)
     connections.push_back(listener->get_waiting_connection());
 }
 
-void WebServer::register_file(string url, string filename)
+void WebServer::register_file(string url, string filename, std::string content_type)
 {
+  auto static_file = new WebStaticFile();
+
   struct stat file_stats;
   stat(filename.c_str(), &file_stats);
 
   int num_bytes = file_stats.st_size;
   char *buffer = (char *)malloc(num_bytes);
 
-  static_contents[url] = buffer;
-  static_content_length[url] = num_bytes;
-  
+  static_file->content_length = num_bytes;
+  static_file->buffer = buffer;
+  static_file->filename = url;
+
+  static_contents.push_back(static_file);
+
   FILE *fp = fopen(filename.c_str(), "r");
   fread(buffer, num_bytes, 1, fp);
   fclose(fp);

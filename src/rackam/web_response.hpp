@@ -18,6 +18,7 @@ class WebResponse {
     string body;
     string response_line;
     string full_response;
+    string content_type;
 
 };
 }

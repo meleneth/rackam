@@ -48,6 +48,8 @@ bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/web_response.hpp \
   src/rackam/web_request.cpp \
   src/rackam/web_request.hpp \
+  src/rackam/web_static_file.hpp \
+  src/rackam/web_static_file.cpp \
   src/rackam/web_server.cpp \
   src/rackam/web_server.hpp \
   src/rackam/message_header.cpp \

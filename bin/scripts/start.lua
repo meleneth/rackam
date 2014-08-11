@@ -249,11 +249,11 @@ n:add_filter("%a (%p/%n)")
 
 Blackbeard.rackam:load_headers_from_file(n, "headers_snipper.log")
 
-Blackbeard.rackam.webserver:register_file("index.html", "htdocs/index.html")
-Blackbeard.rackam.webserver:register_file("favicon.ico", "htdocs/favicon.ico")
-Blackbeard.rackam.webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js")
-Blackbeard.rackam.webserver:register_file("rackam.js", "htdocs/rackam.js")
-Blackbeard.rackam.webserver:register_file("rackam.css", "htdocs/rackam.css")
+Blackbeard.rackam.webserver:register_file("index.html", "htdocs/index.html", "text/html")
+Blackbeard.rackam.webserver:register_file("favicon.ico", "htdocs/favicon.ico", "text/html")
+Blackbeard.rackam.webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js", "text/html")
+Blackbeard.rackam.webserver:register_file("rackam.js", "htdocs/rackam.js", "text/html")
+Blackbeard.rackam.webserver:register_file("rackam.css", "htdocs/rackam.css", "text/css")
 
 
 print("Lua script finished.")

@@ -13,6 +13,7 @@
 #include "author.hpp"
 #include "filter.hpp"
 #include "rackam.hpp"
+#include "web_static_file.hpp"
 
 #include <string>
 
@@ -26,6 +27,7 @@ using namespace Blackbeard;
 %include <std_vector.i>
 /*%template(StringIntMap) std::map<string, int>; */
 
+%include "rackam_types.hpp"
 %include "newsgroup.hpp"
 %include "post_set.hpp"
 %include "post_file.hpp"
@@ -37,6 +39,7 @@ using namespace Blackbeard;
 %include "rackam.hpp"
 %include "filter.hpp"
 %include "message_header.hpp"
+%include "web_static_file.hpp"
 
 %template(NewsgroupVector) std::vector<Blackbeard::Newsgroup *>;
 %template(MessageHeaderVector) std::vector<Blackbeard::MessageHeader *>;

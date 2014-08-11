@@ -24,7 +24,7 @@ class Newsgroup {
 
     std::vector<PostSet *> postsets;
     std::vector<PostFile *> postfiles;
-    std::vector<MessageHeader *> headers;
+    MessageHeader_vector headers;
     std::vector<Filter *> filters;
 
     std::vector<Author *> authors;

@@ -20,17 +20,15 @@ class WebServer {
         void log_to_file(std::string filename);
         void handle_request(WebRequest *request);
         void handle_new_connection(void);
-        void register_file(std::string url, std::string filename);
+        void register_file(std::string url, std::string filename, std::string content_type);
         void tick(void);
 
         TCPListener *listener;
         std::list<TCPConnection *> connections;
         std::list<WebDataFetcher *> handlers;
         std::string web_root;
-
-        std::map<std::string, char *> static_contents;
-        std::map<std::string, int>    static_content_length;
-
+        
+        WebStaticFileList static_contents;
 
     private:
     protected:

@@ -22,9 +22,9 @@ class Author {
 
     Newsgroup *newsgroup;
 
-    MessageHeaderVector headers;
-    PostSetVector postsets;
-    PostFileVector postfiles;
+    MessageHeader_vector headers;
+    PostSet_vector postsets;
+    PostFile_vector postfiles;
     StringToPostFileMap postfiles_by_name;
 };
 
