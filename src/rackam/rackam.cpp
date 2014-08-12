@@ -30,6 +30,7 @@ Rackam::Rackam()
   luaopen_string(lua_state);
   luaopen_math(lua_state);
   luaopen_Blackbeard(lua_state);
+  webserver = nullptr;
 
   console->log("Lua initialized.");
   still_running = 1;
@@ -61,7 +62,6 @@ void Rackam::main_loop()
   tv.tv_sec = 1;
   tv.tv_usec = 0;
   int fdmax = 0;
-  list<TCPConnection *>::iterator c;
 
   //check for new incoming web request
 
@@ -71,8 +71,8 @@ void Rackam::main_loop()
     FD_SET(webserver->listener->sockfd, &read_fds);
     fdmax = webserver->listener->sockfd;
 
-    for(c = webserver->connections.begin(); c != webserver->connections.end(); ++c){
-        int fd = (*c)->sockfd;
+    for(auto connection : webserver->connections) {
+        int fd = connection->sockfd;
         FD_SET(fd, &read_fds);
         if(fdmax < fd){
             fdmax = fd;
@@ -94,9 +94,9 @@ void Rackam::main_loop()
       webserver->handle_new_connection();
     }
 
-    for(c = webserver->connections.begin(); c != webserver->connections.end(); ++c){
-        if(FD_ISSET((*c)->sockfd, &read_fds)){
-            (*c)->read_packets();
+    for(auto connection : webserver->connections) {
+        if(FD_ISSET(connection->sockfd, &read_fds)){
+            connection->read_packets();
         }
     }
 
@@ -106,10 +106,9 @@ void Rackam::main_loop()
 
 Newsgroup *Rackam::newsgroup_for_name(string name)
 {
-  std::vector<Newsgroup*>::iterator i;
-  for(i = newsgroups.begin(); i != newsgroups.end(); ++i) {
-    if((*i)->name == name) {
-      return *i;
+  for(auto newsgroup : newsgroups) {
+    if(newsgroup->name.compare(name) == 0) {
+      return newsgroup;
     }
   }
 
