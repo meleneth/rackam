@@ -20,35 +20,31 @@ Newsgroup::~Newsgroup()
 {
   authors_by_name.empty();
 
-  std::vector<Author *>::iterator a;
-  for(a = authors.begin(); a != authors.end(); ++a) {
-    delete *a;
+  for(auto author : authors) {
+    delete author;
   }
   authors.empty();
 
-  std::vector<PostSet *>::iterator ps;
-  for(ps = postsets.begin(); ps != postsets.end(); ++ps) {
-    delete *ps;
+  for(auto postset : postsets) {
+    delete postset;
   }
   postsets.empty();
 
-  std::vector<PostFile *>::iterator pf;
-  for(pf = postfiles.begin(); pf != postfiles.end(); ++pf) {
-    delete *pf;
+  for(auto postfile : postfiles) {
+    delete postfile;
   }
   postfiles.empty();
 
-  std::vector<MessageHeader *>::iterator mh;
-  for(mh = headers.begin(); mh != headers.end(); ++mh) {
-    delete *mh;
+  for(auto message_header : headers) {
+    delete message_header;
   }
   headers.empty();
 
-  std::vector<Filter *>::iterator f;
-  for(f = filters.begin(); f != filters.end(); ++f) {
-    delete *f;
+  for(auto filter : filters) {
+    delete filter;
   }
   filters.empty();
+
   pthread_mutex_destroy(&self_mutex);
 }
 
