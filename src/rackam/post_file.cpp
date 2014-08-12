@@ -7,6 +7,8 @@ PostFile::PostFile()
   min_message_no = 0;
   size = 0;
   pthread_mutex_init(&self_mutex, NULL);
+  newsgroup = nullptr;
+  author = nullptr;
 }
 
 PostFile::~PostFile()

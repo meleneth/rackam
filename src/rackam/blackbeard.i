@@ -41,14 +41,14 @@ using namespace Blackbeard;
 %include "message_header.hpp"
 %include "web_static_file.hpp"
 
-%template(NewsgroupVector) std::vector<Blackbeard::Newsgroup *>;
-%template(MessageHeaderVector) std::vector<Blackbeard::MessageHeader *>;
-%template(StringAuthorMap) std::map<string, Blackbeard::Author *>;
-%template(AuthorVector) std::vector<Blackbeard::Author *>;
-%template(FilterVector) std::vector<Blackbeard::Filter *>;
-%template(StringVector) std::vector<std::string>;
-%template(PostSetVector) std::vector<Blackbeard::PostSet *>;
-%template(PostFileVector) std::vector<Blackbeard::PostFile *>;
+%template(Newsgroup_vector) std::vector<Blackbeard::Newsgroup *>;
+%template(MessageHeader_vector) std::vector<Blackbeard::MessageHeader *>;
+%template(StringAuthor_map) std::map<string, Blackbeard::Author *>;
+%template(Author_vector) std::vector<Blackbeard::Author *>;
+%template(Filter_vector) std::vector<Blackbeard::Filter *>;
+%template(String_vector) std::vector<std::string>;
+%template(PostSet_vector) std::vector<Blackbeard::PostSet *>;
+%template(PostFile_vector) std::vector<Blackbeard::PostFile *>;
 
 %extend Blackbeard::Newsgroup {
   const char *get_max_message_no_str()

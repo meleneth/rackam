@@ -8,8 +8,12 @@ reset_pager = ->
   $('#pager-data thead').empty()
   $('#pager-data tbody').empty()
 
+reset_pager_data = ->
+  $('#pager-data tbody').empty()
+
 reset_ui = ->
   $("#newsgroup-list-screen").hide()
+  $("#author-screen").hide()
   $('#newsgroups-list').empty()
   $("#breadcrumbs").empty()
   $('#filter-info').hide()
@@ -53,6 +57,7 @@ class Page
     @load_page()
 
   load_page: ->
+    reset_pager_data()
     $.getJSON(@url + ";page_ipp=" + @items_per_page + ";page_first=" + @start, @render_func)
 
   create_ui: ->
@@ -174,6 +179,21 @@ load_filters_pager = (ng) ->
   rackam_pager.create_ui()
   rackam_pager.load_page()
 
+load_author_postfiles_pager = (ng, author) ->
+  reset_pager()
+  $('#pager').show()
+  $("#pager-data thead")
+    .append(html_trh("PostFile Name", "# bytes"))
+
+  loader_func = (data) ->
+    for postfile in data
+      do (postfile) ->
+        $(html_tr(postfile.name, readable_storage(postfile.size)))
+          .appendTo("#pager-data tbody")
+
+  rackam_pager = new Page "/author_postfiles.cgi?ng=" + ng.name + ";aid=" + author.id, 0, 30, author.num_postfiles, loader_func
+  rackam_pager.load_page()
+
 load_newsgroup_screen = (ng) ->
   reset_ui()
 
@@ -188,6 +208,7 @@ load_newsgroup_screen = (ng) ->
   $("#newsgroup-screen").show()
 
 load_author_screen = (ng, author) ->
+  console.log("load_author_screen() loading for " + author.name)
   reset_ui()
   $("#author-screen-name").text(author.name)
 
@@ -199,6 +220,8 @@ load_author_screen = (ng, author) ->
     .click(-> load_authors_pager(ng))
     .appendTo("#breadcrumbs")
 
+  $("#author-items").empty()
+
   $("<li>" + author.num_headers + " Headers</li>")
     .click(-> load_author_headers_pager(ng, author))
     .appendTo("#author-items")
@@ -208,5 +231,8 @@ load_author_screen = (ng, author) ->
     .appendTo("#author-items")
 
   $("<li>" + author.num_postfiles + " PostFiles</li>")
-    .click(-> load_author_postfiles_pager(ng, outho ))
+    .click(-> load_author_postfiles_pager(ng, author))
     .appendTo("#author-items")
+
+  $("#author-screen").show()
+  load_author_postfiles_pager(ng, author)

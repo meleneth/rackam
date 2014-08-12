@@ -67,6 +67,7 @@ PostFile *Author::find_or_create_postfile_for_filename_fileno(std::string filena
   PostFile *new_file = new PostFile();
   new_file->name = filename;
   new_file->author = this;
+  new_file->newsgroup = this->newsgroup;
 
   pthread_mutex_lock(&self_mutex);
   max_postfile_id++;

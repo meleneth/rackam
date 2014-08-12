@@ -47,9 +47,7 @@ void WebServer::handle_request(WebRequest *request)
   
   if(request->path == "/") {
     for(auto sc : static_contents) {
-      console->log("Checking static: " + sc->filename);
       if (sc->filename == request->filename) {
-        console->log("Serving static content: " + request->filename);
         response.content_type = sc->content_type;
         response.prepare_response_for_bytes(sc->content_length);
         request->client->send_data((char *)response.full_response.c_str(), response.full_response.length());

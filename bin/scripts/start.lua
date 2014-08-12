@@ -1,11 +1,90 @@
 JSON = (loadfile "JSON.lua")() -- one-time load of the routines
 
 function web_escape(s)
+  if s == nil then
+    return ''
+  end
   s = string.gsub(s, "&", "&amp;")
   s = string.gsub(s, ">", "&gt;")
   s = string.gsub(s, "<", "&lt;")
   return s
 end
+
+-- A new inheritsFrom() function
+-- this code from lua users wiki,  lua inheritence
+
+function inheritsFrom( baseClass )
+
+    local new_class = {}
+    local class_mt = { __index = new_class }
+
+    function new_class:create(...)
+        local newinst = {}
+        setmetatable( newinst, class_mt )
+        if newinst.initialize then
+          newinst:initialize(...)
+        end
+        return newinst
+    end
+
+    if nil ~= baseClass then
+        setmetatable( new_class, { __index = baseClass } )
+    end
+
+    -- Implementation of additional OO properties starts here --
+
+    -- Return the class object of the instance
+    function new_class:class()
+        return new_class
+    end
+
+    -- Return the super class object of the instance
+    function new_class:superClass()
+        return baseClass
+    end
+
+    -- Return true if the caller is an instance of theClass
+    function new_class:isa( theClass )
+        local b_isa = false
+
+        local cur_class = new_class
+
+        while ( nil ~= cur_class ) and ( false == b_isa ) do
+            if cur_class == theClass then
+                b_isa = true
+            else
+                cur_class = cur_class:superClass()
+            end
+        end
+
+        return b_isa
+    end
+
+    return new_class
+end
+
+WebPager = inheritsFrom(nil)
+
+function WebPager:render(webrequest, items, renderfunc)
+-- getting tricksy
+  local max_i = items:size() - 1
+  local page_ipp = webrequest:paramn("page_ipp")
+  local page_first = webrequest:paramn("page_first")
+  if page_ipp   == 0 then page_ipp = 20 end
+  local page_last = page_first + page_ipp
+  if page_last > max_i then page_last = max_i end
+
+  local response_lines = {}
+  local i;
+  for i = page_first, page_last do
+    local item = items[i]
+    local result = renderfunc(item)
+    table.insert(response_lines, result)
+  end
+
+  return "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
+end
+
 
 function author_as_json(author)
   local output = {}
@@ -52,9 +131,9 @@ end
 
 function postfile_as_json(postfile)
   local output = {}
-  
+
   output['id'] = postfile.id
-  output['name'] = web_escape(postfile.subject)
+  output['name'] = web_escape(postfile.name)
   output['newsgroup'] = web_escape(postfile.newsgroup.name)
   output['author'] = web_escape(postfile.author.name)
   output['min_message_no'] = postfile:get_min_message_no_str()
@@ -174,21 +253,19 @@ end
 
 function web_response_newsgroup_postfiles(webrequest, webresponse)
   local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+  local renderer = function(postfile) return postfile_as_json(postfile) end
 
-  local response_lines = {}
-  local i;
-  local max_i = newsgroup.postfiles:size() - 1
-  local page_ipp = webrequest:paramn("page_ipp")
-  local page_first = webrequest:paramn("page_first")
-  if page_ipp   == 0 then page_ipp = 20 end
-  local page_last = page_first + page_ipp
-  if page_last > max_i then page_last = max_i end
+  local pager = WebPager.create()
+  webresponse.body = pager:render(webrequest, newsgroup.postfiles, renderer)
+end
 
-  for i = page_first, page_last do
-    local postfile = newsgroup.postfiles[i]
-    table.insert(response_lines, postfile_as_json(postfile))
-  end
-  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
+function web_response_author_postfiles(webrequest, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+  local author = newsgroup.authors[webrequest:paramn("aid") - 1]
+  local renderer = function(postfile) return postfile_as_json(postfile) end
+
+  local pager = WebPager.create()
+  webresponse.body = pager:render(webrequest, author.postfiles, renderer)
 end
 
 function handle_web_request(webrequest, webresponse)
