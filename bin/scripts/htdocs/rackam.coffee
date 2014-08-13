@@ -191,7 +191,7 @@ load_author_postfiles_pager = (ng, author) ->
         $(html_tr(postfile.name, readable_storage(postfile.size)))
           .appendTo("#pager-data tbody")
 
-  rackam_pager = new Page "/author_postfiles.cgi?ng=" + ng.name + ";aid=" + author.id, 0, 30, author.num_postfiles, loader_func
+  rackam_pager = new Page "/postfiles.cgi?ng=" + ng.name + ";author_id=" + author.id, 0, 30, author.num_postfiles, loader_func
   rackam_pager.load_page()
 
 load_newsgroup_screen = (ng) ->

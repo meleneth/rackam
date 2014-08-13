@@ -63,9 +63,7 @@ function inheritsFrom( baseClass )
     return new_class
 end
 
-WebPager = inheritsFrom(nil)
-
-function WebPager:render(webrequest, items, renderfunc)
+function paged_web_render(webrequest, items, renderfunc)
 -- getting tricksy
   local max_i = items:size() - 1
   local page_ipp = webrequest:paramn("page_ipp")
@@ -73,15 +71,16 @@ function WebPager:render(webrequest, items, renderfunc)
   if page_ipp   == 0 then page_ipp = 20 end
   local page_last = page_first + page_ipp
   if page_last > max_i then page_last = max_i end
+  return web_render(page_first, page_last, items, renderfunc)
+end
 
+function web_render(start_val, end_val, items, renderfunc)
   local response_lines = {}
-  local i;
-  for i = page_first, page_last do
+  for i = start_val, end_val do
     local item = items[i]
     local result = renderfunc(item)
     table.insert(response_lines, result)
   end
-
   return "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
@@ -215,57 +214,32 @@ function web_response_newsgroups(webresponse)
 end
 
 function web_response_filters(webrequest, webresponse)
-  local response_lines = {}
   local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-  local i
-  local max_i = newsgroup.filters:size() - 1
-  for i = 0, max_i do
-    local filter = newsgroup.filters[i]
-    table.insert(response_lines, filter_as_json(filter))
-  end
-  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
+  webresponse.body = web_render(0, newsgroup.filters:size() - 1, newsgroup.filters, function(filter) return header_as_json(filter) end)
 end
 
 function web_response_headers(webrequest, webresponse)
   local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-
   local headers = newsgroup.headers
+
   if webrequest:has_param("author_id") then
     local author = newsgroup:author_for_id(webrequest:paramn("author_id"))
     headers = author.headers
   end
 
-  local response_lines = {}
-  local i;
-  local max_i = headers:size() - 1
-  local page_ipp = webrequest:paramn("page_ipp")
-  local page_first = webrequest:paramn("page_first")
-  if page_ipp   == 0 then page_ipp = 20 end
-  local page_last = page_first + page_ipp
-  if page_last > max_i then page_last = max_i end
+  webresponse.body = paged_web_render(webrequest, headers, function(header) return header_as_json(header) end)
+end
 
-  for i = page_first, page_last do
-    local header = headers[i]
-    table.insert(response_lines, header_as_json(header))
+function web_response_postfiles(webrequest, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
+  local items = newsgroup.postfiles
+
+  if webrequest:has_param("author_id") then
+    local author = newsgroup:author_for_id(webrequest:paramn("author_id"))
+    items = author.postfiles
   end
-  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
-end
 
-function web_response_newsgroup_postfiles(webrequest, webresponse)
-  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-  local renderer = function(postfile) return postfile_as_json(postfile) end
-
-  local pager = WebPager.create()
-  webresponse.body = pager:render(webrequest, newsgroup.postfiles, renderer)
-end
-
-function web_response_author_postfiles(webrequest, webresponse)
-  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-  local author = newsgroup.authors[webrequest:paramn("aid") - 1]
-  local renderer = function(postfile) return postfile_as_json(postfile) end
-
-  local pager = WebPager.create()
-  webresponse.body = pager:render(webrequest, author.postfiles, renderer)
+  webresponse.body = paged_web_render(webrequest, items, function(postfile) return postfile_as_json(postfile) end)
 end
 
 function handle_web_request(webrequest, webresponse)
@@ -286,12 +260,8 @@ function handle_web_request(webrequest, webresponse)
       web_response_headers(webrequest, webresponse)
       return
     end
-    if webrequest.filename == "author_postfiles.cgi" then
-      web_response_author_postfiles(webrequest, webresponse)
-      return
-    end
-    if webrequest.filename == "newsgroup_postfiles.cgi" then
-      web_response_newsgroup_postfiles(webrequest, webresponse)
+    if webrequest.filename == "postfiles.cgi" then
+      web_response_postfiles(webrequest, webresponse)
       return
     end
     if webrequest.filename == "author_postsets.cgi" then
