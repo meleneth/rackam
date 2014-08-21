@@ -13,7 +13,7 @@ class PostSet {
     long long int max_message_no;
     long long int size;
     int id;
-    std::map<void *, PostFile *> postfiles;
+    std::map<void *, std::shared_ptr<PostFile>> postfiles;
 
     std::string subject;
 };

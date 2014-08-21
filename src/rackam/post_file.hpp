@@ -9,6 +9,7 @@ namespace Blackbeard {
 class PostFile {
   public:
     PostFile();
+    PostFile(std::string name, std::shared_ptr<Author> author, std::shared_ptr<Newsgroup> newsgroup);
     ~PostFile();
 
     std::string name;
@@ -17,8 +18,8 @@ class PostFile {
     long long int size;
     int id;
 
-    Newsgroup *newsgroup;
-    Author *author;
+    std::shared_ptr<Newsgroup> newsgroup;
+    std::shared_ptr<Author> author;
 
     pthread_mutex_t self_mutex;
 };

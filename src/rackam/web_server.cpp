@@ -15,10 +15,8 @@
 
 #include<sstream>
 
-using std::stringstream;
-using std::string;
-using std::list;
 using namespace Blackbeard;
+using namespace std;
 
 WebServer::WebServer(std::string web_root, int port_no)
 {
@@ -30,9 +28,7 @@ WebServer::~WebServer()
 {
   delete listener;
 
-  for(WebStaticFile *sc : static_contents) {
-    delete sc;
-  }
+  static_contents.empty();
 }
 
 namespace Blackbeard {
@@ -102,7 +98,7 @@ void WebServer::handle_new_connection(void)
 
 void WebServer::register_file(string url, string filename, std::string content_type)
 {
-  auto static_file = new WebStaticFile();
+  auto static_file = make_shared<WebStaticFile>();
 
   struct stat file_stats;
   stat(filename.c_str(), &file_stats);

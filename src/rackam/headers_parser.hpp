@@ -14,18 +14,18 @@ void *HeadersParser_process_lines(void *s);
 
 class HeadersParser {
   public:
-    HeadersParser(Newsgroup *newsgroup);
+    HeadersParser(std::shared_ptr<Newsgroup> newsgroup);
     ~HeadersParser();
     
     void process_line(std::string line);
     void queue_line(std::string line);
 
-    void integrate_header(MessageHeader *header);
-    void glean_postset_info(MessageHeader *header, FilterMatch *match);
-    void queue_header(MessageHeader *info);
+    void integrate_header(std::shared_ptr<MessageHeader> header);
+    void glean_postset_info(std::shared_ptr<MessageHeader> header, std::shared_ptr<FilterMatch> match);
+    void queue_header(std::shared_ptr<MessageHeader> info);
 
     pthread_mutex_t self_mutex;
-    Newsgroup * newsgroup;
+    std::shared_ptr<Newsgroup> newsgroup;
     int running_threads;
 };
 

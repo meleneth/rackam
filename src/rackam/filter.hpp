@@ -20,10 +20,11 @@ class FilterMatch {
 class Filter {
   public:
     Filter();
+    Filter(std::string filter_text);
     ~Filter();
 
     void parse_filter(std::string filter);
-    FilterMatch *match(std::string haystack);
+    std::shared_ptr<FilterMatch> match(std::string haystack);
 
     std::string text;
     std::vector<std::string> filter_pieces;
