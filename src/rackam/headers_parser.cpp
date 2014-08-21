@@ -10,8 +10,9 @@
 #define HEADERSPARSER_WORKSIZE 5000
 
 using namespace Blackbeard;
+using namespace std;
 
-HeadersParser::HeadersParser(Newsgroup *newsgroup)
+HeadersParser::HeadersParser(shared_ptr<Newsgroup> newsgroup)
 {
   pthread_mutex_init(&self_mutex, NULL);
   running_threads = 0;
@@ -36,9 +37,9 @@ void HeadersParser::process_line(std::string line)
     std::string msg_id = header_pieces[4];
     msg_id = msg_id.substr(1, msg_id.length() - 2);
     std::string subject = header_pieces[1];
-    Author *posted_by = newsgroup->author_for_name(header_pieces[2]);
+    auto posted_by = newsgroup->author_for_name(header_pieces[2]);
 
-    MessageHeader *header = new MessageHeader(newsgroup, 
+    auto header = make_shared<MessageHeader>(newsgroup, 
       atoll(header_pieces[0].c_str()), 
       msg_id, 
       subject, 
@@ -46,9 +47,8 @@ void HeadersParser::process_line(std::string line)
       atoi(header_pieces[5].c_str())
     );
     
-    std::vector<Filter *>::iterator f;
-    for(f = header->group->filters.begin(); f != header->group->filters.end(); ++f){
-      FilterMatch *match = (*f)->match(header->subject);
+    for(auto filter : header->group->filters){
+      shared_ptr<FilterMatch> match = filter->match(header->subject);
         if(match){
             if( (match->postset_num_files!=0) 
                  && (match->postfile_num_pieces !=0)
@@ -60,7 +60,7 @@ void HeadersParser::process_line(std::string line)
 
               //Don't worry about it he says, do you even KNOW what that did to threading...
              
-              PostFile *file = header->author->find_or_create_postfile_for_filename_fileno(match->postfile_filename, 0);
+              auto file = header->author->find_or_create_postfile_for_filename_fileno(match->postfile_filename, 0);
 
               // omg denormalized someone shoot me
               pthread_mutex_lock(&file->self_mutex);
@@ -75,8 +75,6 @@ void HeadersParser::process_line(std::string line)
               header->author->newsgroup->size += header->size;
               pthread_mutex_unlock(&header->author->newsgroup->self_mutex);
 
-              delete header;
-              delete match;
               return;
             }
         }

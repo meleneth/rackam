@@ -5,6 +5,7 @@
 #include<map>
 #include<list>
 #include<string>
+#include<memory>
 
 
 namespace Blackbeard {
@@ -31,15 +32,15 @@ namespace Blackbeard {
   class WebStaticFile;
 
 
-  typedef std::list<Author*> AuthorList;
-  typedef std::list<WebStaticFile*> WebStaticFileList;
-  typedef std::list<WebStaticFile*>::iterator WebStaticFile_list_iterator;
+  typedef std::list<std::shared_ptr<Author>> AuthorList;
+  typedef std::list<std::shared_ptr<WebStaticFile>> WebStaticFileList;
+  typedef std::list<std::shared_ptr<WebStaticFile>>::iterator WebStaticFile_list_iterator;
 
-  typedef std::vector<MessageHeader*> MessageHeader_vector;
-  typedef std::vector<PostSet*> PostSet_vector;
-  typedef std::vector<PostFile*> PostFile_vector;
+  typedef std::vector<std::shared_ptr<MessageHeader>> MessageHeader_vector;
+  typedef std::vector<std::shared_ptr<PostSet>> PostSet_vector;
+  typedef std::vector<std::shared_ptr<PostFile>> PostFile_vector;
 
-  typedef std::map<std::string, PostFile*> StringToPostFileMap;
+  typedef std::map<std::string, std::shared_ptr<PostFile>> StringToPostFileMap;
 }
 
 #include<pthread.h>

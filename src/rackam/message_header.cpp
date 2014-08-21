@@ -1,9 +1,9 @@
 #include "message_header.hpp"
 
-using std::string;
 using namespace Blackbeard;
+using namespace std;
 
-MessageHeader::MessageHeader(Newsgroup *group, long long int article_no, string msg_id, string subject, Author *posted_by, int num_bytes)
+MessageHeader::MessageHeader(shared_ptr<Newsgroup> group, long long int article_no, string msg_id, string subject, shared_ptr<Author> posted_by, int num_bytes)
 {
     this->group = group;
     this->subject = subject;

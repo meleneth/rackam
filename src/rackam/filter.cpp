@@ -5,6 +5,7 @@
 #include "console.hpp"
 
 using namespace Blackbeard;
+using namespace std;
 
 FilterMatch::FilterMatch()
 {
@@ -24,6 +25,11 @@ Filter::Filter()
 {
   pthread_mutex_init(&self_mutex, NULL);
   num_matched = 0;
+}
+
+Filter::Filter(std::string filter_text):Filter()
+{
+  parse_filter(filter_text);
 }
 
 Filter::~Filter()
@@ -55,7 +61,7 @@ void Filter::parse_filter(std::string filter)
   
 }
 
-FilterMatch *Filter::match(std::string haystack)
+shared_ptr<FilterMatch> Filter::match(std::string haystack)
 {
   int needle_position = 0;
   int match_position = 0;
@@ -138,7 +144,7 @@ FilterMatch *Filter::match(std::string haystack)
       }
     }
   
-  FilterMatch *match = new FilterMatch();
+  auto match = make_shared<FilterMatch>();
   match->postset_subject = postset_subject;
   match->postset_num_files = postset_num_files;
   match->postset_fileno = postset_fileno;

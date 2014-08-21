@@ -28,27 +28,27 @@ using namespace Blackbeard;
 /*%template(StringIntMap) std::map<string, int>; */
 
 %include "rackam_types.hpp"
-%include "newsgroup.hpp"
+%include "lua_newsgroup.hpp"
 %include "post_set.hpp"
 %include "post_file.hpp"
 %include "web_request.hpp"
 %include "web_server.hpp"
 %include "stringpattern.hpp"
 %include "web_response.hpp"
-%include "author.hpp"
+%include "lua_author.hpp"
 %include "rackam.hpp"
 %include "filter.hpp"
 %include "message_header.hpp"
 %include "web_static_file.hpp"
 
-%template(Newsgroup_vector) std::vector<Blackbeard::Newsgroup *>;
-%template(MessageHeader_vector) std::vector<Blackbeard::MessageHeader *>;
-%template(StringAuthor_map) std::map<string, Blackbeard::Author *>;
-%template(Author_vector) std::vector<Blackbeard::Author *>;
-%template(Filter_vector) std::vector<Blackbeard::Filter *>;
+%template(Newsgroup_vector) std::vector<std::shared_ptr<Blackbeard::Newsgroup>>;
+%template(MessageHeader_vector) std::vector<std::shared_ptr<Blackbeard::MessageHeader>>;
+%template(StringAuthor_map) std::map<string, std::shared_ptr<Blackbeard::Author>>;
+%template(Author_vector) std::vector<std::shared_ptr<Blackbeard::Author>>;
+%template(Filter_vector) std::vector<std::shared_ptr<Blackbeard::Filter>>;
 %template(String_vector) std::vector<std::string>;
-%template(PostSet_vector) std::vector<Blackbeard::PostSet *>;
-%template(PostFile_vector) std::vector<Blackbeard::PostFile *>;
+%template(PostSet_vector) std::vector<std::shared_ptr<Blackbeard::PostSet>>;
+%template(PostFile_vector) std::vector<std::shared_ptr<Blackbeard::PostFile>>;
 
 %extend Blackbeard::Newsgroup {
   const char *get_max_message_no_str()

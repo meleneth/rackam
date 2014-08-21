@@ -7,6 +7,7 @@
 #include"filter.hpp"
 
 using namespace Blackbeard;
+using namespace std;
 
 Newsgroup::Newsgroup()
 {
@@ -20,45 +21,24 @@ Newsgroup::~Newsgroup()
 {
   authors_by_name.empty();
 
-  for(auto author : authors) {
-    delete author;
-  }
   authors.empty();
-
-  for(auto postset : postsets) {
-    delete postset;
-  }
   postsets.empty();
-
-  for(auto postfile : postfiles) {
-    delete postfile;
-  }
   postfiles.empty();
-
-  for(auto message_header : headers) {
-    delete message_header;
-  }
   headers.empty();
-
-  for(auto filter : filters) {
-    delete filter;
-  }
   filters.empty();
 
   pthread_mutex_destroy(&self_mutex);
 }
 
-Author *Newsgroup::author_for_name(std::string authorname)
+shared_ptr<Author> Newsgroup::author_for_name(string authorname)
 {
-  std::map<std::string, Author *>::iterator result;
-  result = authors_by_name.find(authorname);
+  auto result = authors_by_name.find(authorname);
   if(result != authors_by_name.end()){
     return result->second;
   }
-  Author *author = new Author(authorname);
+  auto author = make_shared<Author>(authorname, shared_from_this());
   max_author_id++;
   author->id = max_author_id;
-  author->newsgroup = this;
 
   pthread_mutex_lock(&self_mutex);
   authors.push_back(author);
@@ -67,28 +47,24 @@ Author *Newsgroup::author_for_name(std::string authorname)
   return author;
 }
 
-Author *Newsgroup::author_for_id(int author_id)
+shared_ptr<Author> Newsgroup::author_for_id(int author_id)
 {
   if(author_id > max_author_id){
     return NULL;
   }
 
-  std::vector<Author *>::iterator i;
-  for(i = authors.begin() ; i != authors.end() ; ++i) {
-    if((*i)->id == author_id)
-      return *i;
+  for(auto author : authors ){
+    if(author->id == author_id)
+      return author;
   }
   return NULL;
 }
 
-void Newsgroup::add_filter(std::string filter)
+void Newsgroup::add_filter(string filter_text)
 {
-  std::vector<Filter *>::iterator i;
-  for(i = filters.begin(); i != filters.end(); ++i) {
-    if((*i)->text == filter)
+  for(auto filter : filters ){
+    if((*filter).text == filter_text)
       return;
   }
-  Filter *new_filter = new Filter();
-  new_filter->parse_filter(filter);
-  filters.push_back(new_filter);
+  filters.push_back(make_shared<Filter>(filter_text));
 }

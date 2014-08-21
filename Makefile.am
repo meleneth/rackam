@@ -14,7 +14,7 @@ src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i \
   src/rackam/rackam.hpp \
   src/rackam/filter.hpp
 
-	swig -c++ -lua -w315 -o src/rackam/blackbeard_wrap.cxx src/rackam/blackbeard.i
+	swig3.0 -c++ -lua -w315 -o src/rackam/blackbeard_wrap.cxx src/rackam/blackbeard.i
 
 bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/headers_parser.hpp \

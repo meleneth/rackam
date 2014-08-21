@@ -14,8 +14,8 @@
 #include "tcpconnection.hpp"
 #include "tcplistener.hpp"
 
-using std::string;
 using namespace Blackbeard;
+using namespace std;
 
 extern "C" {
   int luaopen_Blackbeard(lua_State* L);
@@ -38,21 +38,17 @@ Rackam::Rackam()
 
 Rackam::~Rackam()
 {
-  std::vector<Newsgroup *>::iterator ng;
-  for(ng = newsgroups.begin(); ng != newsgroups.end(); ++ng) {
-    delete *ng;
-  }
+  newsgroups.empty();
 
   lua_close(lua_state);
-  if(webserver)
-    delete webserver;
+  webserver = nullptr;
 
   pthread_mutex_destroy(&self_mutex);
 }
 
 void Rackam::start_web_server(string base_path, int port_no)
 {
-  webserver = new WebServer(base_path, port_no);
+  webserver = make_shared<WebServer>(base_path, port_no);
 }
 
 void Rackam::main_loop()
@@ -108,26 +104,26 @@ Newsgroup *Rackam::newsgroup_for_name(string name)
 {
   for(auto newsgroup : newsgroups) {
     if(newsgroup->name.compare(name) == 0) {
-      return newsgroup;
+      return newsgroup.get();
     }
   }
 
-  Newsgroup *new_group = new Newsgroup();
+  auto new_group = make_shared<Newsgroup>();
   new_group->name = name;
 
   pthread_mutex_lock(&self_mutex);
   newsgroups.push_back(new_group);
   pthread_mutex_unlock(&self_mutex);
 
-  return new_group;
+  return new_group.get();
 }
 
-void Rackam::load_headers_from_file(Newsgroup *group, string filename)
+void Rackam::load_headers_from_file(Newsgroup &group, string filename)
 {
   int total_bytes;
   int bytes_read;
 
-  HeadersParser *parser = new HeadersParser(group);
+  HeadersParser parser(&group);
 
   char linebuffer[1024];
   std::ifstream in;
@@ -145,13 +141,13 @@ void Rackam::load_headers_from_file(Newsgroup *group, string filename)
   while(!in.eof() && in){
     string line(linebuffer);
     bytes_read += line.length();
-    parser->queue_line(line);
+    parser.queue_line(line);
 //    parser->process_line(line);
 
     in.getline(linebuffer, 1024);
   }
   in.close();
-  parser->queue_line(""); // pthread_join
+  parser.queue_line(""); // pthread_join
 }
 
 

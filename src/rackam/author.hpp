@@ -4,13 +4,13 @@
 #include<rackam_types.hpp>
 
 namespace Blackbeard {
-class Author {
+class Author : public std::enable_shared_from_this < Author > {
   public:
-    Author(std::string name);
+    Author(std::string name, std::shared_ptr<Newsgroup> newsgroup);
     ~Author();
-    PostSet   *postset_for_id(int postset_id);
-    PostFile *postfile_for_id(int postfile_id);
-    PostFile *find_or_create_postfile_for_filename_fileno(std::string filename, int fileno);
+    std::shared_ptr<PostSet> postset_for_id(int postset_id);
+    std::shared_ptr<PostFile> postfile_for_id(int postfile_id);
+    std::shared_ptr<PostFile> find_or_create_postfile_for_filename_fileno(std::string filename, int fileno);
 
     std::string name;
     long long int size;
@@ -20,7 +20,7 @@ class Author {
 
     pthread_mutex_t self_mutex;
 
-    Newsgroup *newsgroup;
+    std::shared_ptr<Newsgroup> newsgroup;
 
     MessageHeader_vector headers;
     PostSet_vector postsets;
