@@ -6,7 +6,7 @@
 #include<pthread.h>
 
 namespace Blackbeard {
-class Newsgroup : public std::enable_shared_from_this<Newsgroup> {
+class Newsgroup {
   public:
     Newsgroup();
     ~Newsgroup();
@@ -18,7 +18,6 @@ class Newsgroup : public std::enable_shared_from_this<Newsgroup> {
 
     int max_author_id;
 
-    std::shared_ptr<Author>author_for_name(std::string authorname);
     std::shared_ptr<Author>author_for_id(int author_id);
     void add_filter(std::string filter);
 

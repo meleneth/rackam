@@ -100,11 +100,11 @@ void Rackam::main_loop()
   }
 }
 
-Newsgroup *Rackam::newsgroup_for_name(string name)
+NewsgroupPtr Rackam::newsgroup_for_name(string name)
 {
   for(auto newsgroup : newsgroups) {
     if(newsgroup->name.compare(name) == 0) {
-      return newsgroup.get();
+      return newsgroup;
     }
   }
 
@@ -115,15 +115,15 @@ Newsgroup *Rackam::newsgroup_for_name(string name)
   newsgroups.push_back(new_group);
   pthread_mutex_unlock(&self_mutex);
 
-  return new_group.get();
+  return new_group;
 }
 
-void Rackam::load_headers_from_file(Newsgroup &group, string filename)
+void Rackam::load_headers_from_file(NewsgroupPtr group, string filename)
 {
   int total_bytes;
   int bytes_read;
 
-  HeadersParser parser(&group);
+  HeadersParser parser(group);
 
   char linebuffer[1024];
   std::ifstream in;

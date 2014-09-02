@@ -2,6 +2,7 @@
 
 #include "strutil.hpp"
 #include "newsgroup.hpp"
+#include "controller.hpp"
 #include "message_header.hpp"
 #include "author.hpp"
 #include "post_file.hpp"
@@ -37,7 +38,8 @@ void HeadersParser::process_line(std::string line)
     std::string msg_id = header_pieces[4];
     msg_id = msg_id.substr(1, msg_id.length() - 2);
     std::string subject = header_pieces[1];
-    auto posted_by = newsgroup->author_for_name(header_pieces[2]);
+    Controller c;
+    auto posted_by = c.author_for_name(newsgroup, header_pieces[2]);
 
     auto header = make_shared<MessageHeader>(newsgroup, 
       atoll(header_pieces[0].c_str()), 
@@ -59,8 +61,8 @@ void HeadersParser::process_line(std::string line)
               // This will all run through the database somehow soon, don't worry about it.
 
               //Don't worry about it he says, do you even KNOW what that did to threading...
-             
-              auto file = header->author->find_or_create_postfile_for_filename_fileno(match->postfile_filename, 0);
+              Controller c;
+              auto file = c.find_or_create_postfile_for_filename_fileno(header->author, match->postfile_filename, 0);
 
               // omg denormalized someone shoot me
               pthread_mutex_lock(&file->self_mutex);

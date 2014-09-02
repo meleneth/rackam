@@ -21,6 +21,8 @@ bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/headers_parser.cpp \
   src/rackam/author.cpp \
   src/rackam/author.hpp \
+  src/rackam/controller.cpp \
+  src/rackam/controller.hpp \
   src/rackam/filter.cpp \
   src/rackam/filter.hpp \
   src/rackam/console.cpp \

@@ -31,6 +31,10 @@ namespace Blackbeard {
   class WebDataFetcher;
   class WebStaticFile;
 
+  typedef std::shared_ptr<Newsgroup> NewsgroupPtr;
+  typedef std::shared_ptr<Author> AuthorPtr;
+  typedef std::shared_ptr<PostFile> PostFilePtr;
+  typedef std::shared_ptr<WebServer> WebServerPtr;
 
   typedef std::list<std::shared_ptr<Author>> AuthorList;
   typedef std::list<std::shared_ptr<WebStaticFile>> WebStaticFileList;

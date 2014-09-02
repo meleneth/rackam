@@ -276,6 +276,7 @@ function handle_web_request(webrequest, webresponse)
 end
 
 local n = Blackbeard.rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
+print(n)
 n:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
 n:add_filter("%s [%e/%f] - \"%a\"%d yEnc (%p/%n)")
 n:add_filter("%s[%e/%f] - \"%a\"%d yEnc (%p/%n)")

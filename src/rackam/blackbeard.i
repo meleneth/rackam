@@ -25,17 +25,22 @@ using namespace Blackbeard;
 %include <std_string.i>
 %include <std_map.i>
 %include <std_vector.i>
+%import "shared_ptr.i"
 /*%template(StringIntMap) std::map<string, int>; */
 
+%template(NewsgroupPtr) std::shared_ptr<Blackbeard::Newsgroup>;
+%template(AuthorPtr) std::shared_ptr<Blackbeard::Author>;
+%template(WebServerPtr) std::shared_ptr<Blackbeard::WebServer>;
+
 %include "rackam_types.hpp"
-%include "lua_newsgroup.hpp"
+%include "newsgroup.hpp"
 %include "post_set.hpp"
 %include "post_file.hpp"
 %include "web_request.hpp"
 %include "web_server.hpp"
 %include "stringpattern.hpp"
 %include "web_response.hpp"
-%include "lua_author.hpp"
+%include "author.hpp"
 %include "rackam.hpp"
 %include "filter.hpp"
 %include "message_header.hpp"

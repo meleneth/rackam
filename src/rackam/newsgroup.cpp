@@ -30,23 +30,6 @@ Newsgroup::~Newsgroup()
   pthread_mutex_destroy(&self_mutex);
 }
 
-shared_ptr<Author> Newsgroup::author_for_name(string authorname)
-{
-  auto result = authors_by_name.find(authorname);
-  if(result != authors_by_name.end()){
-    return result->second;
-  }
-  auto author = make_shared<Author>(authorname, shared_from_this());
-  max_author_id++;
-  author->id = max_author_id;
-
-  pthread_mutex_lock(&self_mutex);
-  authors.push_back(author);
-  authors_by_name[authorname] = author;
-  pthread_mutex_unlock(&self_mutex);
-  return author;
-}
-
 shared_ptr<Author> Newsgroup::author_for_id(int author_id)
 {
   if(author_id > max_author_id){
