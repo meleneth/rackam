@@ -275,8 +275,9 @@ function handle_web_request(webrequest, webresponse)
   end
 end
 
-local n = Blackbeard.rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
-print(n)
+local rackam = Blackbeard.rackam
+
+local n = rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
 n:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
 n:add_filter("%s [%e/%f] - \"%a\"%d yEnc (%p/%n)")
 n:add_filter("%s[%e/%f] - \"%a\"%d yEnc (%p/%n)")
@@ -295,15 +296,16 @@ n:add_filter("%a - [%e/%f] (%p/%n)")
 -- this next one is /really/ broad
 n:add_filter("%a (%p/%n)")
 
-Blackbeard.rackam:load_headers_from_file(n, "headers_snipper.log")
+rackam:load_headers_from_file(n, "headers_snipper.log")
 
-Blackbeard.rackam.webserver:register_file("index.html", "htdocs/index.html", "text/html")
-Blackbeard.rackam.webserver:register_file("favicon.ico", "htdocs/favicon.ico", "text/html")
-Blackbeard.rackam.webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js", "text/html")
-Blackbeard.rackam.webserver:register_file("rackam.js", "htdocs/rackam.js", "text/html")
-Blackbeard.rackam.webserver:register_file("rackam.css", "htdocs/rackam.css", "text/css")
+local webserver = rackam.webserver
 
+webserver:register_file("index.html", "htdocs/index.html", "text/html")
+webserver:register_file("favicon.ico", "htdocs/favicon.ico", "text/html")
+webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js", "text/html")
+webserver:register_file("rackam.js", "htdocs/rackam.js", "text/html")
+webserver:register_file("rackam.css", "htdocs/rackam.css", "text/css")
 
 print("Lua script finished.")
---Blackbeard.rackam.still_running = false
+Blackbeard.rackam.still_running = true
 

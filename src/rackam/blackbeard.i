@@ -29,8 +29,10 @@ using namespace Blackbeard;
 /*%template(StringIntMap) std::map<string, int>; */
 
 %template(NewsgroupPtr) std::shared_ptr<Blackbeard::Newsgroup>;
+%template(PostFilePtr) std::shared_ptr<Blackbeard::PostFile>;
 %template(AuthorPtr) std::shared_ptr<Blackbeard::Author>;
 %template(WebServerPtr) std::shared_ptr<Blackbeard::WebServer>;
+%template(MessageHeaderPtr) std::shared_ptr<Blackbeard::MessageHeader>;
 
 %include "rackam_types.hpp"
 %include "newsgroup.hpp"

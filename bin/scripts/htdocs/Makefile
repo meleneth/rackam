@@ -8,3 +8,8 @@ index.html : index.haml
 
 rackam.css : rackam.scss
 	scss rackam.scss > rackam.css
+
+clean :
+	rm rackam.js
+	rm index.html
+	rm rackam.css
