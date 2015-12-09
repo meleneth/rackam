@@ -6,17 +6,16 @@
 namespace Blackbeard {
 
 class WebStaticFile {
-  public:
-    WebStaticFile();
-    ~WebStaticFile();
+ public:
+  WebStaticFile();
+  ~WebStaticFile();
 
-    std::string url;
-    std::string filename;
-    std::string content_type;
-    char *buffer;
-    int content_length;
+  std::string url;
+  std::string filename;
+  std::string content_type;
+  char *buffer;
+  int content_length;
 };
-
 }
 
 #endif

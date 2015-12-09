@@ -2,14 +2,10 @@
 
 using namespace Blackbeard;
 
-WebStaticFile::WebStaticFile()
-{
-  buffer = nullptr;
-}
+WebStaticFile::WebStaticFile() { buffer = nullptr; }
 
-WebStaticFile::~WebStaticFile()
-{
-  if(buffer) {
+WebStaticFile::~WebStaticFile() {
+  if (buffer) {
     free(buffer);
   }
 }

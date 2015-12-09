@@ -14,45 +14,43 @@ using std::vector;
 
 namespace Blackbeard {
 class WebRequest {
-    public:
-        WebRequest(TCPConnection *client);
-        WebRequest(string uri);
-        ~WebRequest();
+ public:
+  WebRequest(TCPConnection *client);
+  WebRequest(string uri);
+  ~WebRequest();
 
-        void parse_uri(string uri);
-        void parse_headers(void);
-        void split_request_uri(string uri);
-        void defaults(void);
-        string get_uri(void);
-        string param(string name);
-        unsigned int paramn(string name);
-        unsigned int param_index(string name);
-        void delete_param(string name);
-        void param(string name, string value);
-        void param(string name, unsigned int value);
-        bool has_param(string name);
+  void parse_uri(string uri);
+  void parse_headers(void);
+  void split_request_uri(string uri);
+  void defaults(void);
+  string get_uri(void);
+  string param(string name);
+  unsigned int paramn(string name);
+  unsigned int param_index(string name);
+  void delete_param(string name);
+  void param(string name, string value);
+  void param(string name, unsigned int value);
+  bool has_param(string name);
 
-        TCPConnection *client;
-        string request_string;
-        string path;
-        string filename;
-        string content_type;
-        unsigned int http_minor_version;
-        unsigned int http_major_version;
-        unsigned int has_cgi_params;
+  TCPConnection *client;
+  string request_string;
+  string path;
+  string filename;
+  string content_type;
+  unsigned int http_minor_version;
+  unsigned int http_major_version;
+  unsigned int has_cgi_params;
 
+  vector<string> param_names;
+  vector<string> param_values;
 
-        vector<string> param_names;
-        vector<string> param_values;
+  string response_text;
+  string response_headers;
+  int sent_bytes;
 
-        string response_text;
-        string response_headers;
-        int sent_bytes;
-
-    private:
-    protected:
+ private:
+ protected:
 };
-
 }
 
 #endif

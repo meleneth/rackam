@@ -1,22 +1,16 @@
 #include "web_response.hpp"
 #include "console.hpp"
 
-#include<sstream>
+#include <sstream>
 
 using std::stringstream;
 using namespace Blackbeard;
 
-WebResponse::WebResponse()
-{
-  content_type = "text/html";
-}
+WebResponse::WebResponse() { content_type = "text/html"; }
 
-WebResponse::~WebResponse()
-{
-}
+WebResponse::~WebResponse() {}
 
-void WebResponse::prepare_full_response()
-{
+void WebResponse::prepare_full_response() {
   stringstream s;
 
   s << "HTTP/1.1 200 OK\r\n";
@@ -27,11 +21,9 @@ void WebResponse::prepare_full_response()
   s << body;
 
   full_response = s.str();
-
 }
 
-void WebResponse::prepare_response_for_bytes(int num_bytes)
-{
+void WebResponse::prepare_response_for_bytes(int num_bytes) {
   // This is used when returning a file
   stringstream s;
 
@@ -42,5 +34,4 @@ void WebResponse::prepare_response_for_bytes(int num_bytes)
   s << "\r\n";
 
   full_response = s.str();
-
 }

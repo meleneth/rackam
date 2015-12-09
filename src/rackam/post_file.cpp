@@ -3,8 +3,7 @@
 using namespace Blackbeard;
 using namespace std;
 
-PostFile::PostFile()
-{
+PostFile::PostFile() {
   max_message_no = 0;
   min_message_no = 0;
   size = 0;
@@ -13,14 +12,12 @@ PostFile::PostFile()
   author = nullptr;
 }
 
-PostFile::PostFile(std::string name, shared_ptr<Author> author, shared_ptr<Newsgroup> newsgroup):PostFile()
-{
+PostFile::PostFile(std::string name, shared_ptr<Author> author,
+                   shared_ptr<Newsgroup> newsgroup)
+    : PostFile() {
   this->name = name;
   this->author = author;
   this->newsgroup = newsgroup;
 }
 
-PostFile::~PostFile()
-{
-  pthread_mutex_destroy(&self_mutex);
-}
+PostFile::~PostFile() { pthread_mutex_destroy(&self_mutex); }

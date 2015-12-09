@@ -1,7 +1,7 @@
 #ifndef WEBSERVER_HPP
 #define WEBSERVER_HPP
 
-#include<rackam_types.hpp>
+#include <rackam_types.hpp>
 
 #include <string>
 #include <list>
@@ -13,27 +13,27 @@
 namespace Blackbeard {
 
 class WebServer {
-    public:
-        WebServer(std::string document_root, int port_no);
-        ~WebServer();
+ public:
+  WebServer(std::string document_root, int port_no);
+  ~WebServer();
 
-        void log_to_file(std::string filename);
-        void handle_request(WebRequest *request);
-        void handle_new_connection(void);
-        void register_file(std::string url, std::string filename, std::string content_type);
-        void tick(void);
+  void log_to_file(std::string filename);
+  void handle_request(WebRequest *request);
+  void handle_new_connection(void);
+  void register_file(std::string url, std::string filename,
+                     std::string content_type);
+  void tick(void);
 
-        TCPListener *listener;
-        std::list<TCPConnection *> connections;
-        std::list<WebDataFetcher *> handlers;
-        std::string web_root;
-        
-        WebStaticFileList static_contents;
+  TCPListener *listener;
+  std::list<TCPConnection *> connections;
+  std::list<WebDataFetcher *> handlers;
+  std::string web_root;
 
-    private:
-    protected:
+  WebStaticFileList static_contents;
+
+ private:
+ protected:
 };
-
 }
 
 #endif

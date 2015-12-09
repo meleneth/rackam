@@ -7,23 +7,23 @@
 
 namespace Blackbeard {
 class WebDataFetcher {
-    public:
-        WebDataFetcher(WebRequest *request);
-        virtual ~WebDataFetcher();
+ public:
+  WebDataFetcher(WebRequest *request);
+  virtual ~WebDataFetcher();
 
-        virtual int tick(void);
-        virtual string info_update_string(void);
-        string table_id(std::string id);
+  virtual int tick(void);
+  virtual string info_update_string(void);
+  string table_id(std::string id);
 
-        WebRequest *request;
+  WebRequest *request;
 
-        std::vector<string> output_lines;
-        unsigned int line_no;
-        unsigned int num_lines;
-        std::string title;
+  std::vector<string> output_lines;
+  unsigned int line_no;
+  unsigned int num_lines;
+  std::string title;
 
-    private:
-    protected:
+ private:
+ protected:
 };
 }
 

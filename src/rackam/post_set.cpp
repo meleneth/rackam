@@ -2,12 +2,9 @@
 
 using namespace Blackbeard;
 
-PostSet::PostSet()
-{
+PostSet::PostSet() {
   max_message_no = 0;
   min_message_no = 0;
 }
 
-PostSet::~PostSet()
-{
-}
+PostSet::~PostSet() {}

@@ -1,7 +1,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include<pthread.h>
+#include <pthread.h>
 
 #include "rackam_types.hpp"
 
@@ -17,12 +17,9 @@
 using namespace Blackbeard;
 using namespace std;
 
-extern "C" {
-  int luaopen_Blackbeard(lua_State* L);
-};
+extern "C" { int luaopen_Blackbeard(lua_State* L); };
 
-Rackam::Rackam()
-{
+Rackam::Rackam() {
   pthread_mutex_init(&self_mutex, NULL);
   lua_state = lua_open();
   luaopen_base(lua_state);
@@ -36,8 +33,7 @@ Rackam::Rackam()
   still_running = 1;
 }
 
-Rackam::~Rackam()
-{
+Rackam::~Rackam() {
   newsgroups.empty();
 
   lua_close(lua_state);
@@ -46,64 +42,61 @@ Rackam::~Rackam()
   pthread_mutex_destroy(&self_mutex);
 }
 
-void Rackam::start_web_server(string base_path, int port_no)
-{
+void Rackam::start_web_server(string base_path, int port_no) {
   webserver = make_shared<WebServer>(base_path, port_no);
 }
 
-void Rackam::main_loop()
-{ 
+void Rackam::main_loop() {
   fd_set read_fds;
   struct timeval tv;
   tv.tv_sec = 1;
   tv.tv_usec = 0;
   int fdmax = 0;
 
-  //check for new incoming web request
+  // check for new incoming web request
 
-  while(still_running) {
+  while (still_running) {
     FD_ZERO(&read_fds);
 
     FD_SET(webserver->listener->sockfd, &read_fds);
     fdmax = webserver->listener->sockfd;
 
-    for(auto connection : webserver->connections) {
-        int fd = connection->sockfd;
-        FD_SET(fd, &read_fds);
-        if(fdmax < fd){
-            fdmax = fd;
-        }
+    for (auto connection : webserver->connections) {
+      int fd = connection->sockfd;
+      FD_SET(fd, &read_fds);
+      if (fdmax < fd) {
+        fdmax = fd;
+      }
     }
 
     int result;
     do {
-      //result = select(fdmax+1, &read_fds, NULL, NULL, &tv);
-      result = select(fdmax+1, &read_fds, NULL, NULL, NULL);
+      // result = select(fdmax+1, &read_fds, NULL, NULL, &tv);
+      result = select(fdmax + 1, &read_fds, NULL, NULL, NULL);
     } while ((result == -1) && (errno == EINTR));
 
-    if(result == -1){
-        perror("select");
-        exit(1);
+    if (result == -1) {
+      perror("select");
+      exit(1);
     }
 
-    if(FD_ISSET(webserver->listener->sockfd, &read_fds)) {
+    if (FD_ISSET(webserver->listener->sockfd, &read_fds)) {
       webserver->handle_new_connection();
     }
 
-    for(auto connection : webserver->connections) {
-        if(FD_ISSET(connection->sockfd, &read_fds)){
-            connection->read_packets();
-        }
+    for (auto connection : webserver->connections) {
+      if (FD_ISSET(connection->sockfd, &read_fds)) {
+        connection->read_packets();
+      }
     }
 
     webserver->tick();
   }
 }
 
-NewsgroupPtr Rackam::newsgroup_for_name(string name)
-{
-  for(auto newsgroup : newsgroups) {
-    if(newsgroup->name.compare(name) == 0) {
+NewsgroupPtr Rackam::newsgroup_for_name(string name) {
+  for (auto newsgroup : newsgroups) {
+    if (newsgroup->name.compare(name) == 0) {
       return newsgroup;
     }
   }
@@ -118,8 +111,7 @@ NewsgroupPtr Rackam::newsgroup_for_name(string name)
   return new_group;
 }
 
-void Rackam::load_headers_from_file(NewsgroupPtr group, string filename)
-{
+void Rackam::load_headers_from_file(NewsgroupPtr group, string filename) {
   int total_bytes;
   int bytes_read;
 
@@ -130,7 +122,7 @@ void Rackam::load_headers_from_file(NewsgroupPtr group, string filename)
   total_bytes = 0;
   console->log("Loading full headers from " + filename);
   struct stat my_stats;
-  if(stat(filename.c_str(), &my_stats) == -1){
+  if (stat(filename.c_str(), &my_stats) == -1) {
     return;
   }
   total_bytes = my_stats.st_size;
@@ -138,17 +130,14 @@ void Rackam::load_headers_from_file(NewsgroupPtr group, string filename)
 
   in.open(filename.c_str(), ios::in);
   in.getline(linebuffer, 1024);
-  while(!in.eof() && in){
+  while (!in.eof() && in) {
     string line(linebuffer);
     bytes_read += line.length();
     parser.queue_line(line);
-//    parser->process_line(line);
+    //    parser->process_line(line);
 
     in.getline(linebuffer, 1024);
   }
   in.close();
-  parser.queue_line(""); // pthread_join
+  parser.queue_line("");  // pthread_join
 }
-
-
-

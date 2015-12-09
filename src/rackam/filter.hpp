@@ -1,35 +1,35 @@
 #ifndef FILTER_HPP
 #define FILTER_HPP
 
-#include<rackam_types.hpp>
+#include <rackam_types.hpp>
 
 namespace Blackbeard {
 class FilterMatch {
-  public:
-    FilterMatch();
-    ~FilterMatch();
+ public:
+  FilterMatch();
+  ~FilterMatch();
 
-    std::string postset_subject;
-    int postset_num_files;
-    int postset_fileno;
-    int postfile_num_pieces;
-    int postfile_piece_no;
-    std::string postfile_filename;
+  std::string postset_subject;
+  int postset_num_files;
+  int postset_fileno;
+  int postfile_num_pieces;
+  int postfile_piece_no;
+  std::string postfile_filename;
 };
 
 class Filter {
-  public:
-    Filter();
-    Filter(std::string filter_text);
-    ~Filter();
+ public:
+  Filter();
+  Filter(std::string filter_text);
+  ~Filter();
 
-    void parse_filter(std::string filter);
-    std::shared_ptr<FilterMatch> match(std::string haystack);
+  void parse_filter(std::string filter);
+  std::shared_ptr<FilterMatch> match(std::string haystack);
 
-    std::string text;
-    std::vector<std::string> filter_pieces;
-    long long int num_matched;
-    pthread_mutex_t self_mutex;
+  std::string text;
+  std::vector<std::string> filter_pieces;
+  long long int num_matched;
+  pthread_mutex_t self_mutex;
 };
 }
 

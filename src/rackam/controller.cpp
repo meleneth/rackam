@@ -5,18 +5,14 @@
 
 using namespace Blackbeard;
 
-Controller::Controller()
-{
-}
+Controller::Controller() {}
 
-Controller::~Controller()
-{
-}
+Controller::~Controller() {}
 
-AuthorPtr Controller::author_for_name(NewsgroupPtr newsgroup, std::string authorname)
-{
+AuthorPtr Controller::author_for_name(NewsgroupPtr newsgroup,
+                                      std::string authorname) {
   auto result = (*newsgroup).authors_by_name.find(authorname);
-  if(result != (*newsgroup).authors_by_name.end()){
+  if (result != (*newsgroup).authors_by_name.end()) {
     return result->second;
   }
 
@@ -31,20 +27,21 @@ AuthorPtr Controller::author_for_name(NewsgroupPtr newsgroup, std::string author
   return author;
 }
 
-PostFilePtr Controller::find_or_create_postfile_for_filename_fileno(AuthorPtr author, std::string filename, int fileno)
-{
+PostFilePtr Controller::find_or_create_postfile_for_filename_fileno(
+    AuthorPtr author, std::string filename, int fileno) {
   // SHIP IT
   // uh I mean naive implementation here re-write plz
 
-  pthread_mutex_lock(&(*author).self_mutex); // is this one needed?
+  pthread_mutex_lock(&(*author).self_mutex);  // is this one needed?
   auto result = (*author).postfiles_by_name.find(filename);
-  if(result != (*author).postfiles_by_name.end()) {
+  if (result != (*author).postfiles_by_name.end()) {
     pthread_mutex_unlock(&(*author).self_mutex);
     return result->second;
   }
   pthread_mutex_unlock(&(*author).self_mutex);
 
-  std::shared_ptr<PostFile> new_file = std::make_shared<PostFile>(filename, author, (*author).newsgroup);
+  std::shared_ptr<PostFile> new_file =
+      std::make_shared<PostFile>(filename, author, (*author).newsgroup);
 
   pthread_mutex_lock(&(*author).self_mutex);
   (*author).max_postfile_id++;
