@@ -1,0 +1,15 @@
+*.o
+*.a
+*.cxx
+*.log
+config.h
+config.h.*
+configure
+compile
+gmon.out
+depcomp
+stamp-h1
+install-sh
+missing
+config.status
+

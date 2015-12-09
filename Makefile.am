@@ -1,11 +1,12 @@
 bin_PROGRAMS = bin/rackam
+noinst_LIBRARIES = src/librackam.a
 
 SUBDIRS = bin/scripts/htdocs
 
 ACLOCAL_AMFLAGS = -I m4
 
 AM_CXXFLAGS = -I src/rackam -I/usr/include/lua5.1 -lpthread -D_FILE_OFFSET_BITS=64
-bin_rackam_LDADD  = -llua5.1
+bin_rackam_LDADD  = -llua5.1 src/librackam.a
 
 CLEANFILES = src/rackam/blackbeard_wrap.cxx bin/scripts/htdocs/rackam.js
 
@@ -18,17 +19,18 @@ src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i \
 
 	swig3.0 -c++ -lua -w315 -o src/rackam/blackbeard_wrap.cxx src/rackam/blackbeard.i
 
-bin_rackam_SOURCES = src/rackam.cpp  \
-  src/rackam/headers_parser.hpp \
-  src/rackam/headers_parser.cpp \
-  src/rackam/author.cpp \
+RACKAM_SRC = src/rackam/author.cpp \
   src/rackam/author.hpp \
+  src/rackam/console.cpp \
+  src/rackam/console.hpp \
   src/rackam/controller.cpp \
   src/rackam/controller.hpp \
   src/rackam/filter.cpp \
   src/rackam/filter.hpp \
-  src/rackam/console.cpp \
-  src/rackam/console.hpp \
+  src/rackam/headers_parser.cpp \
+  src/rackam/headers_parser.hpp \
+  src/rackam/message_header.cpp \
+  src/rackam/message_header.hpp \
   src/rackam/newsgroup.cpp \
   src/rackam/newsgroup.hpp \
   src/rackam/post_file.cpp \
@@ -48,16 +50,18 @@ bin_rackam_SOURCES = src/rackam.cpp  \
   src/rackam/tcplistener.hpp \
   src/rackam/webdatafetcher.cpp \
   src/rackam/webdatafetcher.hpp \
-  src/rackam/web_response.cpp \
-  src/rackam/web_response.hpp \
   src/rackam/web_request.cpp \
   src/rackam/web_request.hpp \
-  src/rackam/web_static_file.hpp \
-  src/rackam/web_static_file.cpp \
+  src/rackam/web_response.cpp \
+  src/rackam/web_response.hpp \
   src/rackam/web_server.cpp \
   src/rackam/web_server.hpp \
-  src/rackam/message_header.cpp \
-  src/rackam/message_header.hpp \
-	src/rackam/blackbeard_wrap.cxx
+  src/rackam/web_static_file.cpp \
+  src/rackam/web_static_file.hpp
 
+bin_rackam_SOURCES = src/rackam.cpp src/rackam/blackbeard_wrap.cxx
+src_librackam_a_SOURCES = ${RACKAM_SRC}
+
+format-code :
+	for i in ${RACKAM_SRC} src/rackam.cpp ; do clang-format-3.5 -style=Google -i $$i; done
 
