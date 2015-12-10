@@ -5,7 +5,7 @@ SUBDIRS = bin/scripts/htdocs
 
 ACLOCAL_AMFLAGS = -I m4
 
-AM_CXXFLAGS = -I src/rackam -I/usr/include/lua5.1 -lpthread -D_FILE_OFFSET_BITS=64
+AM_CXXFLAGS = -I src/rackam -I/usr/include/lua5.1 -Ivendor -lpthread -D_FILE_OFFSET_BITS=64
 bin_rackam_LDADD  = -llua5.1 src/librackam.a
 
 CLEANFILES = src/rackam/blackbeard_wrap.cxx bin/scripts/htdocs/rackam.js

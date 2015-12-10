@@ -20,8 +20,9 @@ class WebServer {
   void log_to_file(std::string filename);
   void handle_request(WebRequest *request);
   void handle_new_connection(void);
-  void register_file(std::string url, std::string filename,
-                     std::string content_type);
+  std::shared_ptr<WebStaticFile> register_file(std::string url,
+                                               std::string filename,
+                                               std::string content_type);
   void tick(void);
 
   TCPListener *listener;
