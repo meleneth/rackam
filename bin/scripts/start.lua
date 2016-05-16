@@ -300,11 +300,15 @@ rackam:load_headers_from_file(n, "headers_snipper.log")
 
 local webserver = rackam.webserver
 
-webserver:register_file("index.html", "htdocs/index.html", "text/html")
+file = webserver:register_file("index.html", "htdocs/index.haml", "text/html")
+file:add_filter("haml -s")
 webserver:register_file("favicon.ico", "htdocs/favicon.ico", "text/html")
-webserver:register_file("jquery.js", "htdocs/jquery-1.7.1.min.js", "text/html")
-webserver:register_file("rackam.js", "htdocs/rackam.js", "text/html")
-webserver:register_file("rackam.css", "htdocs/rackam.css", "text/css")
+webserver:register_file("jquery.js", "htdocs/vendor/jquery-1.11.0.min.js", "text/html")
+webserver:register_file("bootstrap.min.css", "htdocs/vendor/bootstrap.min.css", "text/css")
+file = webserver:register_file("rackam.js", "htdocs/rackam.coffee", "text/html")
+file:add_filter("coffee -p -s")
+file = webserver:register_file("rackam.css", "htdocs/rackam.scss", "text/css")
+file:add_filter("scss")
 
 print("Lua script finished.")
 Blackbeard.rackam.still_running = true

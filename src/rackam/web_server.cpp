@@ -40,7 +40,8 @@ void WebServer::handle_request(WebRequest *request) {
 
   if (request->path == "/") {
     for (auto sc : static_contents) {
-      if (sc->filename == request->filename) {
+      if (sc->url == request->filename) {
+        sc->reload_if_stale();
         response.content_type = sc->content_type;
         response.prepare_response_for_bytes(sc->buffer.size());
         request->client->send_data((char *)response.full_response.c_str(),

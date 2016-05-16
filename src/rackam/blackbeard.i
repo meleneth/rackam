@@ -33,6 +33,7 @@ using namespace Blackbeard;
 %template(AuthorPtr) std::shared_ptr<Blackbeard::Author>;
 %template(WebServerPtr) std::shared_ptr<Blackbeard::WebServer>;
 %template(MessageHeaderPtr) std::shared_ptr<Blackbeard::MessageHeader>;
+%template(WebStaticFilePtr) std::shared_ptr<Blackbeard::WebStaticFile>;
 
 %include "rackam_types.hpp"
 %include "newsgroup.hpp"
