@@ -12,4 +12,17 @@ stamp-h1
 install-sh
 missing
 config.status
+.deps
+.dirstamp
+.cproject
+.project
+Debug/
+Makefile
+Makefile.in
+aclocal.m4
+ar-lib
+autom4te.cache/
+bin/rackam
+bin/scripts/htdocs/.sass-cache/
+bin/scripts/htdocs/vendor/
 

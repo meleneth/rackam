@@ -202,6 +202,17 @@ end
   
 --end
 
+function rest_response_newsgroups(webrequest, webresponse)
+  local response_lines = {}
+  local i
+  local max_i = Blackbeard.rackam.newsgroups:size() - 1
+  for i = 0, max_i do
+    local ng = Blackbeard.rackam.newsgroups[i]
+    table.insert(response_lines, newsgroup_as_json(ng))
+  end
+  webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]\n"
+end
+
 function web_response_newsgroups(webresponse)
   local response_lines = {}
   local i
@@ -244,6 +255,9 @@ end
 
 function handle_web_request(webrequest, webresponse)
   if webrequest.path == "/" then
+    if webrequest.filename == "n" then
+      rest_response_newsgroups(webrequest, webresponse)
+    end
     if webrequest.filename == "authors.cgi" then
       web_response_authors(webrequest, webresponse)
       return
@@ -277,6 +291,7 @@ end
 
 local rackam = Blackbeard.rackam
 
+rackam:newsgroup_for_name("alt.binaries.stuffyouwant")
 local n = rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
 n:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
 n:add_filter("%s [%e/%f] - \"%a\"%d yEnc (%p/%n)")

@@ -16,6 +16,7 @@ void WebResponse::prepare_full_response() {
   s << "HTTP/1.1 200 OK\r\n";
   s << "Content-length: " << body.length() << "\r\n";
   s << "Content-type: " << content_type << "; charset=UTF-8\r\n";
+  s << "Access-Control-Allow-Origin: http://rinzler:3000\r\n";
   s << "Connection: close\r\n";
   s << "\r\n";
   s << body;
@@ -30,6 +31,7 @@ void WebResponse::prepare_response_for_bytes(int num_bytes) {
   s << "HTTP/1.1 200 OK\r\n";
   s << "Content-length: " << num_bytes << "\r\n";
   s << "Content-type: " << content_type << "\r\n";
+  s << "Access-Control-Allow-Origin: http://rinzler:3000\r\n";
   s << "Connection: close\r\n";
   s << "\r\n";
 

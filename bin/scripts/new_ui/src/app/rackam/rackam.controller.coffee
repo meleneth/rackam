@@ -1,5 +1,5 @@
 angular.module 'newUi'
-  .controller 'RackamController', ($timeout, webDevTec, toastr) ->
+  .controller 'RackamController', ($timeout, webDevTec, toastr, DataBroker) ->
     'ngInject'
     vm = this
     activate = ->
@@ -24,6 +24,8 @@ angular.module 'newUi'
 
     vm.awesomeThings = []
     vm.hotness = 9001 # yes, it's over 9000
+    vm.newsgroups = DataBroker.Newsgroup.query()
+    console.log vm.newsgroups
     vm.classAnimation = ''
     vm.creationDate = 1463383974342
     vm.showToastr = showToastr
