@@ -10,5 +10,10 @@ angular.module 'newUi'
         templateUrl: 'app/rackam/rackam.html'
         controller: 'RackamController'
         controllerAs: 'rackam'
+      .when '/newsgroup/:newsgroup_name',
+        templateUrl: 'app/newsgroup/newsgroup.html'
+        name: 'NewsgroupDetail'
+        controller: 'NewsgroupController'
+        controllerAs: 'newsgroup'
       .otherwise
         redirectTo: '/'

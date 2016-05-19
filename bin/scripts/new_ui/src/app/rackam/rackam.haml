@@ -1,7 +1,6 @@
-%h2
-  Let's get this party started right
-%div
-  Let's get this party started, quickly
-  %br
-  make it over 
-  %span= "{{ rackam.hotness }}"
+%h2 Newsgroups
+%ul
+  %li{"ng-repeat": "newsgroup in rackam.newsgroups"}
+    - link_target = "#/newsgroup/{{newsgroup.name}}"
+    %a{"ng-href": link_target}
+      = "{{newsgroup.name}}"
