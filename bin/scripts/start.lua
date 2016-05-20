@@ -1,4 +1,5 @@
 JSON = (loadfile "JSON.lua")() -- one-time load of the routines
+WebRouter = (loadfile "web_router.lua")()
 
 function web_escape(s)
   if s == nil then
@@ -213,6 +214,17 @@ function rest_response_newsgroups(webrequest, webresponse)
   webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
+function rest_response_newsgroup_authors(webrequest, webresponse)
+  local response_lines = {}
+  local i
+  local max_i = Blackbeard.rackam.newsgroups:size() - 1
+  for i = 0, max_i do
+    local ng = Blackbeard.rackam.newsgroups[i]
+    table.insert(response_lines, newsgroup_as_json(ng))
+  end
+  webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]\n"
+end
+
 function web_response_newsgroups(webresponse)
   local response_lines = {}
   local i
@@ -253,10 +265,19 @@ function web_response_postfiles(webrequest, webresponse)
   webresponse.body = paged_web_render(webrequest, items, function(postfile) return postfile_as_json(postfile) end)
 end
 
+local web_router = WebRouter.new()
+
+function add_route(route)
+
 function handle_web_request(webrequest, webresponse)
+  full_path = table.concat({webrequest.path, webrequest.filename}, "/")
+
   if webrequest.path == "/" then
     if webrequest.filename == "n" then
       rest_response_newsgroups(webrequest, webresponse)
+    end
+    if webrequest.filename == "rest_response_newsgroup_authors" then
+      rest_response_newsgroup_authors(webrequest, webresponse)
     end
     if webrequest.filename == "authors.cgi" then
       web_response_authors(webrequest, webresponse)

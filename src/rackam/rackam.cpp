@@ -22,10 +22,7 @@ extern "C" { int luaopen_Blackbeard(lua_State* L); };
 Rackam::Rackam() {
   pthread_mutex_init(&self_mutex, NULL);
   lua_state = lua_open();
-  luaopen_base(lua_state);
-  luaopen_table(lua_state);
-  luaopen_string(lua_state);
-  luaopen_math(lua_state);
+  luaL_openlibs(lua_state);
   luaopen_Blackbeard(lua_state);
   webserver = nullptr;
 
