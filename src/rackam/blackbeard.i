@@ -34,6 +34,7 @@ using namespace Blackbeard;
 %template(WebServerPtr) std::shared_ptr<Blackbeard::WebServer>;
 %template(MessageHeaderPtr) std::shared_ptr<Blackbeard::MessageHeader>;
 %template(WebStaticFilePtr) std::shared_ptr<Blackbeard::WebStaticFile>;
+%template(FilterMatchPtr) std::shard_ptr<Blackbeard::FilterMatch>;
 
 %include "rackam_types.hpp"
 %include "newsgroup.hpp"
