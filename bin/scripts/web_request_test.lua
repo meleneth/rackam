@@ -18,13 +18,23 @@ local r = Blackbeard.WebRequest("get /n/alt.binaries.multimedia/authors")
 print("---------")
 print(r.path)
 print("---------")
-assert(r.path == "/n/alt.binaries.multimedia/", "Path is '/'")
+assert(r.path == "/n/alt.binaries.multimedia/", "Path is '/n/alt.binaries.multimedia/'")
 assert(r.filename == "authors", "Filename is authors")
+
+assert(WebRouter:starts_with_colon("") == false)
+print(WebRouter:starts_with_colon(":foo"))
+assert(WebRouter:starts_with_colon(":foo") == "foo")
 
 function no_func()
 end
 
 WebRouter:add_route("/n/:newsgroup/authors", no_func)
+
+match = WebRouter:route(r)
+assert(match)
+assert("alt.binaries.multimedia" == match.newsgroup)
+
+
 
 print "And the band marches on"
 

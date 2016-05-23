@@ -35,16 +35,65 @@ function OBJDEF:new(args)
     end
   end
 
-  new['routes'] = { }
+  new['routes'] = {}
 
   return setmetatable(new, OBJDEF)
-  end
+end
 
 function OBJDEF:add_route(route, handler_func)
   print("Adding route: " .. route)
-  self.routes[route] = handler_func
-	result = strsplit("/", route)
-	pprint(result)
+  local r = {}
+  r['route_func'] = handle_func
+  r['route_template'] = route
+  r['route_pieces'] = strsplit("/", route)
+  table.insert(self.routes, r)
+  return r
 end
+
+function OBJDEF:starts_with_colon(str)
+  if string.len(str) == 0 then
+    return false
+  end
+  if string.sub(str, 1, 1) == ":" then
+    return string.sub(str, 2, string.len(str))
+  end
+  return false
+end
+
+function OBJDEF:route(request)
+  local candidate = request.path .. request.filename
+  local candidate_bits = strsplit("/", candidate)
+
+  for ri,route in ipairs(self.routes) do
+    result = self:route_bits(route, candidate_bits)
+    if result then
+      return result
+    end
+  end
+  return false
+end
+
+function OBJDEF:route_bits(route, bits)
+  rp = route.route_pieces
+  if #rp ~= #bits then
+    return false
+  end
+  local match = {}
+
+  for i, v in ipairs(bits) do
+    p = route.route_pieces[i]
+    local colon_match = self:starts_with_colon(route.route_pieces[i])
+    if colon_match then
+      match[colon_match] = v
+      break
+    end
+    if v ~= route.route_pieces[i] then
+      return false
+    end
+  end
+  return match
+end
+
+
 
 return OBJDEF:new()
