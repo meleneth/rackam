@@ -40,17 +40,17 @@ function OBJDEF:new(args)
   return setmetatable(new, OBJDEF)
 end
 
-function OBJDEF:add_route(route, handler_func)
+function OBJDEF:add_route(route, route_func)
   print("Adding route: " .. route)
   local r = {}
-  r['route_func'] = handle_func
+  r['route_func'] = route_func
   r['route_template'] = route
   r['route_pieces'] = strsplit("/", route)
   table.insert(self.routes, r)
   return r
 end
 
-function OBJDEF:starts_with_colon(str)
+function OBJDEF:_starts_with_colon(str)
   if string.len(str) == 0 then
     return false
   end
@@ -60,12 +60,12 @@ function OBJDEF:starts_with_colon(str)
   return false
 end
 
-function OBJDEF:route(request)
+function OBJDEF:check_route(request)
   local candidate = request.path .. request.filename
   local candidate_bits = strsplit("/", candidate)
 
   for ri,route in ipairs(self.routes) do
-    result = self:route_bits(route, candidate_bits)
+    result = self:_route_bits(route, candidate_bits)
     if result then
       return result
     end
@@ -73,7 +73,20 @@ function OBJDEF:route(request)
   return false
 end
 
-function OBJDEF:route_bits(route, bits)
+function OBJDEF:route(request, response)
+  local candidate = request.path .. request.filename
+  local candidate_bits = strsplit("/", candidate)
+
+  for ri,route in ipairs(self.routes) do
+    result = self:_route_bits(route, candidate_bits)
+    if result then
+      return route['route_func'](request, result, response)
+    end
+  end
+  return false
+end
+
+function OBJDEF:_route_bits(route, bits)
   rp = route.route_pieces
   if #rp ~= #bits then
     return false
@@ -82,7 +95,7 @@ function OBJDEF:route_bits(route, bits)
 
   for i, v in ipairs(bits) do
     p = route.route_pieces[i]
-    local colon_match = self:starts_with_colon(route.route_pieces[i])
+    local colon_match = self:_starts_with_colon(route.route_pieces[i])
     if colon_match then
       match[colon_match] = v
       break

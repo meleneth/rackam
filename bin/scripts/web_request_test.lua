@@ -21,16 +21,16 @@ print("---------")
 assert(r.path == "/n/alt.binaries.multimedia/", "Path is '/n/alt.binaries.multimedia/'")
 assert(r.filename == "authors", "Filename is authors")
 
-assert(WebRouter:starts_with_colon("") == false)
-print(WebRouter:starts_with_colon(":foo"))
-assert(WebRouter:starts_with_colon(":foo") == "foo")
+assert(WebRouter:_starts_with_colon("") == false)
+print(WebRouter:_starts_with_colon(":foo"))
+assert(WebRouter:_starts_with_colon(":foo") == "foo")
 
 function no_func()
 end
 
 WebRouter:add_route("/n/:newsgroup/authors", no_func)
 
-match = WebRouter:route(r)
+match = WebRouter:check_route(r)
 assert(match)
 assert("alt.binaries.multimedia" == match.newsgroup)
 

@@ -203,7 +203,7 @@ end
   
 --end
 
-function rest_response_newsgroups(webrequest, webresponse)
+function rest_response_newsgroups(webrequest, match, webresponse)
   local response_lines = {}
   local i
   local max_i = Blackbeard.rackam.newsgroups:size() - 1
@@ -214,8 +214,11 @@ function rest_response_newsgroups(webrequest, webresponse)
   webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]\n"
 end
 
-function rest_response_newsgroup_authors(webrequest, webresponse)
+WebRouter:add_route("/n", rest_response_newsgroups)
+
+function rest_response_newsgroup_authors(webrequest, match, webresponse)
   local response_lines = {}
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(match.newsgroup)
   local i
   local max_i = Blackbeard.rackam.newsgroups:size() - 1
   for i = 0, max_i do
@@ -224,6 +227,8 @@ function rest_response_newsgroup_authors(webrequest, webresponse)
   end
   webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]\n"
 end
+
+WebRouter:add_route("/n/:newsgroup/authors", rest_response_newsgroup_authors)
 
 function web_response_newsgroups(webresponse)
   local response_lines = {}
@@ -265,20 +270,14 @@ function web_response_postfiles(webrequest, webresponse)
   webresponse.body = paged_web_render(webrequest, items, function(postfile) return postfile_as_json(postfile) end)
 end
 
-local web_router = WebRouter.new()
-
-function add_route(route)
-
 function handle_web_request(webrequest, webresponse)
   full_path = table.concat({webrequest.path, webrequest.filename}, "/")
 
+  if WebRouter:route(webrequest, webresponse) then
+    return
+  end
+
   if webrequest.path == "/" then
-    if webrequest.filename == "n" then
-      rest_response_newsgroups(webrequest, webresponse)
-    end
-    if webrequest.filename == "rest_response_newsgroup_authors" then
-      rest_response_newsgroup_authors(webrequest, webresponse)
-    end
     if webrequest.filename == "authors.cgi" then
       web_response_authors(webrequest, webresponse)
       return
