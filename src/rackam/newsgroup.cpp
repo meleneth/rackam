@@ -39,6 +39,13 @@ shared_ptr<Author> Newsgroup::author_for_id(int author_id) {
   return NULL;
 }
 
+shared_ptr<Author> Newsgroup::author_for_name(std::string author_name) {
+  for (auto author : authors) {
+    if (author->name.compare(author_name) == 0) return author;
+  }
+  return NULL;
+}
+
 void Newsgroup::add_filter(string filter_text) {
   for (auto filter : filters) {
     if ((*filter).text == filter_text) return;

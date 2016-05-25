@@ -179,96 +179,42 @@ function header_as_json(header)
   return JSON:encode(output)
 end
 
-function web_response_authors(webrequest, webresponse)
-  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-  local response_lines = {}
-  local i;
-  local max_i = newsgroup.authors:size() - 1
-  local page_ipp = webrequest:paramn("page_ipp")
-  local page_first = webrequest:paramn("page_first")
-  if page_ipp   == 0 then page_ipp = 20 end
-  local page_last = page_first + page_ipp
-  if page_last > max_i then page_last = max_i end
+WebRouter:add_route("/n", function(webrequest, match, webresponse)
+  local newsgroups = Blackbeard.rackam.newsgroups
+  webresponse.body = web_render(0, newsgroups:size() - 1, newsgroups, newsgroup_as_json)
+end)
 
-  for i = page_first, page_last do
-    local author = newsgroup.authors[i]
-    table.insert(response_lines, author_as_json(author))
-  end
-  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
-end
-
---create_paged_handler("author", "authors", "Name|PostSets|PostFiles|Headers")
-
---function create_paged_handler(field_name, plural_field_name, headers)
-  
---end
-
-function rest_response_newsgroups(webrequest, match, webresponse)
-  local response_lines = {}
-  local i
-  local max_i = Blackbeard.rackam.newsgroups:size() - 1
-  for i = 0, max_i do
-    local ng = Blackbeard.rackam.newsgroups[i]
-    table.insert(response_lines, newsgroup_as_json(ng))
-  end
-  webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]\n"
-end
-
-WebRouter:add_route("/n", rest_response_newsgroups)
-
-function rest_response_newsgroup_authors(webrequest, match, webresponse)
-  local response_lines = {}
+WebRouter:add_route("/n/:newsgroup/authors", function(webrequest, match, webresponse)
   local newsgroup = Blackbeard.rackam:newsgroup_for_name(match.newsgroup)
-  local i
-  local max_i = Blackbeard.rackam.newsgroups:size() - 1
-  for i = 0, max_i do
-    local ng = Blackbeard.rackam.newsgroups[i]
-    table.insert(response_lines, newsgroup_as_json(ng))
-  end
-  webresponse.body = "[" .. table.concat(response_lines, ",\n") .. "]\n"
-end
+  webresponse.body = paged_web_render(webrequest, newsgroup.authors, author_as_json)
+end)
 
-WebRouter:add_route("/n/:newsgroup/authors", rest_response_newsgroup_authors)
+WebRouter:add_route("/n/:newsgroup/filters", function(webrequest, match, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(match.newsgroup)
+  webresponse.body = web_render(0, newsgroup.filters:size() - 1, newsgroup.filters, header_as_json)
+end)
 
-function web_response_newsgroups(webresponse)
-  local response_lines = {}
-  local i
-  local max_i = Blackbeard.rackam.newsgroups:size() - 1
-  for i = 0, max_i do
-    local ng = Blackbeard.rackam.newsgroups[i]
-    table.insert(response_lines, newsgroup_as_json(ng))
-  end
-  webresponse.body = "[\n" .. table.concat(response_lines, ",\n") .. "]\n"
-end
+WebRouter:add_route("/n/:newsgroup/headers", function(webrequest, match, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(match.newsgroup)
+  webresponse.body = paged_web_render(webrequest, newsgroup.headers, header_as_json)
+end)
 
-function web_response_filters(webrequest, webresponse)
-  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-  webresponse.body = web_render(0, newsgroup.filters:size() - 1, newsgroup.filters, function(filter) return header_as_json(filter) end)
-end
+WebRouter:add_route("/n/:newsgroup/a/:author/headers", function(webrequest, match, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(match.newsgroup)
+  local author = newsgroup:author_for_name(match.author)
+  webresponse.body = paged_web_render(webrequest, author.headers, header_as_json)
+end)
 
-function web_response_headers(webrequest, webresponse)
-  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-  local headers = newsgroup.headers
+WebRouter:add_route("/n/:newsgroup/postfiles", function(webrequest, match, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(match.newsgroup)
+  webresponse.body = paged_web_render(webrequest, newsgroup.postfiles, postfile_as_json)
+end)
 
-  if webrequest:has_param("author_id") then
-    local author = newsgroup:author_for_id(webrequest:paramn("author_id"))
-    headers = author.headers
-  end
-
-  webresponse.body = paged_web_render(webrequest, headers, function(header) return header_as_json(header) end)
-end
-
-function web_response_postfiles(webrequest, webresponse)
-  local newsgroup = Blackbeard.rackam:newsgroup_for_name(webrequest:param("ng"))
-  local items = newsgroup.postfiles
-
-  if webrequest:has_param("author_id") then
-    local author = newsgroup:author_for_id(webrequest:paramn("author_id"))
-    items = author.postfiles
-  end
-
-  webresponse.body = paged_web_render(webrequest, items, function(postfile) return postfile_as_json(postfile) end)
-end
+WebRouter:add_route("/n/:newsgroup/a/:author/postfiles", function(webrequest, match, webresponse)
+  local newsgroup = Blackbeard.rackam:newsgroup_for_name(match.newsgroup)
+  local author = newsgroup:author_for_name(match.author)
+  webresponse.body = paged_web_render(webrequest, author.postfiles, postfile_as_json)
+end)
 
 function handle_web_request(webrequest, webresponse)
   full_path = table.concat({webrequest.path, webrequest.filename}, "/")
@@ -276,42 +222,10 @@ function handle_web_request(webrequest, webresponse)
   if WebRouter:route(webrequest, webresponse) then
     return
   end
-
-  if webrequest.path == "/" then
-    if webrequest.filename == "authors.cgi" then
-      web_response_authors(webrequest, webresponse)
-      return
-    end
-    if webrequest.filename == "newsgroups.cgi" then
-      web_response_newsgroups(webresponse)
-      return
-    end
-    if webrequest.filename == "filters.cgi" then
-      web_response_filters(webrequest, webresponse)
-      return
-    end
-    if webrequest.filename == "headers.cgi" then
-      web_response_headers(webrequest, webresponse)
-      return
-    end
-    if webrequest.filename == "postfiles.cgi" then
-      web_response_postfiles(webrequest, webresponse)
-      return
-    end
-    if webrequest.filename == "author_postsets.cgi" then
-      web_response_author_postsets(webrequest, webresponse)
-      return
-    end
-    if webrequest.filename == "newsgroup_postsets.cgi" then
-      web_response_newsgroup_postsets(webrequest, webresponse)
-      return
-    end
-  end
 end
 
 local rackam = Blackbeard.rackam
 
-rackam:newsgroup_for_name("alt.binaries.stuffyouwant")
 local n = rackam:newsgroup_for_name("alt.binaries.multimedia.cartoons")
 n:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
 n:add_filter("%s [%e/%f] - \"%a\"%d yEnc (%p/%n)")

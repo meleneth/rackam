@@ -19,6 +19,7 @@ class Newsgroup {
   int max_author_id;
 
   std::shared_ptr<Author> author_for_id(int author_id);
+  std::shared_ptr<Author> author_for_name(std::string author_name);
   void add_filter(std::string filter);
 
   std::vector<std::shared_ptr<PostSet>> postsets;
