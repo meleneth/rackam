@@ -1,1 +1,11 @@
 %h2 Newsgroup
+%ul
+  %li Authors
+  %li PostSets
+  %li
+    - link_target = "#/newsgroup/{{newsgroup.name}}"
+    %a{"ng-href": link_target}
+      postFiles
+
+!="<acme-navbar creation-date=\"main.creationDate\"></acme-navbar>"
+
