@@ -1,7 +1,9 @@
 angular.module 'newUi'
-  .controller 'NewsgroupController', ($timeout, webDevTec, toastr, DataBroker) ->
+  .controller 'NewsgroupController', ($timeout, webDevTec, toastr, DataBroker, $scope) ->
     'ngInject'
     vm = this
+
+    $scope.posted_files = {filename: "BIG BADA BOOM"}
     activate = ->
       getWebDevTec()
       $timeout (->

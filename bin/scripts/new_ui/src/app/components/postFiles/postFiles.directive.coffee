@@ -1,17 +1,16 @@
 angular.module 'newUi'
   .directive 'postFiles', ->
 
-    postFilesController = (moment) ->
+    postFilesController = ->
       'ngInject'
       vm = this
       # "vm.creation" is avaible by directive option "bindToController: true"
-      vm.relativeDate = moment(vm.creationDate).fromNow()
       return
 
     directive =
       restrict: 'E'
-      templateUrl: 'app/components/postfiles/postfiles.html'
-      scope: creationDate: '='
+      templateUrl: 'app/components/postFiles/postFiles.html'
+      scope: postFiles: '=files'
       controller: postFilesController
       controllerAs: 'vm'
       bindToController: true
