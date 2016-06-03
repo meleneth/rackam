@@ -3,7 +3,7 @@ angular.module 'newUi'
     'ngInject'
     vm = this
 
-    vm.load_postfiles = ->
+    $scope.load_postfiles = ->
       console.log "your wish, my want"
 
     $scope.posted_files = {filename: "BIG BADA BOOM"}
