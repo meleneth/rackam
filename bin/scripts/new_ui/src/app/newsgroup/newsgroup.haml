@@ -3,10 +3,17 @@
   %li Authors
   %li PostSets
   %li
-    - link_target = "#/newsgroup/{{newsgroup.name}}"
-    %a{"ng-href": link_target}
+    %button{"ng-click": 'newsgroup.posted_files()'}
       postFiles
-
+I'm a hot potater
 !=" Moo: {{posted_files}}"
+= "{{newsgroup.newsgroup_name}}"
 !="<post-files data-files=\"posted_files\"></post-files>"
+
+%table.table
+  %tr{"ng-repeat": "pf in newsgroup.postfiles"}
+    %td
+      ="{{ pf.name}}"
+    %td
+      ="{{ pf.author}}"
 

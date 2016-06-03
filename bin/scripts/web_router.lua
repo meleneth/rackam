@@ -46,6 +46,7 @@ function OBJDEF:add_route(route, route_func)
   r['route_func'] = route_func
   r['route_template'] = route
   r['route_pieces'] = strsplit("/", route)
+  r['route_name'] = route
   table.insert(self.routes, r)
   return r
 end
@@ -80,6 +81,7 @@ function OBJDEF:route(request, response)
   for ri,route in ipairs(self.routes) do
     result = self:_route_bits(route, candidate_bits)
     if result then
+      print("Matched route " .. route.route_name)
       return route['route_func'](request, result, response)
     end
   end
@@ -98,9 +100,7 @@ function OBJDEF:_route_bits(route, bits)
     local colon_match = self:_starts_with_colon(route.route_pieces[i])
     if colon_match then
       match[colon_match] = v
-      break
-    end
-    if v ~= route.route_pieces[i] then
+    elseif v ~= route.route_pieces[i] then
       return false
     end
   end
