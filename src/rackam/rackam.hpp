@@ -15,14 +15,14 @@ class Rackam {
 
   void start_web_server(std::string base_path, int port_no);
   void main_loop();
-  NewsgroupPtr newsgroup_for_name(std::string name);
+  Newsgroup_ptr newsgroup_for_name(std::string name);
 
-  void load_headers_from_file(NewsgroupPtr group, std::string filename);
+  void load_headers_from_file(Newsgroup_ptr group, std::string filename);
 
-  WebServerPtr webserver;
+  WebServer_ptr webserver;
   lua_State *lua_state;
   bool still_running;
-  std::vector<NewsgroupPtr> newsgroups;
+  std::vector<Newsgroup_ptr> newsgroups;
 
   pthread_mutex_t self_mutex;
 };

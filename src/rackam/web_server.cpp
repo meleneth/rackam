@@ -60,25 +60,21 @@ void WebServer::handle_request(WebRequest *request) {
 }
 
 void WebServer::tick(void) {
-  list<TCPConnection *>::iterator i;
-
-  for (i = connections.begin(); i != connections.end(); ++i) {
+  for (auto i = connections.begin(); i != connections.end(); ++i) {
     if ((*i)->has_data_waiting()) {
       WebRequest *r = new WebRequest(*i);
       handle_request(r);
       delete r;
-      list<TCPConnection *>::iterator p = i;
+      auto p = i;
       --i;
       connections.erase(p);
     }
   }
 
-  list<WebDataFetcher *>::iterator h;
-
-  for (h = handlers.begin(); h != handlers.end(); ++h) {
+  for (auto h = handlers.begin(); h != handlers.end(); ++h) {
     if (!(*h)->tick()) {
-      list<WebDataFetcher *>::iterator j = h;
-      WebDataFetcher *r = (*h);
+      auto j = h;
+      auto r = *h;
       --h;
       delete r;
       handlers.erase(j);

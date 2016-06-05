@@ -23,14 +23,12 @@ void StringPattern::add_breaker(unsigned int target) {
 }
 
 int StringPattern::match(string target) {
-  std::list<string>::iterator s;
-
   for (unsigned int i = 0; i < max_part_no; i++) {
     results[i] = "";
   }
 
   unsigned int count = 0;
-  s = breakers.begin();
+  auto s = breakers.begin();
   while (s != breakers.end()) {
     size_t index = target.find(*s);
 

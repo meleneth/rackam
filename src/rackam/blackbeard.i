@@ -28,13 +28,13 @@ using namespace Blackbeard;
 %import "shared_ptr.i"
 /*%template(StringIntMap) std::map<string, int>; */
 
-%template(NewsgroupPtr) std::shared_ptr<Blackbeard::Newsgroup>;
-%template(PostFilePtr) std::shared_ptr<Blackbeard::PostFile>;
-%template(AuthorPtr) std::shared_ptr<Blackbeard::Author>;
-%template(WebServerPtr) std::shared_ptr<Blackbeard::WebServer>;
-%template(MessageHeaderPtr) std::shared_ptr<Blackbeard::MessageHeader>;
-%template(WebStaticFilePtr) std::shared_ptr<Blackbeard::WebStaticFile>;
-%template(FilterMatchPtr) std::shared_ptr<Blackbeard::FilterMatch>;
+%template(Newsgroup_ptr) std::shared_ptr<Blackbeard::Newsgroup>;
+%template(PostFile_ptr) std::shared_ptr<Blackbeard::PostFile>;
+%template(Author_ptr) std::shared_ptr<Blackbeard::Author>;
+%template(WebServer_ptr) std::shared_ptr<Blackbeard::WebServer>;
+%template(MessageHeader_ptr) std::shared_ptr<Blackbeard::MessageHeader>;
+%template(WebStaticFile_ptr) std::shared_ptr<Blackbeard::WebStaticFile>;
+%template(FilterMatch_ptr) std::shared_ptr<Blackbeard::FilterMatch>;
 
 %include "rackam_types.hpp"
 %include "newsgroup.hpp"

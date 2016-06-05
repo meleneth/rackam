@@ -31,18 +31,23 @@ namespace Blackbeard {
   class WebDataFetcher;
   class WebStaticFile;
 
-  typedef std::shared_ptr<Newsgroup> NewsgroupPtr;
-  typedef std::shared_ptr<Author> AuthorPtr;
-  typedef std::shared_ptr<PostFile> PostFilePtr;
-  typedef std::shared_ptr<WebServer> WebServerPtr;
+  typedef std::shared_ptr<Author> Author_ptr;
+  typedef std::shared_ptr<Filter> Filter_ptr;
+  typedef std::shared_ptr<MessageHeader> MessageHeader_ptr;
+  typedef std::shared_ptr<Newsgroup> Newsgroup_ptr;
+  typedef std::shared_ptr<PostFile> PostFile_ptr;
+  typedef std::shared_ptr<PostSet> PostSet_ptr;
+  typedef std::shared_ptr<WebServer> WebServer_ptr;
+  typedef std::shared_ptr<WebStaticFile> WebStaticFile_ptr;
 
-  typedef std::list<std::shared_ptr<Author>> AuthorList;
-  typedef std::list<std::shared_ptr<WebStaticFile>> WebStaticFileList;
-  typedef std::list<std::shared_ptr<WebStaticFile>>::iterator WebStaticFile_list_iterator;
+  typedef std::list<Author_ptr> AuthorList;
+  typedef std::list<WebStaticFile_ptr> WebStaticFileList;
 
-  typedef std::vector<std::shared_ptr<MessageHeader>> MessageHeader_vector;
-  typedef std::vector<std::shared_ptr<PostSet>> PostSet_vector;
-  typedef std::vector<std::shared_ptr<PostFile>> PostFile_vector;
+  typedef std::vector<Author_ptr> Author_vector;
+  typedef std::vector<Filter_ptr> Filter_vector;
+  typedef std::vector<MessageHeader_ptr> MessageHeader_vector;
+  typedef std::vector<PostFile_ptr> PostFile_vector;
+  typedef std::vector<PostSet_ptr> PostSet_vector;
 
   typedef std::map<std::string, std::shared_ptr<PostFile>> StringToPostFileMap;
 }

@@ -9,7 +9,7 @@ Controller::Controller() {}
 
 Controller::~Controller() {}
 
-AuthorPtr Controller::author_for_name(NewsgroupPtr newsgroup,
+Author_ptr Controller::author_for_name(Newsgroup_ptr newsgroup,
                                       std::string authorname) {
   auto result = (*newsgroup).authors_by_name.find(authorname);
   if (result != (*newsgroup).authors_by_name.end()) {
@@ -27,8 +27,8 @@ AuthorPtr Controller::author_for_name(NewsgroupPtr newsgroup,
   return author;
 }
 
-PostFilePtr Controller::find_or_create_postfile_for_filename_fileno(
-    AuthorPtr author, std::string filename, int fileno) {
+PostFile_ptr Controller::find_or_create_postfile_for_filename_fileno(
+    Author_ptr author, std::string filename, int fileno) {
   // SHIP IT
   // uh I mean naive implementation here re-write plz
 

@@ -91,7 +91,7 @@ void Rackam::main_loop() {
   }
 }
 
-NewsgroupPtr Rackam::newsgroup_for_name(string name) {
+Newsgroup_ptr Rackam::newsgroup_for_name(string name) {
   for (auto newsgroup : newsgroups) {
     if (newsgroup->name.compare(name) == 0) {
       return newsgroup;
@@ -108,7 +108,7 @@ NewsgroupPtr Rackam::newsgroup_for_name(string name) {
   return new_group;
 }
 
-void Rackam::load_headers_from_file(NewsgroupPtr group, string filename) {
+void Rackam::load_headers_from_file(Newsgroup_ptr group, string filename) {
   int total_bytes;
   int bytes_read;
 

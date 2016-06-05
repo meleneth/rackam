@@ -184,11 +184,11 @@ string WebRequest::get_uri(void) {
 }
 
 void WebRequest::delete_param(string name) {
-  vector<string>::iterator n = param_names.begin();
-  vector<string>::iterator v = param_values.begin();
+  auto n = param_names.begin();
+  auto v = param_values.begin();
   for (; n != param_names.end();) {
     if (0 == (*n).compare(name)) {
-      vector<string>::iterator p = n;
+      auto p = n;
       --n;
       param_names.erase(p);
       p = v;
@@ -201,7 +201,6 @@ void WebRequest::delete_param(string name) {
 }
 
 bool WebRequest::has_param(string name) {
-  vector<string>::iterator i;
   for (auto param_name : param_names) {
     if (0 == param_name.compare(name)) {
       return true;
