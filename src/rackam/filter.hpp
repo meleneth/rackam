@@ -24,7 +24,7 @@ class Filter {
   ~Filter();
 
   void parse_filter(std::string filter);
-  std::shared_ptr<FilterMatch> match(std::string haystack);
+  FilterMatch_ptr match(std::string haystack);
 
   std::string text;
   std::vector<std::string> filter_pieces;

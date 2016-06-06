@@ -28,7 +28,7 @@ Newsgroup::~Newsgroup() {
   pthread_mutex_destroy(&self_mutex);
 }
 
-shared_ptr<Author> Newsgroup::author_for_id(int author_id) {
+Author_ptr Newsgroup::author_for_id(int author_id) {
   if (author_id > max_author_id) {
     return NULL;
   }
@@ -39,7 +39,7 @@ shared_ptr<Author> Newsgroup::author_for_id(int author_id) {
   return NULL;
 }
 
-shared_ptr<Author> Newsgroup::author_for_name(std::string author_name) {
+Author_ptr Newsgroup::author_for_name(std::string author_name) {
   for (auto author : authors) {
     if (author->name.compare(author_name) == 0) return author;
   }

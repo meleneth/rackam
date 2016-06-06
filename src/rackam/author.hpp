@@ -6,10 +6,10 @@
 namespace Blackbeard {
 class Author {
  public:
-  Author(std::string name, std::shared_ptr<Newsgroup> newsgroup);
+  Author(std::string name, Newsgroup_ptr newsgroup);
   ~Author();
-  std::shared_ptr<PostSet> postset_for_id(int postset_id);
-  std::shared_ptr<PostFile> postfile_for_id(int postfile_id);
+  PostSet_ptr postset_for_id(int postset_id);
+  PostFile_ptr postfile_for_id(int postfile_id);
 
   std::string name;
   long long int size;
@@ -19,7 +19,7 @@ class Author {
 
   pthread_mutex_t self_mutex;
 
-  std::shared_ptr<Newsgroup> newsgroup;
+  Newsgroup_ptr newsgroup;
 
   MessageHeader_vector headers;
   PostSet_vector postsets;

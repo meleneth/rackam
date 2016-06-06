@@ -6,16 +6,16 @@
 namespace Blackbeard {
 class MessageHeader {
  public:
-  MessageHeader(std::shared_ptr<Newsgroup> group, long long int article_no,
+  MessageHeader(Newsgroup_ptr group, long long int article_no,
                 std::string msg_id, std::string subject,
-                std::shared_ptr<Author> posted_by, int num_bytes);
+                Author_ptr posted_by, int num_bytes);
   ~MessageHeader();
 
-  std::shared_ptr<Newsgroup> group;
+  Newsgroup_ptr group;
   long long int article_no;
   std::string msg_id;
   std::string subject;
-  std::shared_ptr<Author> author;
+  Author_ptr author;
   int size;
 
  private:

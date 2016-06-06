@@ -51,7 +51,7 @@ void Filter::parse_filter(std::string filter) {
   }
 }
 
-shared_ptr<FilterMatch> Filter::match(std::string haystack) {
+FilterMatch_ptr Filter::match(std::string haystack) {
   int needle_position = 0;
   int match_position = 0;
   int size = filter_pieces.size();

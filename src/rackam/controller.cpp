@@ -40,7 +40,7 @@ PostFile_ptr Controller::find_or_create_postfile_for_filename_fileno(
   }
   pthread_mutex_unlock(&(*author).self_mutex);
 
-  std::shared_ptr<PostFile> new_file =
+  PostFile_ptr new_file =
       std::make_shared<PostFile>(filename, author, (*author).newsgroup);
 
   pthread_mutex_lock(&(*author).self_mutex);

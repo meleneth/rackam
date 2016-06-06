@@ -13,7 +13,7 @@ class PostSet {
   long long int max_message_no;
   long long int size;
   int id;
-  std::vector<std::shared_ptr<PostFile>> postfiles;
+  PostFile_vector postfiles;
 
   std::string subject;
 };

@@ -33,6 +33,7 @@ namespace Blackbeard {
 
   typedef std::shared_ptr<Author> Author_ptr;
   typedef std::shared_ptr<Filter> Filter_ptr;
+  typedef std::shared_ptr<FilterMatch> FilterMatch_ptr;
   typedef std::shared_ptr<MessageHeader> MessageHeader_ptr;
   typedef std::shared_ptr<Newsgroup> Newsgroup_ptr;
   typedef std::shared_ptr<PostFile> PostFile_ptr;

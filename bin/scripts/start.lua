@@ -259,6 +259,20 @@ file:add_filter("coffee -p -s")
 file = webserver:register_file("rackam.css", "htdocs/rackam.scss", "text/css")
 file:add_filter("scss")
 
+print("Creating test data")
+function create_test_data()
+  local test_binaries = rackam:newsgroup_for_name("alt.binaries.test.example")
+  test_binaries:add_filter("(%e/%f) \"%a\"%d- yEnc (%p/%n)")
+  test_binaries:add_filter("%s [%e/%f] - \"%a\"%d yEnc (%p/%n)")
+  test_binaries:add_filter("%s[%e/%f] - \"%a\"%d yEnc (%p/%n)")
+  test_binaries:add_filter("%s[%e/%f] - yEnc \"%a\" (%p/%n)")
+
+  local a_writer = test_binaries:author_for_name("A. Writer <a_writer@example.com>")
+  local vlad_author = test_binaries:author_for_name("Vlad the Impaler <vlad@example.com>")
+end
+
+create_test_data()
+
 print("Lua script finished.")
 Blackbeard.rackam.still_running = true
 

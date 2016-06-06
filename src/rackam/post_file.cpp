@@ -12,8 +12,8 @@ PostFile::PostFile() {
   author = nullptr;
 }
 
-PostFile::PostFile(std::string name, shared_ptr<Author> author,
-                   shared_ptr<Newsgroup> newsgroup)
+PostFile::PostFile(std::string name, Author_ptr author,
+                   Newsgroup_ptr newsgroup)
     : PostFile() {
   this->name = name;
   this->author = author;

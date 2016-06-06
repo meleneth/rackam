@@ -13,7 +13,7 @@
 using namespace Blackbeard;
 using namespace std;
 
-HeadersParser::HeadersParser(shared_ptr<Newsgroup> newsgroup) {
+HeadersParser::HeadersParser(Newsgroup_ptr newsgroup) {
   pthread_mutex_init(&self_mutex, NULL);
   running_threads = 0;
   this->newsgroup = newsgroup;
@@ -41,7 +41,7 @@ void HeadersParser::process_line(std::string line) {
       atoi(header_pieces[5].c_str()));
 
   for (auto filter : header->group->filters) {
-    shared_ptr<FilterMatch> match = filter->match(header->subject);
+    FilterMatch_ptr match = filter->match(header->subject);
     if (match) {
       if ((match->postset_num_files != 0) &&
           (match->postfile_num_pieces != 0) &&

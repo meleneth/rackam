@@ -3,9 +3,9 @@
 using namespace Blackbeard;
 using namespace std;
 
-MessageHeader::MessageHeader(shared_ptr<Newsgroup> group,
+MessageHeader::MessageHeader(Newsgroup_ptr group,
                              long long int article_no, string msg_id,
-                             string subject, shared_ptr<Author> posted_by,
+                             string subject, Author_ptr posted_by,
                              int num_bytes) {
   this->group = group;
   this->subject = subject;
