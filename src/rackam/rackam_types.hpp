@@ -9,6 +9,10 @@
 
 
 namespace Blackbeard {
+
+  typedef int64_t size_in_bytes_t;
+  typedef int64_t message_id_t;
+
   class Console;
 
   class MessageHeader;

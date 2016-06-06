@@ -37,6 +37,8 @@ RACKAM_SRC = src/rackam/author.cpp \
   src/rackam/post_file.hpp \
   src/rackam/post_set.cpp \
   src/rackam/post_set.hpp \
+  src/rackam/factory.hpp \
+  src/rackam/factory.cpp \
   src/rackam/rackam.cpp \
   src/rackam/rackam.hpp \
   src/rackam/SDL_types.h \

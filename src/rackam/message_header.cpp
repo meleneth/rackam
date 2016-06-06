@@ -4,9 +4,9 @@ using namespace Blackbeard;
 using namespace std;
 
 MessageHeader::MessageHeader(Newsgroup_ptr group,
-                             long long int article_no, string msg_id,
+                             message_id_t article_no, string msg_id,
                              string subject, Author_ptr posted_by,
-                             int num_bytes) {
+                             size_in_bytes_t num_bytes) {
   this->group = group;
   this->subject = subject;
   this->author = posted_by;

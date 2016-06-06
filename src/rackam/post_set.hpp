@@ -9,9 +9,10 @@ class PostSet {
   PostSet();
   ~PostSet();
 
-  long long int min_message_no;
-  long long int max_message_no;
-  long long int size;
+  message_id_t min_message_no;
+  message_id_t max_message_no;
+  size_in_bytes_t size;
+
   int id;
   PostFile_vector postfiles;
 
