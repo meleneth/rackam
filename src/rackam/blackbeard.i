@@ -13,6 +13,7 @@
 #include "author.hpp"
 #include "filter.hpp"
 #include "rackam.hpp"
+#include "factory.hpp"
 #include "web_static_file.hpp"
 
 #include <string>
@@ -47,6 +48,7 @@ using namespace Blackbeard;
 %include "author.hpp"
 %include "rackam.hpp"
 %include "filter.hpp"
+%include "factory.hpp"
 %include "message_header.hpp"
 %include "web_static_file.hpp"
 
