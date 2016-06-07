@@ -1,8 +1,6 @@
 bin_PROGRAMS = bin/rackam
 noinst_LIBRARIES = src/librackam.a
 
-SUBDIRS = bin/scripts/htdocs
-
 ACLOCAL_AMFLAGS = -I m4
 
 AM_CXXFLAGS = -I src/rackam -I/usr/include/lua5.1 -Ivendor -lpthread -D_FILE_OFFSET_BITS=64
