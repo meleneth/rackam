@@ -4,7 +4,8 @@ angular.module 'newUi'
     postFilesController = ->
       'ngInject'
       vm = this
-      # "vm.creation" is avaible by directive option "bindToController: true"
+      # "vm.postFiles" is avaible, populated by data-files="expression"
+      # because of directive option "bindToController: true"
       return
 
     directive =

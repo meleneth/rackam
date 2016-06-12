@@ -12,6 +12,7 @@ src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i \
   src/rackam/newsgroup.hpp \
   src/rackam/post_file.hpp \
   src/rackam/post_set.hpp \
+  src/rackam/factory.hpp \
   src/rackam/rackam.hpp \
   src/rackam/filter.hpp
 

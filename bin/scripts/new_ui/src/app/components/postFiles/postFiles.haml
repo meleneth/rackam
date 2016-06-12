@@ -1,31 +1,10 @@
-!= "<nav class=\"navbar navbar-static-top navbar-inverse\">"
-.container-fluid
-  .navbar-header
-    %a.navbar-brand{href: "https://github.com/Swiip/generator-gulp-angular"}
-      %span.glyphicon.glyphicon-home
-      Gulp Angular Merp
-      = "{{vm.postFiles.filename}} {{ 1 + 1}}"
+%h2 PostFiles
+%table.table
+  %tr{"ng-repeat": "pf in vm.postFiles"}
+    %td
+      ="{{ pf.name}}"
+    %td
+      ="{{ pf.size | bytes }}"
+    %td
+      ="{{ pf.author}}"
 
-  .collapse.navbar-collapse{id: "bs-example-navbar-collapse-6"}
-    %ul.nav.navbar-nav
-      %li.active
-        %a{"ng-href": "#"}
-          Home
-      %li
-        %a{"ng-href": "#/rackam"}
-          Rackam
-      %li
-        %a{"ng-href": "#/newsgroup/alt.binaries.multimedia.cartoons"}
-          Cartoons
-      %li
-        %a{"ng-href": "#"}
-          About
-      %li
-        %a{"ng-href": "#"}
-          Contact
-
-    %ul.nav.navbar-nav.navbar-right.acme-navbar-text
-      %li 
-        Application was created
-        = "{{ vm.relativeDate }}"
-!= "</nav>"

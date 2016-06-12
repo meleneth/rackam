@@ -245,7 +245,6 @@ n:add_filter("%a - [%e/%f] (%p/%n)")
 -- this next one is /really/ broad
 n:add_filter("%a (%p/%n)")
 
-rackam:load_headers_from_file(n, "headers_snipper.log")
 
 local webserver = rackam.webserver
 
@@ -269,12 +268,16 @@ function create_test_data()
 
   local a_writer = test_binaries:author_for_name("A. Writer <a_writer@example.com>")
   local vlad_author = test_binaries:author_for_name("Vlad the Impaler <vlad@example.com>")
-  local factory = Blackbeard.Factory()
-  factory:make_PostFile(a_writer, test_binaries, "test_file.001", 1234567)
+  Blackbeard.Factory_make_PostFile(test_binaries, a_writer, "test_file.001", 1234567)
+  local file = Blackbeard.Factory_make_PostFile(test_binaries, a_writer, "test_file.002", 1234567)
+  Blackbeard.Factory_find_a_home_for(file)
 
 end
 
 create_test_data()
+
+print("Loading headers")
+rackam:load_headers_from_file(n, "headers_snipper.log")
 
 print("Lua script finished.")
 Blackbeard.rackam.still_running = true

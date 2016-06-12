@@ -1,21 +1,12 @@
-%h2 Newsgroup
+!="<acme-navbar creation-date=\"main.creationDate\"></acme-navbar>"
+%h2
+  = "Newsgroup {{newsgroup.newsgroup_name}}"
 %ul
   %li Authors
   %li PostSets
   %li
     %button{"ng-click": 'load_postfiles()'}
       postFiles
-I'm a hot potater
-!=" Moo: {{posted_files}}"
-= "{{newsgroup.newsgroup_name}}"
-!="<post-files data-files=\"posted_files\"></post-files>"
+!="<post-files data-files=\"newsgroup.postfiles\"></post-files>"
 
-%table.table
-  %tr{"ng-repeat": "pf in newsgroup.postfiles"}
-    %td
-      ="{{ pf.name}}"
-    %td
-      ="{{ pf.size | bytes }}"
-    %td
-      ="{{ pf.author}}"
 

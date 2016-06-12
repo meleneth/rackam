@@ -23,3 +23,12 @@ PostFile_ptr  Factory::make_PostFile(Newsgroup_ptr newsgroup, Author_ptr author,
   return post_file;
 }
 
+void Factory::find_a_home_for(PostFile_ptr post_file)
+{
+  // If a postfile doesn't have a postset, it is stored on author -> postfiles.
+  // If a postfile has a postset, it stored on postset->postfiles, which lives on author->postsets
+  // Newsgroup has authors
+  // newsgroup browse view should be able to show postsets and postfiles interleaved
+  //  based on message id
+}
+
