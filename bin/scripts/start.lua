@@ -191,7 +191,11 @@ end)
 
 WebRouter:add_route("/n/:newsgroup/filters", function(webrequest, match, webresponse)
   local newsgroup = Blackbeard.rackam:newsgroup_for_name(match.newsgroup)
-  webresponse.body = web_render(0, newsgroup.filters:size() - 1, newsgroup.filters, header_as_json)
+  local filters = newsgroup.filters
+  print(newsgroup)
+  print(newsgroup.name)
+  print(filters)
+  webresponse.body = web_render(0, filters:size() - 1, filters, filter_as_json)
 end)
 
 WebRouter:add_route("/n/:newsgroup/headers", function(webrequest, match, webresponse)
@@ -278,7 +282,7 @@ create_test_data()
 
 print("Loading headers")
 rackam:load_headers_from_file(n, "headers_snipper.log")
-
+print("Finished loading headers")
 print("Lua script finished.")
 Blackbeard.rackam.still_running = true
 

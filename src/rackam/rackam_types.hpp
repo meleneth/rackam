@@ -51,10 +51,11 @@ namespace Blackbeard {
   typedef std::vector<Author_ptr> Author_vector;
   typedef std::vector<Filter_ptr> Filter_vector;
   typedef std::vector<MessageHeader_ptr> MessageHeader_vector;
+  typedef std::vector<Newsgroup_ptr> Newsgroup_vector;
   typedef std::vector<PostFile_ptr> PostFile_vector;
   typedef std::vector<PostSet_ptr> PostSet_vector;
 
-  typedef std::map<std::string, std::shared_ptr<PostFile>> StringToPostFileMap;
+  typedef std::map<std::string, PostFile_ptr> StringToPostFileMap;
 }
 
 #include<pthread.h>

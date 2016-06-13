@@ -2,18 +2,18 @@
 %{
 /* Includes the header in the wrapper code */
 #include "rackam_types.hpp"
+#include "author.hpp"
+#include "factory.hpp"
+#include "filter.hpp"
+#include "message_header.hpp"
 #include "newsgroup.hpp"
-#include "post_set.hpp"
 #include "post_file.hpp"
-#include "web_server.hpp"
+#include "post_set.hpp"
+#include "rackam.hpp"
+#include "stringpattern.hpp"
 #include "web_request.hpp"
 #include "web_response.hpp"
-#include "stringpattern.hpp"
-#include "message_header.hpp"
-#include "author.hpp"
-#include "filter.hpp"
-#include "rackam.hpp"
-#include "factory.hpp"
+#include "web_server.hpp"
 #include "web_static_file.hpp"
 
 #include <string>
@@ -29,6 +29,21 @@ using namespace Blackbeard;
 %import "shared_ptr.i"
 /*%template(StringIntMap) std::map<string, int>; */
 
+%include "rackam_types.hpp"
+%include "author.hpp"
+%include "factory.hpp"
+%include "filter.hpp"
+%include "message_header.hpp"
+%include "newsgroup.hpp"
+%include "post_file.hpp"
+%include "post_set.hpp"
+%include "rackam.hpp"
+%include "stringpattern.hpp"
+%include "web_request.hpp"
+%include "web_response.hpp"
+%include "web_server.hpp"
+%include "web_static_file.hpp"
+
 %template(Newsgroup_ptr) std::shared_ptr<Blackbeard::Newsgroup>;
 %template(PostFile_ptr) std::shared_ptr<Blackbeard::PostFile>;
 %template(Author_ptr) std::shared_ptr<Blackbeard::Author>;
@@ -36,21 +51,7 @@ using namespace Blackbeard;
 %template(MessageHeader_ptr) std::shared_ptr<Blackbeard::MessageHeader>;
 %template(WebStaticFile_ptr) std::shared_ptr<Blackbeard::WebStaticFile>;
 %template(FilterMatch_ptr) std::shared_ptr<Blackbeard::FilterMatch>;
-
-%include "rackam_types.hpp"
-%include "newsgroup.hpp"
-%include "post_set.hpp"
-%include "post_file.hpp"
-%include "web_request.hpp"
-%include "web_server.hpp"
-%include "stringpattern.hpp"
-%include "web_response.hpp"
-%include "author.hpp"
-%include "rackam.hpp"
-%include "filter.hpp"
-%include "factory.hpp"
-%include "message_header.hpp"
-%include "web_static_file.hpp"
+%template(Filter_ptr) std::shared_ptr<Blackbeard::Filter>;
 
 %template(Newsgroup_vector) std::vector<std::shared_ptr<Blackbeard::Newsgroup>>;
 %template(MessageHeader_vector) std::vector<std::shared_ptr<Blackbeard::MessageHeader>>;

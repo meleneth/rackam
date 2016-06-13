@@ -22,7 +22,7 @@ class Rackam {
   WebServer_ptr webserver;
   lua_State *lua_state;
   bool still_running;
-  std::vector<Newsgroup_ptr> newsgroups;
+  Newsgroup_vector newsgroups;
 
   pthread_mutex_t self_mutex;
 };
