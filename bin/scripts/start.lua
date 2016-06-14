@@ -271,7 +271,7 @@ function create_test_data()
   Blackbeard.Factory_make_PostFile(test_binaries, a_writer, "test_file.001", 1234567)
   local file = Blackbeard.Factory_make_PostFile(test_binaries, a_writer, "test_file.002", 1234567)
   print(file.post_set)
-  assert(not file.post_set, "Post file starts with no post set")
+  assert(file.post_set == nil, "Post file starts with no post set")
   Blackbeard.Factory_find_a_home_for(file)
   assert(file.post_set, "find_a_home makes postset for file")
 

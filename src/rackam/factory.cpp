@@ -37,7 +37,7 @@ void Factory::find_a_home_for(PostFile_ptr post_file)
 void Factory::rehome(PostFile_ptr child, PostSet_ptr new_home)
 {
   auto author = child->author;
-  author->postfiles.erase(std::remove_if(author->postfiles.begin(), author->postfiles.end(), *child), author->postfiles.end());
-  child->post_set = new_home;
+  author->postfiles.erase(std::remove(author->postfiles.begin(), author->postfiles.end(), child), author->postfiles.end());
+  child->postset = new_home;
 }
 
