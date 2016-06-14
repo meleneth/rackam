@@ -1,3 +1,5 @@
+#include<algorithm>
+
 #include "factory.hpp"
 #include "newsgroup.hpp"
 #include "author.hpp"
@@ -30,5 +32,12 @@ void Factory::find_a_home_for(PostFile_ptr post_file)
   // Newsgroup has authors
   // newsgroup browse view should be able to show postsets and postfiles interleaved
   //  based on message id
+}
+
+void Factory::rehome(PostFile_ptr child, PostSet_ptr new_home)
+{
+  auto author = child->author;
+  author->postfiles.erase(std::remove_if(author->postfiles.begin(), author->postfiles.end(), *child), author->postfiles.end());
+  child->post_set = new_home;
 }
 

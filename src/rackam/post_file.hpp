@@ -21,6 +21,7 @@ class PostFile {
 
   Newsgroup_ptr newsgroup;
   Author_ptr author;
+  PostSet_ptr post_set;
 
   pthread_mutex_t self_mutex;
 };
