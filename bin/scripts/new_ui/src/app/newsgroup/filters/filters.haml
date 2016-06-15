@@ -1,0 +1,16 @@
+!="<acme-navbar creation-date=\"main.creationDate\"></acme-navbar>"
+%h2
+  = "Newsgroup {{newsgroup.newsgroup_name}}"
+%h3 Filters
+%ul
+  %li Authors
+  %li PostSets
+  %li
+    %button{"ng-click": 'load_postfiles()'}
+      postFiles
+%ul
+  %li{"ng-repeat": "filter in filters"}
+    ="{{filter.num_matched}}: {{filter.text}}"
+!="<post-files data-files=\"newsgroup.postfiles\"></post-files>"
+
+

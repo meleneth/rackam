@@ -4,4 +4,6 @@ angular.module 'newUi'
     DataBroker.Newsgroup = $resource('http://rinzler:4242/n/:newsgroupName')
     DataBroker.NewsgroupAuthors = $resource('http://rinzler:4242/n/:newsgroupName/authors')
     DataBroker.NewsgroupPostfiles = $resource('http://rinzler:4242/n/:newsgroupName/postfiles')
+    DataBroker.NewsgroupFilters = $resource('http://rinzler:4242/n/:newsgroupName/filters')
+
     return DataBroker

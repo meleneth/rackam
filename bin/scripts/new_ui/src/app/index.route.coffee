@@ -10,6 +10,11 @@ angular.module 'newUi'
         templateUrl: 'app/rackam/rackam.html'
         controller: 'RackamController'
         controllerAs: 'rackam'
+      .when '/newsgroup/:newsgroup_name/filters',
+        templateUrl: 'app/newsgroup/filters/filters.html'
+        name: 'NewsgroupFiltersDetail'
+        controller: 'FiltersController'
+        controllerAs: 'filters'
       .when '/newsgroup/:newsgroup_name',
         templateUrl: 'app/newsgroup/newsgroup.html'
         name: 'NewsgroupDetail'
