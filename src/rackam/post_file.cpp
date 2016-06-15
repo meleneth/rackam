@@ -10,6 +10,7 @@ PostFile::PostFile() {
   pthread_mutex_init(&self_mutex, NULL);
   newsgroup = nullptr;
   author = nullptr;
+  postset = nullptr;
 }
 
 PostFile::PostFile(std::string name, Author_ptr author,

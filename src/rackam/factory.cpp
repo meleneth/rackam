@@ -1,3 +1,5 @@
+#include<algorithm>
+
 #include "factory.hpp"
 #include "newsgroup.hpp"
 #include "author.hpp"
@@ -30,5 +32,19 @@ void Factory::find_a_home_for(PostFile_ptr post_file)
   // Newsgroup has authors
   // newsgroup browse view should be able to show postsets and postfiles interleaved
   //  based on message id
+}
+
+// iterator trick:
+// make a new iterator type, that can iterate over a newsgroup's posts.
+// on init, gets an iterator to postsets and postfiles (which are stored in sorted by msgid order)
+// on ++, switch back and forth depending on msgid sort order and return the next item
+// Probably requires a PostCollection base class - postfiles and postsets are very similar
+// is doing it by date any different than msgid?
+
+void Factory::rehome(PostFile_ptr child, PostSet_ptr new_home)
+{
+  auto author = child->author;
+  author->postfiles.erase(std::remove(author->postfiles.begin(), author->postfiles.end(), child), author->postfiles.end());
+  child->postset = new_home;
 }
 

@@ -274,7 +274,10 @@ function create_test_data()
   local vlad_author = test_binaries:author_for_name("Vlad the Impaler <vlad@example.com>")
   Blackbeard.Factory_make_PostFile(test_binaries, a_writer, "test_file.001", 1234567)
   local file = Blackbeard.Factory_make_PostFile(test_binaries, a_writer, "test_file.002", 1234567)
+  print(file.post_set)
+  assert(file.post_set == nil, "Post file starts with no post set")
   Blackbeard.Factory_find_a_home_for(file)
+  assert(file.post_set, "find_a_home makes postset for file")
 
 end
 
