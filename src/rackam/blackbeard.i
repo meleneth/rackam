@@ -7,6 +7,7 @@
 #include "filter.hpp"
 #include "message_header.hpp"
 #include "newsgroup.hpp"
+#include "post_collection.hpp"
 #include "post_file.hpp"
 #include "post_set.hpp"
 #include "rackam.hpp"
@@ -35,6 +36,7 @@ using namespace Blackbeard;
 %include "filter.hpp"
 %include "message_header.hpp"
 %include "newsgroup.hpp"
+%include "post_collection.hpp"
 %include "post_file.hpp"
 %include "post_set.hpp"
 %include "rackam.hpp"
@@ -46,6 +48,8 @@ using namespace Blackbeard;
 
 %template(Newsgroup_ptr) std::shared_ptr<Blackbeard::Newsgroup>;
 %template(PostFile_ptr) std::shared_ptr<Blackbeard::PostFile>;
+%template(PostSet_ptr) std::shared_ptr<Blackbeard::PostSet>;
+%template(PostCollection_ptr) std::shared_ptr<Blackbeard::PostCollection>;
 %template(Author_ptr) std::shared_ptr<Blackbeard::Author>;
 %template(WebServer_ptr) std::shared_ptr<Blackbeard::WebServer>;
 %template(MessageHeader_ptr) std::shared_ptr<Blackbeard::MessageHeader>;

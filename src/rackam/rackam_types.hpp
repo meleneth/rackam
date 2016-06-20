@@ -17,6 +17,7 @@ namespace Blackbeard {
 
   class MessageHeader;
   class Newsgroup;
+  class PostCollection;
   class PostFile;
   class PostSet;
   class Author;
@@ -40,6 +41,7 @@ namespace Blackbeard {
   typedef std::shared_ptr<FilterMatch> FilterMatch_ptr;
   typedef std::shared_ptr<MessageHeader> MessageHeader_ptr;
   typedef std::shared_ptr<Newsgroup> Newsgroup_ptr;
+  typedef std::shared_ptr<PostCollection> PostCollection_ptr;
   typedef std::shared_ptr<PostFile> PostFile_ptr;
   typedef std::shared_ptr<PostSet> PostSet_ptr;
   typedef std::shared_ptr<WebServer> WebServer_ptr;
