@@ -4,9 +4,10 @@
 #include <pthread.h>
 
 #include <rackam_types.hpp>
+#include <post_collection.hpp>
 
 namespace Blackbeard {
-class PostFile {
+class PostFile : public PostCollection {
  public:
   PostFile();
   PostFile(std::string name, Author_ptr author,
@@ -14,10 +15,6 @@ class PostFile {
   ~PostFile();
 
   std::string name;
-  message_id_t max_message_no;
-  message_id_t min_message_no;
-  size_in_bytes_t size;
-  int id;
 
   Newsgroup_ptr newsgroup;
   Author_ptr author;
