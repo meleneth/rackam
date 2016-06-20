@@ -12,6 +12,7 @@ src/rackam/blackbeard_wrap.cxx : src/rackam/blackbeard.i \
   src/rackam/newsgroup.hpp \
   src/rackam/post_file.hpp \
   src/rackam/post_set.hpp \
+  src/rackam/post_collection.hpp \
   src/rackam/factory.hpp \
   src/rackam/rackam.hpp \
   src/rackam/filter.hpp
@@ -32,6 +33,8 @@ RACKAM_SRC = src/rackam/author.cpp \
   src/rackam/message_header.hpp \
   src/rackam/newsgroup.cpp \
   src/rackam/newsgroup.hpp \
+  src/rackam/post_collection.cpp \
+  src/rackam/post_collection.hpp \
   src/rackam/post_file.cpp \
   src/rackam/post_file.hpp \
   src/rackam/post_set.cpp \
